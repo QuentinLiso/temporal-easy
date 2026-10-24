@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 440" width="960" height="440" role="img" aria-labelledby="title desc">
+  <title id="title">API key vs mTLS to Temporal Cloud</title>
+  <desc id="desc">Two ways for a Client to authenticate to a Temporal Cloud Namespace over TLS: an API key sent as a bearer token on each request and rotatable with dynamic credentials, or an mTLS client certificate presented in the TLS handshake, signed by a CA uploaded to the Namespace and rotatable with GetClientCertificate.</desc>
+  <defs>
+    <style>
+      .t{font-family:-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;fill:#1f2937}
+      .h{font-size:16px;font-weight:700}
+      .b{font-size:13px}
+      .bb{font-size:13px;font-weight:700}
+      .s{font-size:12px;fill:#4b5563}
+      .m{font-family:SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;fill:#111827;white-space:pre}
+      .n{font-size:12px;font-weight:700;fill:#ffffff}
+    </style>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#6b7280"/>
+    </marker>
+    <marker id="arrb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#2563eb"/>
+    </marker>
+    <marker id="arrp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#7c3aed"/>
+    </marker>
+    <marker id="arrr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#dc2626"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="960" height="440" rx="14" fill="#ffffff"/>
+  <text class="t h" x="30" y="38">Two ways to prove who you are</text>
+  <rect x="640" y="70" width="300" height="330" rx="12" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+  <text class="t bb" x="790" y="100" text-anchor="middle">Temporal Cloud</text>
+  <text class="m" x="790" y="124" text-anchor="middle">shop-prod.a1b2c.tmprl.cloud:7233</text>
+  <text class="m" x="790" y="146" text-anchor="middle">Namespace shop-prod.a1b2c</text>
+  <rect x="660" y="170" width="260" height="80" rx="10" fill="#ffffff" stroke="#9ca3af" stroke-width="1.5"/>
+  <text class="t bb" x="674" y="194">API keys</text>
+  <text class="t s" x="674" y="214">checks the bearer token</text>
+  <rect x="660" y="290" width="260" height="90" rx="10" fill="#ffffff" stroke="#9ca3af" stroke-width="1.5"/>
+  <text class="t bb" x="674" y="314">CA certificates</text>
+  <text class="t s" x="674" y="334">uploaded to the Namespace;</text>
+  <text class="t s" x="674" y="351">verifies the client certificate</text>
+  <rect x="20" y="150" width="300" height="110" rx="10" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+  <text class="t bb" x="34" y="174">Client with an API key</text>
+  <text class="m" x="34" y="194">NewAPIKeyStaticCredentials(key)</text>
+  <text class="t s" x="34" y="211">TLS on: &amp;tls.Config{}</text>
+  <text class="t s" x="34" y="228">rotate: NewAPIKeyDynamicCredentials</text>
+  <line x1="320" y1="205" x2="656" y2="210" stroke="#2563eb" stroke-width="1.5" marker-end="url(#arrb)"/>
+  <text class="t s" x="488" y="196" text-anchor="middle">TLS + Authorization: Bearer &lt;key&gt;</text>
+  <text class="t s" x="488" y="226" text-anchor="middle">on every request</text>
+  <rect x="20" y="290" width="300" height="110" rx="10" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+  <text class="t bb" x="34" y="314">Client with mTLS</text>
+  <text class="m" x="34" y="334">tls.Config{GetClientCertificate}</text>
+  <text class="t s" x="34" y="351">client.pem + client.key</text>
+  <text class="t s" x="34" y="368">rotate: GetClientCertificate</text>
+  <line x1="320" y1="345" x2="656" y2="335" stroke="#2563eb" stroke-width="1.5" marker-end="url(#arrb)"/>
+  <text class="t s" x="488" y="326" text-anchor="middle">client certificate in the</text>
+  <text class="t s" x="488" y="360" text-anchor="middle">TLS handshake</text>
+  <text class="t s" x="30" y="100">Endpoint + Namespace + TLS + one credential.</text>
+  <text class="t s" x="30" y="118">Keep the secret in env vars or a secret store, not in Git.</text>
+</svg>

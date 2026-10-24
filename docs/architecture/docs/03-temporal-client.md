@@ -272,7 +272,9 @@ func (a *api) orderResult(w http.ResponseWriter, r *http.Request) {
 
 	var result orders.FulfillOrderResult
 	err := a.temporal.GetWorkflow(ctx, workflowID(r.PathValue("id")), "").Get(ctx, &result)
-	if errors.Is(err, context.DeadlineExceeded) {
+	// On timeout, Get returns a *serviceerror.DeadlineExceeded, not context.DeadlineExceeded:
+	// check our own context instead of the error type.
+	if err != nil && ctx.Err() != nil {
 		http.Error(w, "order still in progress", http.StatusAccepted)
 		return
 	}

@@ -8,6 +8,8 @@
 > Companion guides: [Temporal Workflows with Go](../../workflows/docs/README.md) and
 > [Temporal Activities with Go](../../activities/docs/README.md). Read this one first to know which
 > part runs where. Read those to write the code.
+> [Temporal Client with Go](../../client/docs/README.md) goes deeper into connecting, starting and
+> managing Workflows from your services.
 
 ![Architecture mental model](../img/architecture-mental-model.svg)
 

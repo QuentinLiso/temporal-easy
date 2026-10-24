@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 540" width="960" height="540" role="img" aria-labelledby="title desc">
+  <title id="title">Workflow ID policies</title>
+  <desc id="desc">Decision tree for starting a Workflow with an ID that was used before. If a run with that ID is running, WorkflowIDConflictPolicy decides: Fail refuses, UseExisting returns the running run, TerminateExisting terminates it and starts a new run. If only closed runs exist, WorkflowIDReusePolicy decides: AllowDuplicate starts a new run, AllowDuplicateFailedOnly starts one only if the last run did not complete, RejectDuplicate refuses. A refused start returns the existing run without error by default, or a WorkflowExecutionAlreadyStarted error when WorkflowExecutionErrorWhenAlreadyStarted is true.</desc>
+  <defs>
+    <style>
+      .t{font-family:-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;fill:#1f2937}
+      .h{font-size:16px;font-weight:700}
+      .b{font-size:13px}
+      .bb{font-size:13px;font-weight:700}
+      .s{font-size:12px;fill:#4b5563}
+      .m{font-family:SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;fill:#111827;white-space:pre}
+      .n{font-size:12px;font-weight:700;fill:#ffffff}
+    </style>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#6b7280"/>
+    </marker>
+    <marker id="arrb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#2563eb"/>
+    </marker>
+    <marker id="arrp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#7c3aed"/>
+    </marker>
+    <marker id="arrr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#dc2626"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="960" height="540" rx="14" fill="#ffffff"/>
+  <text class="t h" x="30" y="38">ExecuteWorkflow with an ID that was used before</text>
+  <rect x="360" y="60" width="240" height="50" rx="10" fill="#ffffff" stroke="#9ca3af" stroke-width="1.5"/>
+  <text class="t bb" x="480.0" y="84" text-anchor="middle">Is a run with this ID running?</text>
+  <line x1="420" y1="110" x2="240" y2="150" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text class="t bb" x="318" y="134" text-anchor="middle">yes</text>
+  <line x1="540" y1="110" x2="720" y2="150" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text class="t bb" x="642" y="134" text-anchor="middle">no, only closed runs</text>
+  <rect x="40" y="154" width="400" height="44" rx="10" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+  <text class="t bb" x="240.0" y="178" text-anchor="middle">WorkflowIDConflictPolicy</text>
+  <rect x="520" y="154" width="400" height="44" rx="10" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+  <text class="t bb" x="720.0" y="178" text-anchor="middle">WorkflowIDReusePolicy</text>
+  <rect x="40" y="218" width="190" height="48" rx="10" fill="#ffffff" stroke="#9ca3af" stroke-width="1.5"/>
+  <text class="m" x="52" y="247">FAIL (default)</text>
+  <line x1="230" y1="242" x2="256" y2="242" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arr)"/>
+  <rect x="260" y="218" width="180" height="48" rx="10" fill="#fee2e2" stroke="#dc2626" stroke-width="1.5"/>
+  <text class="t s" x="272" y="247">refused</text>
+  <rect x="40" y="280" width="190" height="48" rx="10" fill="#ffffff" stroke="#9ca3af" stroke-width="1.5"/>
+  <text class="m" x="52" y="309">USE_EXISTING</text>
+  <line x1="230" y1="304" x2="256" y2="304" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arr)"/>
+  <rect x="260" y="280" width="180" height="48" rx="10" fill="#d1fae5" stroke="#059669" stroke-width="1.5"/>
+  <text class="t s" x="272" y="309">returns the running run</text>
+  <rect x="40" y="342" width="190" height="48" rx="10" fill="#ffffff" stroke="#9ca3af" stroke-width="1.5"/>
+  <text class="m" x="52" y="371">TERMINATE_EXISTING</text>
+  <line x1="230" y1="366" x2="256" y2="366" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arr)"/>
+  <rect x="260" y="342" width="180" height="48" rx="10" fill="#fef3c7" stroke="#d97706" stroke-width="1.5"/>
+  <text class="t s" x="272" y="371">old run terminated, new run</text>
+  <rect x="520" y="218" width="230" height="48" rx="10" fill="#ffffff" stroke="#9ca3af" stroke-width="1.5"/>
+  <text class="m" x="532" y="247">ALLOW_DUPLICATE (default)</text>
+  <line x1="750" y1="242" x2="776" y2="242" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arr)"/>
+  <rect x="780" y="218" width="160" height="48" rx="10" fill="#d1fae5" stroke="#059669" stroke-width="1.5"/>
+  <text class="t s" x="790" y="247">new run</text>
+  <rect x="520" y="280" width="230" height="48" rx="10" fill="#ffffff" stroke="#9ca3af" stroke-width="1.5"/>
+  <text class="m" x="532" y="309">ALLOW_DUPLICATE_FAILED_ONLY</text>
+  <line x1="750" y1="304" x2="776" y2="304" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arr)"/>
+  <rect x="780" y="280" width="160" height="48" rx="10" fill="#fef3c7" stroke="#d97706" stroke-width="1.5"/>
+  <text class="t s" x="790" y="302">new run if last run failed</text>
+  <text class="t s" x="790" y="318">else refused</text>
+  <rect x="520" y="342" width="230" height="48" rx="10" fill="#ffffff" stroke="#9ca3af" stroke-width="1.5"/>
+  <text class="m" x="532" y="371">REJECT_DUPLICATE</text>
+  <line x1="750" y1="366" x2="776" y2="366" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arr)"/>
+  <rect x="780" y="342" width="160" height="48" rx="10" fill="#fee2e2" stroke="#dc2626" stroke-width="1.5"/>
+  <text class="t s" x="790" y="371">refused</text>
+  <rect x="40" y="420" width="880" height="100" rx="10" fill="#f3f4f6" stroke="#6b7280" stroke-width="1.5"/>
+  <text class="t bb" x="56" y="446">When the start is refused: WorkflowExecutionErrorWhenAlreadyStarted</text>
+  <rect x="56" y="456" width="420" height="54" rx="10" fill="#ffffff" stroke="#9ca3af" stroke-width="1.5"/>
+  <text class="t bb" x="70" y="480">false (default): no error</text>
+  <text class="t s" x="70" y="500">returns a WorkflowRun for the existing / last run</text>
+  <rect x="490" y="456" width="414" height="54" rx="10" fill="#ffffff" stroke="#9ca3af" stroke-width="1.5"/>
+  <text class="t bb" x="504" y="480">true: error</text>
+  <text class="t s" x="504" y="500">*serviceerror.WorkflowExecutionAlreadyStarted</text>
+  <text class="t s" x="480" y="410"></text>
+</svg>

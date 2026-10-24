@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 380" width="960" height="380" role="img" aria-labelledby="title desc">
+  <title id="title">Workflow timeouts</title>
+  <desc id="desc">A Workflow Execution can be a chain of runs linked by Continue-As-New or retries. The Workflow Execution Timeout spans the whole chain, the Workflow Run Timeout applies to each run, and the Workflow Task Timeout applies to each Workflow Task processed by a Worker.</desc>
+  <defs>
+    <style>
+      .t{font-family:-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;fill:#1f2937}
+      .h{font-size:16px;font-weight:700}
+      .b{font-size:13px}
+      .bb{font-size:13px;font-weight:700}
+      .s{font-size:12px;fill:#4b5563}
+      .m{font-family:SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;fill:#111827;white-space:pre}
+      .n{font-size:12px;font-weight:700;fill:#ffffff}
+    </style>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#6b7280"/>
+    </marker>
+    <marker id="arrb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#2563eb"/>
+    </marker>
+    <marker id="arrp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#7c3aed"/>
+    </marker>
+    <marker id="arrr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#dc2626"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="960" height="380" rx="14" fill="#ffffff"/>
+  <text class="t h" x="30" y="38">Three timeouts, three scopes</text>
+  <rect x="40" y="150" width="330" height="56" rx="8" fill="#d1fae5" stroke="#059669" stroke-width="1.5"/>
+  <text class="t bb" x="52" y="172">run 1</text>
+  <rect x="110.0" y="182" width="26" height="16" rx="3" fill="#fef3c7" stroke="#d97706" stroke-width="1.5"/>
+  <rect x="186.66666666666669" y="182" width="26" height="16" rx="3" fill="#fef3c7" stroke="#d97706" stroke-width="1.5"/>
+  <rect x="263.33333333333337" y="182" width="26" height="16" rx="3" fill="#fef3c7" stroke="#d97706" stroke-width="1.5"/>
+  <line x1="372" y1="178" x2="376" y2="178" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arr)"/>
+  <rect x="380" y="150" width="260" height="56" rx="8" fill="#d1fae5" stroke="#059669" stroke-width="1.5"/>
+  <text class="t bb" x="392" y="172">run 2</text>
+  <rect x="450.0" y="182" width="26" height="16" rx="3" fill="#fef3c7" stroke="#d97706" stroke-width="1.5"/>
+  <rect x="503.3333333333333" y="182" width="26" height="16" rx="3" fill="#fef3c7" stroke="#d97706" stroke-width="1.5"/>
+  <rect x="556.6666666666666" y="182" width="26" height="16" rx="3" fill="#fef3c7" stroke="#d97706" stroke-width="1.5"/>
+  <line x1="642" y1="178" x2="646" y2="178" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arr)"/>
+  <rect x="650" y="150" width="290" height="56" rx="8" fill="#d1fae5" stroke="#059669" stroke-width="1.5"/>
+  <text class="t bb" x="662" y="172">run 3</text>
+  <rect x="720.0" y="182" width="26" height="16" rx="3" fill="#fef3c7" stroke="#d97706" stroke-width="1.5"/>
+  <rect x="783.3333333333334" y="182" width="26" height="16" rx="3" fill="#fef3c7" stroke="#d97706" stroke-width="1.5"/>
+  <rect x="846.6666666666666" y="182" width="26" height="16" rx="3" fill="#fef3c7" stroke="#d97706" stroke-width="1.5"/>
+  <text class="t s" x="368" y="140" text-anchor="middle">Continue-As-New</text>
+  <text class="t s" x="645" y="140" text-anchor="middle">retry</text>
+  <rect x="40" y="80" width="900" height="34" rx="6" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+  <text class="t bb" x="56" y="102">WorkflowExecutionTimeout: the whole chain (default: unlimited)</text>
+  <rect x="40" y="222" width="330" height="28" rx="6" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+  <text class="t s" x="50" y="241">WorkflowRunTimeout</text>
+  <rect x="380" y="222" width="260" height="28" rx="6" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+  <text class="t s" x="390" y="241">WorkflowRunTimeout</text>
+  <rect x="650" y="222" width="290" height="28" rx="6" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+  <text class="t s" x="660" y="241">WorkflowRunTimeout</text>
+  <text class="t s" x="40" y="274">Run timeout: each run (default: same as the execution timeout)</text>
+  <rect x="40" y="296" width="26" height="16" rx="3" fill="#fef3c7" stroke="#d97706" stroke-width="1.5"/>
+  <text class="t s" x="76" y="309">WorkflowTaskTimeout: one Workflow Task on a Worker (default: 10 s)</text>
+  <rect x="20" y="330" width="920" height="36" rx="10" fill="#f3f4f6" stroke="#6b7280" stroke-width="1.5"/>
+  <text class="t s" x="36" y="353">Safety nets only. Business deadlines ("cancel if unpaid after 24 h") belong in the Workflow as timers.</text>
+</svg>

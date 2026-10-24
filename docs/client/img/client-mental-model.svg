@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 520" width="960" height="520" role="img" aria-labelledby="title desc">
+  <title id="title">Temporal Client mental model</title>
+  <desc id="desc">Several of your processes each hold one Temporal Client. Each Client talks over gRPC to the Temporal Service to start Workflows, interact with them (Signal, Query, Update), observe them (results, describe, list), manage them (cancel, terminate) and run Standalone Activities or Nexus Operations. Workers, not Clients, run the code.</desc>
+  <defs>
+    <style>
+      .t{font-family:-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;fill:#1f2937}
+      .h{font-size:16px;font-weight:700}
+      .b{font-size:13px}
+      .bb{font-size:13px;font-weight:700}
+      .s{font-size:12px;fill:#4b5563}
+      .m{font-family:SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;fill:#111827;white-space:pre}
+      .n{font-size:12px;font-weight:700;fill:#ffffff}
+    </style>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#6b7280"/>
+    </marker>
+    <marker id="arrb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#2563eb"/>
+    </marker>
+    <marker id="arrp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#7c3aed"/>
+    </marker>
+    <marker id="arrr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#dc2626"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="960" height="520" rx="14" fill="#ffffff"/>
+  <text class="t h" x="30" y="38">One Client per process, many operations, no code execution</text>
+  <text class="t bb" x="30" y="76">Your processes</text>
+  <rect x="20" y="92" width="250" height="90" rx="10" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+  <text class="t bb" x="36" y="118">checkout-api</text>
+  <text class="t s" x="36" y="138">starts orders</text>
+  <rect x="36" y="148" width="150" height="24" rx="5" fill="#ffffff" stroke="#9ca3af" stroke-width="1.5"/>
+  <text class="m" x="46" y="165">client.Client</text>
+  <line x1="270" y1="137" x2="346" y2="185" stroke="#2563eb" stroke-width="1.5" marker-end="url(#arrb)"/>
+  <rect x="20" y="202" width="250" height="90" rx="10" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+  <text class="t bb" x="36" y="228">back-office</text>
+  <text class="t s" x="36" y="248">Query, Signal, cancel</text>
+  <rect x="36" y="258" width="150" height="24" rx="5" fill="#ffffff" stroke="#9ca3af" stroke-width="1.5"/>
+  <text class="m" x="46" y="275">client.Client</text>
+  <line x1="270" y1="247" x2="346" y2="215" stroke="#2563eb" stroke-width="1.5" marker-end="url(#arrb)"/>
+  <rect x="20" y="312" width="250" height="90" rx="10" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+  <text class="t bb" x="36" y="338">nightly-job</text>
+  <text class="t s" x="36" y="358">list stuck orders</text>
+  <rect x="36" y="368" width="150" height="24" rx="5" fill="#ffffff" stroke="#9ca3af" stroke-width="1.5"/>
+  <text class="m" x="46" y="385">client.Client</text>
+  <line x1="270" y1="357" x2="346" y2="245" stroke="#2563eb" stroke-width="1.5" marker-end="url(#arrb)"/>
+  <rect x="350" y="110" width="220" height="230" rx="12" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+  <text class="t bb" x="460" y="140" text-anchor="middle">Temporal Service</text>
+  <text class="t s" x="460" y="162" text-anchor="middle">Frontend (gRPC :7233)</text>
+  <text class="t s" x="460" y="210" text-anchor="middle">records Events,</text>
+  <text class="t s" x="460" y="228" text-anchor="middle">queues Tasks,</text>
+  <text class="t s" x="460" y="246" text-anchor="middle">stores results</text>
+  <rect x="350" y="390" width="220" height="92" rx="10" fill="#d1fae5" stroke="#059669" stroke-width="1.5"/>
+  <text class="t bb" x="364" y="414">Workers</text>
+  <text class="t s" x="364" y="434">poll Task Queues and run</text>
+  <text class="t s" x="364" y="451">Workflow / Activity code.</text>
+  <text class="t s" x="364" y="468">Not the Client's job.</text>
+  <line x1="460" y1="340" x2="460" y2="386" stroke="#7c3aed" stroke-width="1.5" marker-end="url(#arrp)" marker-start="url(#arrp)"/>
+  <rect x="630" y="72" width="310" height="70" rx="10" fill="#ffffff" stroke="#9ca3af" stroke-width="1.5"/>
+  <text class="t bb" x="646" y="98">Start</text>
+  <text class="m" x="646" y="122">ExecuteWorkflow · SignalWithStart</text>
+  <line x1="626" y1="107" x2="574" y2="225" stroke="#9ca3af" stroke-width="1.5"/>
+  <rect x="630" y="156" width="310" height="70" rx="10" fill="#ffffff" stroke="#9ca3af" stroke-width="1.5"/>
+  <text class="t bb" x="646" y="182">Interact</text>
+  <text class="m" x="646" y="206">Signal · Query · Update</text>
+  <line x1="626" y1="191" x2="574" y2="225" stroke="#9ca3af" stroke-width="1.5"/>
+  <rect x="630" y="240" width="310" height="70" rx="10" fill="#ffffff" stroke="#9ca3af" stroke-width="1.5"/>
+  <text class="t bb" x="646" y="266">Observe</text>
+  <text class="m" x="646" y="290">Get · Describe · List · Count</text>
+  <line x1="626" y1="275" x2="574" y2="225" stroke="#9ca3af" stroke-width="1.5"/>
+  <rect x="630" y="324" width="310" height="70" rx="10" fill="#ffffff" stroke="#9ca3af" stroke-width="1.5"/>
+  <text class="t bb" x="646" y="350">Manage</text>
+  <text class="m" x="646" y="374">Cancel · Terminate</text>
+  <line x1="626" y1="359" x2="574" y2="225" stroke="#9ca3af" stroke-width="1.5"/>
+  <rect x="630" y="408" width="310" height="70" rx="10" fill="#ffffff" stroke="#9ca3af" stroke-width="1.5"/>
+  <text class="t bb" x="646" y="434">Without a Workflow</text>
+  <text class="m" x="646" y="458">ExecuteActivity · NewNexusClient (exp.)</text>
+  <line x1="626" y1="443" x2="574" y2="225" stroke="#9ca3af" stroke-width="1.5"/>
+  <text class="t s" x="480" y="508" text-anchor="middle">Never inside Workflow code (breaks determinism). Fine inside Activities.</text>
+</svg>
