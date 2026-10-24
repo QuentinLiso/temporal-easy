@@ -5,6 +5,8 @@
 > Every chapter has **compilable Go examples** with production-like names.
 >
 > Companion guide: [Temporal Workflows with Go](../../workflows/docs/README.md). Workflows orchestrate, Activities do the side effects.
+>
+> New to Temporal? Start with [Temporal Architecture with Go](../../architecture/docs/README.md): which part runs where, and why replay works.
 
 ![Activities mental model](../img/activities-mental-model.svg)
 

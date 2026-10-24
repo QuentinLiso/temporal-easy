@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 420" width="960" height="420" role="img" aria-labelledby="title desc">
+  <title id="title">Clients and the Frontend Service</title>
+  <desc id="desc">The Temporal CLI, the Web UI and the SDK Client embedded in your applications all call the same gRPC API on the Frontend Service, which rate-limits, authorizes, validates and routes each request to the History or Matching service. Clients never reach backend services or Workers directly.</desc>
+  <defs>
+    <style>
+      .t{font-family:-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;fill:#1f2937}
+      .h{font-size:16px;font-weight:700}
+      .b{font-size:13px}
+      .bb{font-size:13px;font-weight:700}
+      .s{font-size:12px;fill:#4b5563}
+      .m{font-family:SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;fill:#111827}
+      .n{font-size:12px;font-weight:700;fill:#ffffff}
+    </style>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#6b7280"/>
+    </marker>
+    <marker id="arrb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#2563eb"/>
+    </marker>
+    <marker id="arrp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#7c3aed"/>
+    </marker>
+    <marker id="arrr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#dc2626"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="960" height="420" rx="14" fill="#ffffff"/>
+  <text class="t h" x="30" y="38">Every request enters through the Frontend</text>
+  <rect x="20" y="80" width="250" height="70" rx="10" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+  <text class="t bb" x="34" y="104">Temporal CLI</text>
+  <text class="m" x="34" y="124">temporal workflow start …</text>
+  <rect x="20" y="170" width="250" height="70" rx="10" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+  <text class="t bb" x="34" y="194">Web UI</text>
+  <text class="t s" x="34" y="214">localhost:8233 on the dev server</text>
+  <rect x="20" y="260" width="250" height="86" rx="10" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+  <text class="t bb" x="34" y="284">SDK Client in your app</text>
+  <text class="m" x="34" y="304">c.ExecuteWorkflow(…)</text>
+  <text class="m" x="34" y="321">c.QueryWorkflow(…)</text>
+  <rect x="350" y="70" width="270" height="290" rx="12" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+  <text class="t bb" x="485" y="98" text-anchor="middle">Frontend Service</text>
+  <rect x="370" y="114" width="230" height="48" rx="10" fill="#ffffff" stroke="#9ca3af" stroke-width="1.5"/>
+  <text class="t bb" x="384" y="138">Rate limiting</text>
+  <text class="t s" x="384" y="158">protect the cluster</text>
+  <line x1="485" y1="162" x2="485" y2="172" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arr)"/>
+  <rect x="370" y="174" width="230" height="48" rx="10" fill="#ffffff" stroke="#9ca3af" stroke-width="1.5"/>
+  <text class="t bb" x="384" y="198">Authorization</text>
+  <text class="t s" x="384" y="218">may this caller do this?</text>
+  <line x1="485" y1="222" x2="485" y2="232" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arr)"/>
+  <rect x="370" y="234" width="230" height="48" rx="10" fill="#ffffff" stroke="#9ca3af" stroke-width="1.5"/>
+  <text class="t bb" x="384" y="258">Validation</text>
+  <text class="t s" x="384" y="278">well-formed request?</text>
+  <line x1="485" y1="282" x2="485" y2="292" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arr)"/>
+  <rect x="370" y="294" width="230" height="48" rx="10" fill="#ffffff" stroke="#9ca3af" stroke-width="1.5"/>
+  <text class="t bb" x="384" y="318">Routing</text>
+  <text class="t s" x="384" y="338">to the right backend service</text>
+  <line x1="270" y1="115" x2="346" y2="150" stroke="#2563eb" stroke-width="1.5" marker-end="url(#arrb)"/>
+  <line x1="270" y1="205" x2="346" y2="215" stroke="#2563eb" stroke-width="1.5" marker-end="url(#arrb)"/>
+  <line x1="270" y1="303" x2="346" y2="280" stroke="#2563eb" stroke-width="1.5" marker-end="url(#arrb)"/>
+  <text class="t s" x="310" y="70" text-anchor="middle">gRPC, port 7233</text>
+  <rect x="700" y="90" width="240" height="74" rx="10" fill="#ffffff" stroke="#9ca3af" stroke-width="1.5"/>
+  <text class="t bb" x="714" y="114">History Service</text>
+  <text class="t s" x="714" y="134">start, signal, cancel, result,</text>
+  <text class="t s" x="714" y="151">history, describe</text>
+  <rect x="700" y="186" width="240" height="74" rx="10" fill="#ffffff" stroke="#9ca3af" stroke-width="1.5"/>
+  <text class="t bb" x="714" y="210">Matching Service</text>
+  <text class="t s" x="714" y="230">Task Queues, Worker polls,</text>
+  <text class="t s" x="714" y="247">describe task queue</text>
+  <rect x="700" y="282" width="240" height="74" rx="10" fill="#ffffff" stroke="#9ca3af" stroke-width="1.5"/>
+  <text class="t bb" x="714" y="306">Visibility store</text>
+  <text class="t s" x="714" y="326">list and count Workflows</text>
+  <line x1="600" y1="300" x2="696" y2="127" stroke="#7c3aed" stroke-width="1.5" marker-end="url(#arrp)"/>
+  <line x1="600" y1="300" x2="696" y2="223" stroke="#7c3aed" stroke-width="1.5" marker-end="url(#arrp)"/>
+  <line x1="600" y1="300" x2="696" y2="319" stroke="#7c3aed" stroke-width="1.5" marker-end="url(#arrp)"/>
+  <text class="t s" x="480" y="404" text-anchor="middle">Clients never talk to History, Matching or your Workers directly.</text>
+</svg>

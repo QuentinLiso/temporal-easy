@@ -2,6 +2,7 @@
 
 Onboarding guides for Temporal with Go:
 
+- `docs/architecture/`: Temporal Architecture (8 chapters)
 - `docs/workflows/`: Temporal Workflows (13 chapters)
 - `docs/activities/`: Temporal Activities (10 chapters)
 
@@ -24,6 +25,7 @@ temporal-easy/
     │   ├── config.mts         # site config; builds nav + sidebar from the folders
     │   └── theme/             # default theme + JetBrains Mono, wider content, GuideCards.vue
     ├── index.md               # home page: one card per guide, generated
+    ├── architecture/          # same layout as workflows/
     ├── workflows/
     │   ├── docs/*.md          # chapters (README.md is the overview)
     │   └── img/*.svg          # diagrams

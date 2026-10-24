@@ -7,7 +7,7 @@ const srcDir = fileURLToPath(new URL('..', import.meta.url))
 
 // Guides listed first, in this order. Any other docs/<feature>/docs/ folder
 // is picked up automatically and appended alphabetically.
-const guideOrder = ['workflows', 'activities']
+const guideOrder = ['architecture', 'workflows', 'activities']
 
 function guides(): string[] {
   const found = readdirSync(srcDir, { withFileTypes: true })

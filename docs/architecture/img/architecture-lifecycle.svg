@@ -1,0 +1,127 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 1280" width="960" height="1280" role="img" aria-labelledby="title desc">
+  <title id="title">Workflow and Activity lifecycle</title>
+  <desc id="desc">Sequence of the fifteen steps of one Workflow Execution with one Activity between the Client, the Frontend, History and Matching services, and a Worker: start, Workflow Task, Commands, Activity Task, retry-free success, resume and completion, then the Client reads the result. Events appended by History are noted on each step.</desc>
+  <defs>
+    <style>
+      .t{font-family:-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;fill:#1f2937}
+      .h{font-size:16px;font-weight:700}
+      .b{font-size:13px}
+      .bb{font-size:13px;font-weight:700}
+      .s{font-size:12px;fill:#4b5563}
+      .m{font-family:SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;fill:#111827}
+      .n{font-size:12px;font-weight:700;fill:#ffffff}
+    </style>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#6b7280"/>
+    </marker>
+    <marker id="arrb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#2563eb"/>
+    </marker>
+    <marker id="arrp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#7c3aed"/>
+    </marker>
+    <marker id="arrr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#dc2626"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="960" height="1280" rx="14" fill="#ffffff"/>
+  <text class="t h" x="30" y="38">One Workflow, one Activity: the 15 steps</text>
+  <rect x="10" y="118" width="940" height="514" rx="8" fill="#dbeafe" opacity="0.45"/>
+  <text class="t s" x="940" y="134" text-anchor="end">Workflow lifecycle (1–7)</text>
+  <rect x="10" y="636" width="940" height="292" rx="8" fill="#fef3c7" opacity="0.45"/>
+  <text class="t s" x="940" y="652" text-anchor="end">Activity lifecycle (8–11)</text>
+  <rect x="10" y="932" width="940" height="292" rx="8" fill="#d1fae5" opacity="0.45"/>
+  <text class="t s" x="940" y="948" text-anchor="end">Resume and finish (12–15)</text>
+  <rect x="28" y="62" width="124" height="34" rx="8" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+  <text class="t bb" x="90" y="84" text-anchor="middle">Client</text>
+  <line x1="90" y1="96" x2="90" y2="1250" stroke="#d1d5db" stroke-width="1.5" stroke-dasharray="5 4"/>
+  <rect x="208" y="62" width="124" height="34" rx="8" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+  <text class="t bb" x="270" y="84" text-anchor="middle">Frontend</text>
+  <line x1="270" y1="96" x2="270" y2="1250" stroke="#d1d5db" stroke-width="1.5" stroke-dasharray="5 4"/>
+  <rect x="398" y="62" width="124" height="34" rx="8" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+  <text class="t bb" x="460" y="84" text-anchor="middle">History</text>
+  <line x1="460" y1="96" x2="460" y2="1250" stroke="#d1d5db" stroke-width="1.5" stroke-dasharray="5 4"/>
+  <rect x="588" y="62" width="124" height="34" rx="8" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+  <text class="t bb" x="650" y="84" text-anchor="middle">Matching</text>
+  <line x1="650" y1="96" x2="650" y2="1250" stroke="#d1d5db" stroke-width="1.5" stroke-dasharray="5 4"/>
+  <rect x="798" y="62" width="124" height="34" rx="8" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+  <text class="t bb" x="860" y="84" text-anchor="middle">Worker</text>
+  <line x1="860" y1="96" x2="860" y2="1250" stroke="#d1d5db" stroke-width="1.5" stroke-dasharray="5 4"/>
+  <circle cx="30" cy="138" r="11" fill="#374151"/>
+  <text class="t n" x="30" y="142" text-anchor="middle">1</text>
+  <line x1="94" y1="138" x2="264" y2="138" stroke="#2563eb" stroke-width="1.5" marker-end="url(#arrb)"/>
+  <text class="m" x="180.0" y="132" text-anchor="middle">StartWorkflowExecution</text>
+  <line x1="274" y1="154" x2="454" y2="154" stroke="#7c3aed" stroke-width="1.5" marker-end="url(#arrp)"/>
+  <circle cx="30" cy="212" r="11" fill="#374151"/>
+  <text class="t n" x="30" y="216" text-anchor="middle">2</text>
+  <rect x="456" y="198" width="321.6" height="20" rx="4" fill="#ffffff" stroke="#7c3aed" stroke-width="1"/>
+  <text class="t s" x="462" y="212">+ WorkflowExecutionStarted, WorkflowTaskScheduled</text>
+  <circle cx="30" cy="286" r="11" fill="#374151"/>
+  <text class="t n" x="30" y="290" text-anchor="middle">3</text>
+  <line x1="464" y1="286" x2="644" y2="286" stroke="#7c3aed" stroke-width="1.5" marker-end="url(#arrp)"/>
+  <text class="m" x="555.0" y="280" text-anchor="middle">AddWorkflowTask</text>
+  <circle cx="30" cy="360" r="11" fill="#374151"/>
+  <text class="t n" x="30" y="364" text-anchor="middle">4</text>
+  <line x1="856" y1="360" x2="276" y2="360" stroke="#2563eb" stroke-width="1.5" marker-end="url(#arrb)"/>
+  <text class="m" x="565.0" y="354" text-anchor="middle">PollWorkflowTaskQueue</text>
+  <line x1="646" y1="376" x2="466" y2="376" stroke="#7c3aed" stroke-width="1.5" marker-end="url(#arrp)"/>
+  <rect x="456" y="394" width="142.4" height="20" rx="4" fill="#ffffff" stroke="#7c3aed" stroke-width="1"/>
+  <text class="t s" x="462" y="408">+ WorkflowTaskStarted</text>
+  <circle cx="30" cy="434" r="11" fill="#374151"/>
+  <text class="t n" x="30" y="438" text-anchor="middle">5</text>
+  <text class="t s" x="930" y="434" text-anchor="end">replay history, run Workflow code</text>
+  <circle cx="30" cy="508" r="11" fill="#374151"/>
+  <text class="t n" x="30" y="512" text-anchor="middle">6</text>
+  <line x1="856" y1="508" x2="276" y2="508" stroke="#2563eb" stroke-width="1.5" marker-end="url(#arrb)"/>
+  <text class="m" x="565.0" y="502" text-anchor="middle">RespondWorkflowTaskCompleted</text>
+  <line x1="274" y1="524" x2="454" y2="524" stroke="#7c3aed" stroke-width="1.5" marker-end="url(#arrp)"/>
+  <text class="t s" x="930" y="556" text-anchor="end">[ScheduleActivityTask]</text>
+  <circle cx="30" cy="582" r="11" fill="#374151"/>
+  <text class="t n" x="30" y="586" text-anchor="middle">7</text>
+  <rect x="456" y="568" width="302.40000000000003" height="20" rx="4" fill="#ffffff" stroke="#7c3aed" stroke-width="1"/>
+  <text class="t s" x="462" y="582">+ WorkflowTaskCompleted, ActivityTaskScheduled</text>
+  <circle cx="30" cy="656" r="11" fill="#374151"/>
+  <text class="t n" x="30" y="660" text-anchor="middle">8</text>
+  <line x1="464" y1="656" x2="644" y2="656" stroke="#7c3aed" stroke-width="1.5" marker-end="url(#arrp)"/>
+  <text class="m" x="555.0" y="650" text-anchor="middle">AddActivityTask</text>
+  <circle cx="30" cy="730" r="11" fill="#374151"/>
+  <text class="t n" x="30" y="734" text-anchor="middle">9</text>
+  <line x1="856" y1="730" x2="276" y2="730" stroke="#2563eb" stroke-width="1.5" marker-end="url(#arrb)"/>
+  <text class="m" x="565.0" y="724" text-anchor="middle">PollActivityTaskQueue</text>
+  <line x1="646" y1="746" x2="466" y2="746" stroke="#7c3aed" stroke-width="1.5" marker-end="url(#arrp)"/>
+  <rect x="456" y="764" width="200.0" height="20" rx="4" fill="#ffffff" stroke="#7c3aed" stroke-width="1"/>
+  <text class="t s" x="462" y="778">attempt started (no Event yet)</text>
+  <circle cx="30" cy="804" r="11" fill="#374151"/>
+  <text class="t n" x="30" y="808" text-anchor="middle">10</text>
+  <text class="t s" x="930" y="804" text-anchor="end">run Activity code (I/O allowed)</text>
+  <circle cx="30" cy="878" r="11" fill="#374151"/>
+  <text class="t n" x="30" y="882" text-anchor="middle">11</text>
+  <line x1="856" y1="878" x2="276" y2="878" stroke="#2563eb" stroke-width="1.5" marker-end="url(#arrb)"/>
+  <text class="m" x="565.0" y="872" text-anchor="middle">RespondActivityTaskCompleted</text>
+  <line x1="274" y1="894" x2="454" y2="894" stroke="#7c3aed" stroke-width="1.5" marker-end="url(#arrp)"/>
+  <rect x="456" y="912" width="366.40000000000003" height="20" rx="4" fill="#ffffff" stroke="#7c3aed" stroke-width="1"/>
+  <text class="t s" x="462" y="926">+ ActivityTaskStarted, …Completed, WorkflowTaskScheduled</text>
+  <circle cx="30" cy="952" r="11" fill="#374151"/>
+  <text class="t n" x="30" y="956" text-anchor="middle">12</text>
+  <line x1="464" y1="952" x2="644" y2="952" stroke="#7c3aed" stroke-width="1.5" marker-end="url(#arrp)"/>
+  <text class="m" x="555.0" y="946" text-anchor="middle">AddWorkflowTask</text>
+  <circle cx="30" cy="1026" r="11" fill="#374151"/>
+  <text class="t n" x="30" y="1030" text-anchor="middle">13</text>
+  <line x1="856" y1="1026" x2="276" y2="1026" stroke="#2563eb" stroke-width="1.5" marker-end="url(#arrb)"/>
+  <text class="m" x="565.0" y="1020" text-anchor="middle">PollWorkflowTaskQueue</text>
+  <line x1="646" y1="1042" x2="466" y2="1042" stroke="#7c3aed" stroke-width="1.5" marker-end="url(#arrp)"/>
+  <text class="t s" x="930" y="1074" text-anchor="end">replay, unblock .Get, continue</text>
+  <circle cx="30" cy="1100" r="11" fill="#374151"/>
+  <text class="t n" x="30" y="1104" text-anchor="middle">14</text>
+  <line x1="856" y1="1100" x2="276" y2="1100" stroke="#2563eb" stroke-width="1.5" marker-end="url(#arrb)"/>
+  <text class="m" x="565.0" y="1094" text-anchor="middle">RespondWorkflowTaskCompleted</text>
+  <line x1="274" y1="1116" x2="454" y2="1116" stroke="#7c3aed" stroke-width="1.5" marker-end="url(#arrp)"/>
+  <rect x="456" y="1134" width="187.20000000000002" height="20" rx="4" fill="#ffffff" stroke="#7c3aed" stroke-width="1"/>
+  <text class="t s" x="462" y="1148">+ WorkflowExecutionCompleted</text>
+  <circle cx="30" cy="1174" r="11" fill="#374151"/>
+  <text class="t n" x="30" y="1178" text-anchor="middle">15</text>
+  <line x1="94" y1="1174" x2="264" y2="1174" stroke="#2563eb" stroke-width="1.5" marker-end="url(#arrb)"/>
+  <text class="m" x="180.0" y="1168" text-anchor="middle">get result</text>
+  <line x1="274" y1="1190" x2="454" y2="1190" stroke="#7c3aed" stroke-width="1.5" marker-end="url(#arrp)"/>
+  <text class="t s" x="480" y="1268" text-anchor="middle">Client and Worker always initiate (blue). History and Matching never call your processes (purple = internal).</text>
+</svg>

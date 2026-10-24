@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 540" width="960" height="540" role="img" aria-labelledby="title desc">
+  <title id="title">Temporal architecture mental model</title>
+  <desc id="desc">Your environment holds your Temporal Application: a Client application and Worker processes built with the Go SDK, plus the CLI and Web UI. All of them talk over gRPC to the Frontend of the Temporal Service, which contains the History, Matching and Worker services, a required database and optional Elasticsearch and Grafana. The Service stores state and schedules Tasks; it never runs your code.</desc>
+  <defs>
+    <style>
+      .t{font-family:-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;fill:#1f2937}
+      .h{font-size:16px;font-weight:700}
+      .b{font-size:13px}
+      .bb{font-size:13px;font-weight:700}
+      .s{font-size:12px;fill:#4b5563}
+      .m{font-family:SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;fill:#111827}
+      .n{font-size:12px;font-weight:700;fill:#ffffff}
+    </style>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#6b7280"/>
+    </marker>
+    <marker id="arrb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#2563eb"/>
+    </marker>
+    <marker id="arrp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#7c3aed"/>
+    </marker>
+    <marker id="arrr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#dc2626"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="960" height="540" rx="14" fill="#ffffff"/>
+  <text class="t h" x="30" y="38">Two sides, one network boundary</text>
+  <rect x="20" y="60" width="400" height="450" rx="14" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+  <text class="t bb" x="40" y="88">Your environment: you run it</text>
+  <rect x="40" y="104" width="360" height="96" rx="10" fill="#ffffff" stroke="#9ca3af" stroke-width="1.5"/>
+  <text class="t bb" x="54" y="128">Client application (e.g. orders-api)</text>
+  <text class="m" x="54" y="148">c.ExecuteWorkflow · SignalWorkflow</text>
+  <text class="m" x="54" y="165">QueryWorkflow · GetWorkflow(...).Get</text>
+  <text class="t s" x="54" y="182">Sends control requests. Runs no Workflow code.</text>
+  <rect x="40" y="216" width="360" height="170" rx="10" fill="#ffffff" stroke="#9ca3af" stroke-width="1.5"/>
+  <text class="t bb" x="54" y="240">Worker processes ×N</text>
+  <rect x="54" y="254" width="106" height="58" rx="10" fill="#d1fae5" stroke="#059669" stroke-width="1.5"/>
+  <text class="t bb" x="107.0" y="278" text-anchor="middle">Workflow</text>
+  <text class="t s" x="107.0" y="298" text-anchor="middle">code</text>
+  <rect x="170" y="254" width="106" height="58" rx="10" fill="#d1fae5" stroke="#059669" stroke-width="1.5"/>
+  <text class="t bb" x="223.0" y="278" text-anchor="middle">Activity</text>
+  <text class="t s" x="223.0" y="298" text-anchor="middle">code</text>
+  <rect x="286" y="254" width="100" height="58" rx="10" fill="#f3f4f6" stroke="#6b7280" stroke-width="1.5"/>
+  <text class="t bb" x="336.0" y="278" text-anchor="middle">Go SDK</text>
+  <text class="t s" x="336.0" y="298" text-anchor="middle">worker.New</text>
+  <text class="t s" x="54" y="334">Poll Task Queues, run your code,</text>
+  <text class="t s" x="54" y="351">send Commands and results back.</text>
+  <text class="t s" x="54" y="368">Stateless: any Worker can continue any Workflow.</text>
+  <rect x="40" y="402" width="360" height="88" rx="10" fill="#ffffff" stroke="#9ca3af" stroke-width="1.5"/>
+  <text class="t bb" x="54" y="426">Temporal CLI · Web UI</text>
+  <text class="t s" x="54" y="446">Developers and operators. Same Frontend API</text>
+  <text class="t s" x="54" y="463">as the SDK Client.</text>
+  <rect x="540" y="60" width="400" height="450" rx="14" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+  <text class="t bb" x="560" y="88">Temporal Service: self-hosted or Cloud</text>
+  <rect x="560" y="104" width="360" height="62" rx="10" fill="#ffffff" stroke="#9ca3af" stroke-width="1.5"/>
+  <text class="t bb" x="574" y="128">Frontend Service</text>
+  <text class="t s" x="574" y="148">gRPC entry point · rate limit · authz · validation · routing</text>
+  <rect x="560" y="192" width="112" height="92" rx="10" fill="#ffffff" stroke="#9ca3af" stroke-width="1.5"/>
+  <text class="t bb" x="574" y="216">History</text>
+  <text class="t s" x="574" y="236">Event History</text>
+  <text class="t s" x="574" y="253">mutable state</text>
+  <text class="t s" x="574" y="270">timers</text>
+  <rect x="684" y="192" width="112" height="92" rx="10" fill="#ffffff" stroke="#9ca3af" stroke-width="1.5"/>
+  <text class="t bb" x="698" y="216">Matching</text>
+  <text class="t s" x="698" y="236">Task Queues</text>
+  <text class="t s" x="698" y="253">partitions</text>
+  <text class="t s" x="698" y="270">polling</text>
+  <rect x="808" y="192" width="112" height="92" rx="10" fill="#ffffff" stroke="#9ca3af" stroke-width="1.5"/>
+  <text class="t bb" x="822" y="216">Worker Svc</text>
+  <text class="t s" x="822" y="236">Temporal's own</text>
+  <text class="t s" x="822" y="253">system</text>
+  <text class="t s" x="822" y="270">Workflows</text>
+  <line x1="616" y1="166" x2="616" y2="188" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="740" y1="166" x2="740" y2="188" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="864" y1="166" x2="864" y2="188" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arr)"/>
+  <rect x="560" y="310" width="360" height="62" rx="10" fill="#ffffff" stroke="#9ca3af" stroke-width="1.5"/>
+  <text class="t bb" x="574" y="334">Database (required)</text>
+  <text class="t s" x="574" y="354">Cassandra · MySQL · PostgreSQL · SQLite</text>
+  <line x1="616" y1="284" x2="616" y2="306" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arr)" marker-start="url(#arr)"/>
+  <line x1="740" y1="284" x2="740" y2="306" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arr)" marker-start="url(#arr)"/>
+  <rect x="560" y="392" width="360" height="62" rx="10" fill="#ffffff" stroke="#9ca3af" stroke-width="1.5" stroke-dasharray="6 4"/>
+  <text class="t bb" x="574" y="416">Optional components</text>
+  <text class="t s" x="574" y="436">Elasticsearch (advanced visibility) · Grafana (dashboards)</text>
+  <text class="t s" x="740" y="488" text-anchor="middle">Stores state, schedules Tasks. Never runs your code.</text>
+  <line x1="400" y1="140" x2="556" y2="126" stroke="#2563eb" stroke-width="1.5" marker-end="url(#arrb)"/>
+  <text class="t s" x="478" y="118" text-anchor="middle">start · signal ·</text>
+  <text class="t s" x="478" y="152" text-anchor="middle">query (gRPC)</text>
+  <line x1="400" y1="300" x2="556" y2="140" stroke="#2563eb" stroke-width="1.5" marker-end="url(#arrb)" marker-start="url(#arrb)"/>
+  <text class="t s" x="478" y="262" text-anchor="middle">long-poll Tasks,</text>
+  <text class="t s" x="478" y="278" text-anchor="middle">respond</text>
+  <line x1="400" y1="446" x2="556" y2="154" stroke="#2563eb" stroke-width="1.5" marker-end="url(#arrb)"/>
+  <text class="t s" x="432" y="410">same API</text>
+</svg>

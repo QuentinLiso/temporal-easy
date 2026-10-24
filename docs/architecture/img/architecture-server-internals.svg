@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 600" width="960" height="600" role="img" aria-labelledby="title desc">
+  <title id="title">Temporal Server internals</title>
+  <desc id="desc">Clients and Workers reach the Frontend. The Frontend routes to the History Service, which owns Event Histories, mutable state and internal timer, transfer, replication and visibility queues, and to the Matching Service, which holds partitioned Task Queues. History asks Matching to add Workflow and Activity Tasks. The Worker Service runs Temporal's internal system Workflows. Everything persists to the required database; Elasticsearch and Grafana are optional.</desc>
+  <defs>
+    <style>
+      .t{font-family:-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;fill:#1f2937}
+      .h{font-size:16px;font-weight:700}
+      .b{font-size:13px}
+      .bb{font-size:13px;font-weight:700}
+      .s{font-size:12px;fill:#4b5563}
+      .m{font-family:SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;fill:#111827}
+      .n{font-size:12px;font-weight:700;fill:#ffffff}
+    </style>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#6b7280"/>
+    </marker>
+    <marker id="arrb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#2563eb"/>
+    </marker>
+    <marker id="arrp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#7c3aed"/>
+    </marker>
+    <marker id="arrr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#dc2626"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="960" height="600" rx="14" fill="#ffffff"/>
+  <text class="t h" x="30" y="38">Inside the Temporal Server</text>
+  <rect x="20" y="56" width="920" height="46" rx="10" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+  <text class="t bb" x="480" y="84" text-anchor="middle">Your Clients, Workers, the CLI and the Web UI</text>
+  <rect x="300" y="128" width="360" height="60" rx="10" fill="#ffffff" stroke="#9ca3af" stroke-width="1.5"/>
+  <text class="t bb" x="480.0" y="152" text-anchor="middle">Frontend Service</text>
+  <text class="t s" x="480.0" y="172" text-anchor="middle">rate limit · authorization · validation · routing</text>
+  <line x1="480" y1="102" x2="480" y2="124" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arr)" marker-start="url(#arr)"/>
+  <rect x="20" y="214" width="920" height="252" rx="12" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+  <text class="t bb" x="36" y="238">Backend services</text>
+  <rect x="36" y="252" width="330" height="200" rx="10" fill="#ffffff" stroke="#9ca3af" stroke-width="1.5"/>
+  <text class="t bb" x="50" y="276">History Service</text>
+  <text class="t s" x="50" y="296">Per Workflow Execution:</text>
+  <rect x="50" y="306" width="146" height="54" rx="10" fill="#d1fae5" stroke="#059669" stroke-width="1.5"/>
+  <text class="t bb" x="64" y="330">Event History</text>
+  <text class="t s" x="64" y="350">ordered Events</text>
+  <rect x="206" y="306" width="146" height="54" rx="10" fill="#d1fae5" stroke="#059669" stroke-width="1.5"/>
+  <text class="t bb" x="220" y="330">Mutable state</text>
+  <text class="t s" x="220" y="350">status, pending work</text>
+  <text class="t s" x="50" y="384">Internal task queues:</text>
+  <rect x="50" y="394" width="70" height="30" rx="6" fill="#fef3c7" stroke="#d97706" stroke-width="1.5"/>
+  <text class="t s" x="85" y="414" text-anchor="middle">timer</text>
+  <rect x="126" y="394" width="70" height="30" rx="6" fill="#fef3c7" stroke="#d97706" stroke-width="1.5"/>
+  <text class="t s" x="161" y="414" text-anchor="middle">transfer</text>
+  <rect x="202" y="394" width="70" height="30" rx="6" fill="#fef3c7" stroke="#d97706" stroke-width="1.5"/>
+  <text class="t s" x="237" y="414" text-anchor="middle">replication</text>
+  <rect x="278" y="394" width="70" height="30" rx="6" fill="#fef3c7" stroke="#d97706" stroke-width="1.5"/>
+  <text class="t s" x="313" y="414" text-anchor="middle">visibility</text>
+  <text class="t s" x="50" y="442">Rebuilds state by replay after failures.</text>
+  <rect x="400" y="252" width="300" height="200" rx="10" fill="#ffffff" stroke="#9ca3af" stroke-width="1.5"/>
+  <text class="t bb" x="414" y="276">Matching Service</text>
+  <text class="t s" x="414" y="306">Task Queue “orders”</text>
+  <rect x="414" y="314" width="128" height="30" rx="6" fill="#fef3c7" stroke="#d97706" stroke-width="1.5"/>
+  <text class="t s" x="478" y="334" text-anchor="middle">partition 0</text>
+  <rect x="550" y="314" width="128" height="30" rx="6" fill="#fef3c7" stroke="#d97706" stroke-width="1.5"/>
+  <text class="t s" x="614" y="334" text-anchor="middle">partition 1</text>
+  <text class="t s" x="414" y="370">Task Queue “payments”</text>
+  <rect x="414" y="378" width="128" height="30" rx="6" fill="#fef3c7" stroke="#d97706" stroke-width="1.5"/>
+  <text class="t s" x="478" y="398" text-anchor="middle">partition 0</text>
+  <text class="t s" x="414" y="430">Hands Tasks to polling Workers.</text>
+  <line x1="366" y1="330" x2="396" y2="330" stroke="#7c3aed" stroke-width="1.5" marker-end="url(#arrp)"/>
+  <text class="t s" x="381" y="320" text-anchor="middle">add</text>
+  <line x1="396" y1="360" x2="366" y2="360" stroke="#7c3aed" stroke-width="1.5" marker-end="url(#arrp)"/>
+  <text class="t s" x="381" y="378" text-anchor="middle">started</text>
+  <rect x="734" y="252" width="192" height="200" rx="10" fill="#ffffff" stroke="#9ca3af" stroke-width="1.5"/>
+  <text class="t bb" x="748" y="276">Worker Service</text>
+  <text class="t s" x="748" y="300">Temporal's internal</text>
+  <text class="t s" x="748" y="318">system Workflows:</text>
+  <text class="t s" x="748" y="336">maintenance, cleanup,</text>
+  <text class="t s" x="748" y="354">replication, archival,</text>
+  <text class="t s" x="748" y="372">visibility indexing.</text>
+  <text class="t s" x="748" y="390"></text>
+  <text class="t s" x="748" y="408">Not your Workers.</text>
+  <line x1="400" y1="188" x2="200" y2="248" stroke="#7c3aed" stroke-width="1.5" marker-end="url(#arrp)"/>
+  <line x1="520" y1="188" x2="550" y2="248" stroke="#7c3aed" stroke-width="1.5" marker-end="url(#arrp)"/>
+  <rect x="36" y="494" width="560" height="62" rx="10" fill="#ffffff" stroke="#9ca3af" stroke-width="1.5"/>
+  <text class="t bb" x="50" y="518">Database (required): Cassandra · MySQL · PostgreSQL · SQLite</text>
+  <text class="t s" x="50" y="538">Workflow state, Event Histories, Task Queues, metadata</text>
+  <line x1="200" y1="466" x2="200" y2="490" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arr)" marker-start="url(#arr)"/>
+  <line x1="550" y1="466" x2="550" y2="490" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arr)" marker-start="url(#arr)"/>
+  <rect x="620" y="494" width="150" height="62" rx="10" fill="#f3f4f6" stroke="#6b7280" stroke-width="1.5" stroke-dasharray="6 4"/>
+  <text class="t bb" x="634" y="518">Elasticsearch</text>
+  <text class="t s" x="634" y="538">optional: visibility</text>
+  <rect x="790" y="494" width="150" height="62" rx="10" fill="#f3f4f6" stroke="#6b7280" stroke-width="1.5" stroke-dasharray="6 4"/>
+  <text class="t bb" x="804" y="518">Grafana</text>
+  <text class="t s" x="804" y="538">optional: dashboards</text>
+  <text class="t s" x="480" y="584" text-anchor="middle">Arrows: Frontend routes requests · History asks Matching to add Tasks · Matching reports when a Task starts</text>
+</svg>

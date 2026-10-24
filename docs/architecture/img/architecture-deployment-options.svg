@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 440" width="960" height="440" role="img" aria-labelledby="title desc">
+  <title id="title">Temporal deployment options</title>
+  <desc id="desc">Three ways to get a Temporal Service: the dev server on a laptop (SQLite, localhost:7233), a self-hosted cluster you operate (Frontend, History, Matching and Worker services with Cassandra, MySQL or PostgreSQL, optional Elasticsearch and Grafana), or Temporal Cloud operated by Temporal (namespace.account.tmprl.cloud:7233 with an API key or mTLS). In all three, you run your own Workers and Clients with the same code.</desc>
+  <defs>
+    <style>
+      .t{font-family:-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;fill:#1f2937}
+      .h{font-size:16px;font-weight:700}
+      .b{font-size:13px}
+      .bb{font-size:13px;font-weight:700}
+      .s{font-size:12px;fill:#4b5563}
+      .m{font-family:SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;fill:#111827}
+      .n{font-size:12px;font-weight:700;fill:#ffffff}
+    </style>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#6b7280"/>
+    </marker>
+    <marker id="arrb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#2563eb"/>
+    </marker>
+    <marker id="arrp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#7c3aed"/>
+    </marker>
+    <marker id="arrr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#dc2626"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="960" height="440" rx="14" fill="#ffffff"/>
+  <text class="t h" x="30" y="38">The Service changes. Your Workers and Clients don't.</text>
+  <rect x="20" y="64" width="296" height="160" rx="12" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+  <text class="t h" x="168" y="92" text-anchor="middle">Dev server</text>
+  <text class="m" x="168" y="114" text-anchor="middle">temporal server start-dev</text>
+  <text class="t s" x="168" y="146" text-anchor="middle">operated by: you, on a laptop</text>
+  <text class="t s" x="168" y="168" text-anchor="middle">SQLite, built-in Web UI</text>
+  <text class="t s" x="168" y="190" text-anchor="middle">no auth</text>
+  <line x1="168" y1="296" x2="168" y2="230" stroke="#2563eb" stroke-width="1.5" marker-end="url(#arrb)"/>
+  <rect x="38" y="248" width="260" height="24" rx="5" fill="#ffffff"/>
+  <text class="m" x="168" y="265" text-anchor="middle">localhost:7233</text>
+  <rect x="332" y="64" width="296" height="160" rx="12" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+  <text class="t h" x="480" y="92" text-anchor="middle">Self-hosted</text>
+  <text class="t s" x="480" y="114" text-anchor="middle">your cluster</text>
+  <text class="t s" x="480" y="146" text-anchor="middle">operated by: you</text>
+  <text class="t s" x="480" y="168" text-anchor="middle">Cassandra / MySQL / PostgreSQL</text>
+  <text class="t s" x="480" y="190" text-anchor="middle">+ optional Elasticsearch, Grafana</text>
+  <line x1="480" y1="296" x2="480" y2="230" stroke="#2563eb" stroke-width="1.5" marker-end="url(#arrb)"/>
+  <rect x="350" y="248" width="260" height="24" rx="5" fill="#ffffff"/>
+  <text class="m" x="480" y="265" text-anchor="middle">frontend.internal:7233 + mTLS</text>
+  <rect x="644" y="64" width="296" height="160" rx="12" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+  <text class="t h" x="792" y="92" text-anchor="middle">Temporal Cloud</text>
+  <text class="t s" x="792" y="114" text-anchor="middle">managed by Temporal</text>
+  <text class="t s" x="792" y="146" text-anchor="middle">operated by: Temporal</text>
+  <text class="t s" x="792" y="168" text-anchor="middle">database and scaling managed</text>
+  <text class="t s" x="792" y="190" text-anchor="middle">Namespace &lt;ns&gt;.&lt;account&gt;</text>
+  <line x1="792" y1="296" x2="792" y2="230" stroke="#2563eb" stroke-width="1.5" marker-end="url(#arrb)"/>
+  <rect x="662" y="248" width="260" height="24" rx="5" fill="#ffffff"/>
+  <text class="m" x="792" y="265" text-anchor="middle">&lt;ns&gt;.&lt;acct&gt;.tmprl.cloud:7233</text>
+  <rect x="20" y="300" width="920" height="110" rx="12" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+  <text class="t bb" x="480" y="328" text-anchor="middle">Your environment (always run by you)</text>
+  <rect x="40" y="342" width="280" height="52" rx="10" fill="#ffffff" stroke="#9ca3af" stroke-width="1.5"/>
+  <text class="t bb" x="180.0" y="366" text-anchor="middle">Workers (worker.New + Run)</text>
+  <rect x="340" y="342" width="280" height="52" rx="10" fill="#ffffff" stroke="#9ca3af" stroke-width="1.5"/>
+  <text class="t bb" x="480.0" y="366" text-anchor="middle">Client apps (client.Dial)</text>
+  <rect x="640" y="342" width="280" height="52" rx="10" fill="#ffffff" stroke="#9ca3af" stroke-width="1.5"/>
+  <text class="t bb" x="780.0" y="366" text-anchor="middle">envconfig connection profiles</text>
+  <text class="t s" x="480" y="430" text-anchor="middle">Same Go code everywhere: only the connection profile (address, Namespace, credentials) changes.</text>
+</svg>
