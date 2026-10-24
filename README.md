@@ -15,8 +15,10 @@ temporal-easy/
 ├── .npmrc                   # project registry (public npm, not Artifactory)
 ├── pnpm-workspace.yaml      # pnpm settings (allows esbuild's install script)
 └── docs/                    # VitePress source root
-    ├── .vitepress/config.mts  # site title, top nav, sidebar
-    ├── index.md               # landing page
+    ├── .vitepress/
+    │   ├── config.mts         # site config; builds nav + sidebar from the folders
+    │   └── theme/             # default theme + JetBrains Mono, wider content, GuideCards.vue
+    ├── index.md               # home page: one card per guide, generated
     ├── workflows/
     │   ├── docs/*.md          # chapters (README.md is the overview)
     │   └── img/*.svg          # diagrams
@@ -40,9 +42,11 @@ The project uses pnpm. The local `.npmrc` points it at the public npm registry, 
 
 ## Contributing
 
-- **New chapter:**
-  - Add `NN-short-slug.md` to `docs/<guide>/docs/` and start it with a `# NN · Title` heading.
-  - Add the page to that guide's sidebar in `docs/.vitepress/config.mts`. Pages are not picked up automatically.
+- **New chapter:** add `NN-short-slug.md` to `docs/<guide>/docs/` and start it with a `# NN · Title` heading. The sidebar picks it up automatically and uses the heading text up to the first `:` as the label.
+- **New Temporal feature:**
+  - Create `docs/<feature>/docs/README.md` (the overview), the numbered chapters and `docs/<feature>/img/`.
+  - The feature then appears automatically as its own sidebar section and as a card on the home page.
+  - To control its position, add it to `guideOrder` in `docs/.vitepress/config.mts`. Unlisted features are added alphabetically.
 - **Diagrams:** put SVGs in the guide's `img/` folder and reference them with `![alt](../img/name.svg)`.
 - **Links:** use relative links to the `.md` file, such as `[Versioning](./11-versioning.md)` or `[Activities](../../activities/docs/README.md)`.
 - **Code samples:**

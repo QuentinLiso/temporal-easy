@@ -1,0 +1,11 @@
+:root {
+  --vp-font-family-mono: 'JetBrains Mono', ui-monospace, Menlo, Consolas, monospace;
+}
+
+/* Wider content column so 960px diagrams keep a readable text size. */
+@media (min-width: 960px) {
+  .VPDoc .content-container,
+  .VPDoc.has-aside .content-container {
+    max-width: 960px !important;
+  }
+}
