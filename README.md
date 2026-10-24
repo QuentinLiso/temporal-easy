@@ -15,7 +15,7 @@ temporal-easy/
 ├── .npmrc                   # project registry (public npm, not Artifactory)
 ├── pnpm-workspace.yaml      # pnpm settings (allows esbuild's install script)
 ├── topics/<feature>.md      # sources of each guide, read by /temporal-doc
-├── .claude/                 # /temporal-doc command + temporal-doc and temporal-vitepress skills
+├── .claude/                 # /temporal-doc command + temporal-guide-writing and temporal-vitepress skills
 └── docs/                    # VitePress source root
     ├── .vitepress/
     │   ├── config.mts         # site config; builds nav + sidebar from the folders

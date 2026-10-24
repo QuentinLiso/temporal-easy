@@ -39,7 +39,7 @@ temporal-easy/
 Use pnpm, never npm.
 
 To publish a new feature guide:
-- Check it follows the `temporal-doc` structure: `docs/<feature>/docs/README.md`, `NN-slug.md` chapters, `docs/<feature>/img/*.svg`.
+- Check it follows the `temporal-guide-writing` structure: `docs/<feature>/docs/README.md`, `NN-slug.md` chapters, `docs/<feature>/img/*.svg`.
 - Add `<feature>` to `guideOrder` only if it must not be sorted alphabetically.
 - Add the companion-guide line to the other guides' README blockquotes if it helps readers.
 

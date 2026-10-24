@@ -5,7 +5,7 @@
             "Read(./**)",
             "Edit(./**)",
             "Skill(qdoc)",
-            "Skill(temporal-doc)",
+            "Skill(temporal-guide-writing)",
             "Skill(temporal-vitepress)"
         ]
     }

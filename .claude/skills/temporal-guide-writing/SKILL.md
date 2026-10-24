@@ -1,5 +1,5 @@
 ---
-name: temporal-doc
+name: temporal-guide-writing
 description: Write a progressive onboarding roadmap for one Temporal feature in Go, from the Temporal Encyclopedia and Go SDK docs read side by side, with SVG diagrams and compilable Go examples. Use when documenting a Temporal feature into docs/<feature>/.
 ---
 

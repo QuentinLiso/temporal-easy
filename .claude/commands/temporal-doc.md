@@ -20,6 +20,6 @@ Read the topic file `$ARGUMENTS`. It has three sections:
 If `$ARGUMENTS` is empty or the file is missing, stop and ask which topic file to use. To document a new topic, copy one of the files in `topics/` and change its three sections.
 
 Then:
-1. Use the `temporal-doc` skill to write the guide into `docs/<feature>/`, from the pages listed in the topic file.
+1. Use the `temporal-guide-writing` skill to write the guide into `docs/<feature>/`, from the pages listed in the topic file.
 2. Use the `temporal-vitepress` skill to publish it on the website and verify the build.
 3. Report the chapters written, the diagrams, the docs/SDK discrepancies found, and the build result.
