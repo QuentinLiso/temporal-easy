@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 600" width="960" height="600" role="img" aria-labelledby="title desc">
+  <title id="title">Soft timeout: racing a Timer against long-running work</title>
+  <desc id="desc">Two scenarios with a Selector. If the work finishes first, the Workflow cancels the Timer. If the Timer fires first, the Workflow reacts, for example by issuing an apology voucher, and keeps waiting for the work without failing or retrying it.</desc>
+  <defs>
+    <style>
+      .t{font-family:-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;fill:#1f2937}
+      .h{font-size:15px;font-weight:700}
+      .b{font-size:12.5px}
+      .bb{font-size:12.5px;font-weight:700}
+      .s{font-size:11.5px;fill:#4b5563}
+      .m{font-family:SFMono-Regular,Menlo,Consolas,monospace;font-size:11.5px;fill:#111827}
+      .ev{font-family:SFMono-Regular,Menlo,Consolas,monospace;font-size:11px;fill:#6d28d9}
+    </style>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#374151"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="960" height="600" rx="14" fill="#ffffff"/>
+  <text class="t h" x="30" y="34">Soft timeout with a Selector: Timer vs. work (Activity or Signal)</text>
+  <text class="m" x="30" y="56">selector.AddFuture(work, …) · selector.AddFuture(workflow.NewTimer(timerCtx, 45*time.Minute), …) · selector.Select(ctx)</text>
+
+  <!-- ===== Scenario A ===== -->
+  <rect x="20" y="74" width="920" height="220" rx="12" fill="#f8fafc" stroke="#cbd5e1"/>
+  <text class="t h" x="40" y="100">A · The work finishes first</text>
+
+  <!-- time axis A -->
+  <line x1="200" y1="262" x2="900" y2="262" stroke="#9ca3af"/>
+  <text class="t s" x="200" y="280" text-anchor="middle">t=0</text>
+  <text class="t s" x="520" y="280" text-anchor="middle">t=31 min</text>
+  <text class="t s" x="690" y="280" text-anchor="middle">t=45 min</text>
+
+  <text class="t bb" x="40" y="138">Work</text>
+  <text class="t s" x="40" y="154">Activity / Signal</text>
+  <rect x="200" y="124" width="320" height="30" rx="6" fill="#d1fae5" stroke="#059669"/>
+  <text class="t b" x="360" y="144" text-anchor="middle">courier delivering…</text>
+  <text class="t bb" x="532" y="144">✓ delivered</text>
+
+  <text class="t bb" x="40" y="198">Timer</text>
+  <text class="t s" x="40" y="214">45 min SLA</text>
+  <rect x="200" y="184" width="320" height="30" rx="6" fill="#fef3c7" stroke="#d97706"/>
+  <rect x="520" y="184" width="170" height="30" rx="6" fill="#ffffff" stroke="#d97706" stroke-dasharray="5 4"/>
+  <text class="t s" x="605" y="204" text-anchor="middle">would have fired here</text>
+  <text class="t bb" x="526" y="232">✕ cancelTimers()</text>
+  <text class="ev" x="526" y="248">TimerCanceled</text>
+  <line x1="520" y1="158" x2="520" y2="180" stroke="#374151" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <text class="t b" x="720" y="130">The work's callback runs:</text>
+  <text class="t b" x="720" y="148">record the result, then</text>
+  <text class="t b" x="720" y="166">cancel the Timer's Context.</text>
+  <text class="t s" x="720" y="190">No voucher, nothing else fires.</text>
+
+  <!-- ===== Scenario B ===== -->
+  <rect x="20" y="310" width="920" height="270" rx="12" fill="#f8fafc" stroke="#cbd5e1"/>
+  <text class="t h" x="40" y="336">B · The Timer fires first (soft timeout)</text>
+
+  <line x1="200" y1="548" x2="900" y2="548" stroke="#9ca3af"/>
+  <text class="t s" x="200" y="566" text-anchor="middle">t=0</text>
+  <text class="t s" x="540" y="566" text-anchor="middle">t=45 min</text>
+  <text class="t s" x="820" y="566" text-anchor="middle">t=62 min</text>
+
+  <text class="t bb" x="40" y="374">Work</text>
+  <text class="t s" x="40" y="390">Activity / Signal</text>
+  <rect x="200" y="360" width="620" height="30" rx="6" fill="#d1fae5" stroke="#059669"/>
+  <text class="t b" x="380" y="380" text-anchor="middle">courier delivering… (still running, not canceled)</text>
+  <text class="t bb" x="826" y="380">✓ delivered</text>
+
+  <text class="t bb" x="40" y="434">Timer</text>
+  <text class="t s" x="40" y="450">45 min SLA</text>
+  <rect x="200" y="420" width="340" height="30" rx="6" fill="#fef3c7" stroke="#d97706"/>
+  <text class="t bb" x="548" y="440">⏰ fires</text>
+  <text class="ev" x="548" y="456">TimerFired</text>
+
+  <line x1="540" y1="454" x2="540" y2="484" stroke="#374151" stroke-width="1.5" marker-end="url(#arr)"/>
+  <rect x="470" y="488" width="200" height="40" rx="6" fill="#dbeafe" stroke="#2563eb"/>
+  <text class="t b" x="570" y="505" text-anchor="middle">Timer callback: run</text>
+  <text class="m" x="570" y="521" text-anchor="middle">IssueApologyVoucher</text>
+
+  <text class="t s" x="40" y="500">The Workflow does NOT fail</text>
+  <text class="t s" x="40" y="516">and the work is NOT retried.</text>
+  <text class="t s" x="40" y="532">Loop: Select again for the work.</text>
+
+  <text class="t s" x="690" y="500">Each Future matches once,</text>
+  <text class="t s" x="690" y="516">so the next Select only waits</text>
+  <text class="t s" x="690" y="532">for the work to finish.</text>
+</svg>

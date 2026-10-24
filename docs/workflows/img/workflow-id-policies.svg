@@ -1,0 +1,113 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 660" width="960" height="660" role="img" aria-labelledby="title desc">
+  <title id="title">Workflow ID Conflict and Reuse policies</title>
+  <desc id="desc">Decision flow when starting a Workflow Execution with a Workflow ID that may already be used. If an Open Execution holds the ID, the Conflict Policy applies. Otherwise, if a Closed Execution within retention used it, the Reuse Policy applies. The Go SDK returns the existing run instead of an error unless WorkflowExecutionErrorWhenAlreadyStarted is true.</desc>
+  <defs>
+    <style>
+      .t{font-family:-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;fill:#1f2937}
+      .h{font-size:15px;font-weight:700}
+      .b{font-size:12.5px}
+      .bb{font-size:12.5px;font-weight:700}
+      .s{font-size:11.5px;fill:#4b5563}
+      .m{font-family:SFMono-Regular,Menlo,Consolas,monospace;font-size:11.5px;fill:#111827}
+    </style>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#374151"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="960" height="660" rx="14" fill="#ffffff"/>
+  <text class="t h" x="30" y="34">Starting a Workflow with an ID that may already be used</text>
+
+  <!-- start -->
+  <rect x="300" y="52" width="360" height="44" rx="8" fill="#dbeafe" stroke="#2563eb"/>
+  <text class="m" x="480" y="72" text-anchor="middle">c.ExecuteWorkflow(ctx, opts, …)</text>
+  <text class="m" x="480" y="88" text-anchor="middle">opts.ID = "payout-m_4821-2026-10-24"</text>
+  <line x1="480" y1="96" x2="480" y2="120" stroke="#374151" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- diamond 1 -->
+  <polygon points="480,122 640,170 480,218 320,170" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+  <text class="t bb" x="480" y="166" text-anchor="middle">An OPEN Execution</text>
+  <text class="t bb" x="480" y="183" text-anchor="middle">holds this ID?</text>
+
+  <!-- yes left -->
+  <line x1="320" y1="170" x2="250" y2="170" stroke="#374151" stroke-width="1.5"/>
+  <line x1="250" y1="170" x2="250" y2="246" stroke="#374151" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text class="t bb" x="284" y="162" text-anchor="middle">yes</text>
+
+  <!-- conflict policy box -->
+  <rect x="30" y="250" width="440" height="200" rx="10" fill="#f8fafc" stroke="#7c3aed"/>
+  <text class="t h" x="50" y="276">Conflict Policy</text>
+  <text class="m" x="190" y="276">WorkflowIDConflictPolicy</text>
+
+  <rect x="46" y="292" width="160" height="40" rx="6" fill="#fee2e2" stroke="#dc2626"/>
+  <text class="t bb" x="126" y="309" text-anchor="middle">FAIL</text>
+  <text class="t s" x="126" y="325" text-anchor="middle">(default)</text>
+  <text class="t b" x="218" y="309">no new run →</text>
+  <text class="t b" x="218" y="325">"already started" error</text>
+
+  <rect x="46" y="342" width="160" height="40" rx="6" fill="#d1fae5" stroke="#059669"/>
+  <text class="t bb" x="126" y="367" text-anchor="middle">USE_EXISTING</text>
+  <text class="t b" x="218" y="359">no new run → success with</text>
+  <text class="t b" x="218" y="375">the open run's Run ID</text>
+
+  <rect x="46" y="392" width="160" height="40" rx="6" fill="#fef3c7" stroke="#d97706"/>
+  <text class="t bb" x="126" y="417" text-anchor="middle">TERMINATE_EXISTING</text>
+  <text class="t b" x="218" y="409">terminate the open run,</text>
+  <text class="t b" x="218" y="425">then start a new one</text>
+
+  <!-- no right -->
+  <line x1="640" y1="170" x2="710" y2="170" stroke="#374151" stroke-width="1.5"/>
+  <line x1="710" y1="170" x2="710" y2="226" stroke="#374151" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text class="t bb" x="676" y="162" text-anchor="middle">no</text>
+
+  <!-- diamond 2 -->
+  <polygon points="710,230 880,272 710,314 540,272" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+  <text class="t bb" x="710" y="266" text-anchor="middle">A CLOSED Execution used</text>
+  <text class="t bb" x="710" y="283" text-anchor="middle">it (within retention)?</text>
+
+  <!-- no -> start -->
+  <line x1="880" y1="272" x2="915" y2="272" stroke="#374151" stroke-width="1.5"/>
+  <line x1="915" y1="272" x2="915" y2="346" stroke="#374151" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text class="t bb" x="900" y="264" text-anchor="middle">no</text>
+  <rect x="850" y="350" width="94" height="44" rx="8" fill="#d1fae5" stroke="#059669"/>
+  <text class="t bb" x="897" y="370" text-anchor="middle">start a</text>
+  <text class="t bb" x="897" y="386" text-anchor="middle">new run</text>
+
+  <!-- yes -> reuse -->
+  <line x1="710" y1="314" x2="710" y2="346" stroke="#374151" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text class="t bb" x="726" y="335">yes</text>
+
+  <rect x="500" y="350" width="336" height="200" rx="10" fill="#f8fafc" stroke="#7c3aed"/>
+  <text class="t h" x="516" y="376">Reuse Policy</text>
+  <text class="m" x="616" y="376">WorkflowIDReusePolicy</text>
+
+  <rect x="512" y="390" width="170" height="40" rx="6" fill="#d1fae5" stroke="#059669"/>
+  <text class="t bb" x="597" y="407" text-anchor="middle">ALLOW_DUPLICATE</text>
+  <text class="t s" x="597" y="423" text-anchor="middle">(default)</text>
+  <text class="t b" x="692" y="415">start a new run</text>
+
+  <rect x="512" y="440" width="170" height="40" rx="6" fill="#fef3c7" stroke="#d97706"/>
+  <text class="t bb" x="597" y="457" text-anchor="middle">ALLOW_DUPLICATE_</text>
+  <text class="t bb" x="597" y="472" text-anchor="middle">FAILED_ONLY</text>
+  <text class="t b" x="692" y="457">start only if the last</text>
+  <text class="t b" x="692" y="473">run did NOT complete</text>
+
+  <rect x="512" y="490" width="170" height="40" rx="6" fill="#fee2e2" stroke="#dc2626"/>
+  <text class="t bb" x="597" y="515" text-anchor="middle">REJECT_DUPLICATE</text>
+  <text class="t b" x="692" y="507">no new run →</text>
+  <text class="t b" x="692" y="523">"already started" error</text>
+
+  <!-- Go note -->
+  <rect x="30" y="470" width="440" height="164" rx="10" fill="#fef3c7" stroke="#d97706"/>
+  <text class="t h" x="50" y="496">Go SDK: what your code sees</text>
+  <text class="t b" x="50" y="520">When a policy refuses a new run, the server answers</text>
+  <text class="m" x="50" y="538">WorkflowExecutionAlreadyStarted</text>
+  <text class="t b" x="50" y="560">• default: ExecuteWorkflow swallows it and returns a</text>
+  <text class="t b" x="62" y="577">WorkflowRun for the current / last run (err == nil)</text>
+  <text class="t b" x="50" y="599">• WorkflowExecutionErrorWhenAlreadyStarted: true</text>
+  <text class="t b" x="62" y="614">→ you get *serviceerror.WorkflowExecutionAlreadyStarted</text>
+
+  <text class="t s" x="500" y="580">Two OPEN Executions can never share a Workflow ID.</text>
+  <text class="t s" x="500" y="598">Reuse checks only see Closed Executions still inside the</text>
+  <text class="t s" x="500" y="614">Namespace Retention Period (e.g. 30 days).</text>
+</svg>

@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 560" width="960" height="560" role="img" aria-labelledby="title desc">
+  <title id="title">Workflow Execution statuses</title>
+  <desc id="desc">A Workflow Execution starts Running. It can be Paused and Unpaused while Open. It closes as Completed, Failed, Canceled, Terminated, Timed Out or Continued-As-New, which starts a new run with the same Workflow ID.</desc>
+  <defs>
+    <style>
+      .t{font-family:-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;fill:#1f2937}
+      .h{font-size:15px;font-weight:700}
+      .b{font-size:12.5px}
+      .s{font-size:11.5px;fill:#4b5563}
+      .m{font-family:SFMono-Regular,Menlo,Consolas,monospace;font-size:11.5px;fill:#111827}
+    </style>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#374151"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="960" height="560" rx="14" fill="#ffffff"/>
+  <text class="t h" x="30" y="34">Workflow Execution status: Open vs. Closed</text>
+
+  <!-- Open zone -->
+  <rect x="30" y="56" width="330" height="482" rx="12" fill="#f8fafc" stroke="#94a3b8" stroke-dasharray="6 4"/>
+  <text class="t h" x="50" y="82">OPEN</text>
+  <text class="t s" x="50" y="100">can still make progress</text>
+
+  <!-- start -->
+  <rect x="110" y="118" width="170" height="40" rx="20" fill="#dbeafe" stroke="#2563eb"/>
+  <text class="m" x="195" y="143" text-anchor="middle">ExecuteWorkflow</text>
+  <line x1="195" y1="158" x2="195" y2="196" stroke="#374151" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- running -->
+  <rect x="95" y="200" width="200" height="70" rx="10" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+  <text class="t h" x="195" y="228" text-anchor="middle">Running</text>
+  <text class="t s" x="195" y="248" text-anchor="middle">working, or waiting on a Timer,</text>
+  <text class="t s" x="195" y="263" text-anchor="middle">an Activity or a Signal</text>
+
+  <!-- paused -->
+  <rect x="95" y="380" width="200" height="70" rx="10" fill="#fef3c7" stroke="#d97706" stroke-width="1.5"/>
+  <text class="t h" x="195" y="408" text-anchor="middle">Paused</text>
+  <text class="t s" x="195" y="428" text-anchor="middle">no new Workflow Tasks</text>
+  <text class="t s" x="195" y="443" text-anchor="middle">(pre-release, operator only)</text>
+
+  <line x1="165" y1="272" x2="165" y2="376" stroke="#374151" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text class="m" x="158" y="328" text-anchor="end">pause</text>
+  <line x1="225" y1="378" x2="225" y2="274" stroke="#374151" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text class="m" x="232" y="328">unpause</text>
+  <text class="t s" x="195" y="486" text-anchor="middle">Terminate still works while Paused.</text>
+  <text class="t s" x="195" y="502" text-anchor="middle">Cancel waits for Unpause.</text>
+
+  <!-- Closed zone -->
+  <rect x="420" y="56" width="510" height="482" rx="12" fill="#f8fafc" stroke="#94a3b8" stroke-dasharray="6 4"/>
+  <text class="t h" x="440" y="82">CLOSED</text>
+  <text class="t s" x="440" y="100">no further progress for this run</text>
+
+  <!-- fan-out arrows from running -->
+  <line x1="295" y1="235" x2="586" y2="140" stroke="#374151" stroke-width="1.3" marker-end="url(#arr)"/>
+  <line x1="295" y1="235" x2="586" y2="198" stroke="#374151" stroke-width="1.3" marker-end="url(#arr)"/>
+  <line x1="295" y1="235" x2="586" y2="256" stroke="#374151" stroke-width="1.3" marker-end="url(#arr)"/>
+  <line x1="295" y1="235" x2="586" y2="314" stroke="#374151" stroke-width="1.3" marker-end="url(#arr)"/>
+  <line x1="295" y1="235" x2="586" y2="372" stroke="#374151" stroke-width="1.3" marker-end="url(#arr)"/>
+  <line x1="295" y1="235" x2="586" y2="430" stroke="#374151" stroke-width="1.3" marker-end="url(#arr)"/>
+
+  <!-- closed statuses -->
+  <rect x="590" y="120" width="150" height="40" rx="8" fill="#d1fae5" stroke="#059669"/>
+  <text class="t b" x="665" y="145" text-anchor="middle" font-weight="700">Completed</text>
+  <text class="t s" x="752" y="145">returned a result</text>
+
+  <rect x="590" y="178" width="150" height="40" rx="8" fill="#fee2e2" stroke="#dc2626"/>
+  <text class="t b" x="665" y="203" text-anchor="middle" font-weight="700">Failed</text>
+  <text class="t s" x="752" y="203">returned an error</text>
+
+  <rect x="590" y="236" width="150" height="40" rx="8" fill="#fef3c7" stroke="#d97706"/>
+  <text class="t b" x="665" y="261" text-anchor="middle" font-weight="700">Canceled</text>
+  <text class="t s" x="752" y="255">handled a cancel</text>
+  <text class="t s" x="752" y="270">request (cooperative)</text>
+
+  <rect x="590" y="294" width="150" height="40" rx="8" fill="#fee2e2" stroke="#dc2626"/>
+  <text class="t b" x="665" y="319" text-anchor="middle" font-weight="700">Terminated</text>
+  <text class="t s" x="752" y="313">force-stopped, code</text>
+  <text class="t s" x="752" y="328">never sees it</text>
+
+  <rect x="590" y="352" width="150" height="40" rx="8" fill="#fee2e2" stroke="#dc2626"/>
+  <text class="t b" x="665" y="377" text-anchor="middle" font-weight="700">Timed Out</text>
+  <text class="t s" x="752" y="371">hit a Workflow</text>
+  <text class="t s" x="752" y="386">Execution/Run timeout</text>
+
+  <rect x="590" y="410" width="150" height="40" rx="8" fill="#ede9fe" stroke="#7c3aed"/>
+  <text class="t b" x="665" y="435" text-anchor="middle" font-weight="700">Continued-As-New</text>
+  <text class="t s" x="752" y="429">closes this run and</text>
+  <text class="t s" x="752" y="444">starts a fresh one</text>
+
+  <!-- CAN loop back -->
+  <path d="M665,450 L665,522 L195,522" fill="none" stroke="#7c3aed" stroke-width="1.5" stroke-dasharray="5 4"/>
+    <text class="t s" x="680" y="490">new Run ID, same Workflow ID,</text>
+  <text class="t s" x="680" y="505">fresh Event History</text>
+  <line x1="40" y1="522" x2="40" y2="236" stroke="#7c3aed" stroke-width="1.5" stroke-dasharray="5 4"/>
+  <line x1="40" y1="236" x2="91" y2="236" stroke="#7c3aed" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#arr)"/>
+  <line x1="195" y1="522" x2="40" y2="522" stroke="#7c3aed" stroke-width="1.5" stroke-dasharray="5 4"/>
+</svg>

@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 740" width="960" height="740" role="img" aria-labelledby="title desc">
+  <title id="title">Queries, Signals and Updates</title>
+  <desc id="desc">How a Query, a Signal and an Update travel from a Client through the Temporal Service to the Workflow running on a Worker, what each one writes to the Event History, and how long the caller waits.</desc>
+  <defs>
+    <style>
+      .t{font-family:-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;fill:#1f2937}
+      .h{font-size:15px;font-weight:700}
+      .b{font-size:12.5px}
+      .s{font-size:11.5px;fill:#4b5563}
+      .m{font-family:SFMono-Regular,Menlo,Consolas,monospace;font-size:11.5px;fill:#111827}
+      .ev{font-family:SFMono-Regular,Menlo,Consolas,monospace;font-size:11px;fill:#6d28d9}
+    </style>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#374151"/>
+    </marker>
+    <marker id="arrR" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#dc2626"/>
+    </marker>
+    <marker id="arrG" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#059669"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="960" height="740" rx="14" fill="#ffffff"/>
+  <text class="t h" x="30" y="34">Three ways to talk to a running Workflow</text>
+
+  <!-- Lane headers -->
+  <rect x="40" y="52" width="200" height="48" rx="8" fill="#dbeafe" stroke="#2563eb"/>
+  <text class="t h" x="140" y="74" text-anchor="middle">Client</text>
+  <text class="t s" x="140" y="92" text-anchor="middle">cart API · CLI · other code</text>
+  <rect x="390" y="52" width="200" height="48" rx="8" fill="#ede9fe" stroke="#7c3aed"/>
+  <text class="t h" x="490" y="74" text-anchor="middle">Temporal Service</text>
+  <text class="t s" x="490" y="92" text-anchor="middle">Event History</text>
+  <rect x="720" y="52" width="200" height="48" rx="8" fill="#dbeafe" stroke="#2563eb"/>
+  <text class="t h" x="820" y="74" text-anchor="middle">Worker</text>
+  <text class="t s" x="820" y="92" text-anchor="middle">ShoppingCartWorkflow</text>
+
+  <!-- Lifelines -->
+  <line x1="140" y1="100" x2="140" y2="690" stroke="#9ca3af" stroke-dasharray="4 4"/>
+  <line x1="490" y1="100" x2="490" y2="690" stroke="#9ca3af" stroke-dasharray="4 4"/>
+  <line x1="820" y1="100" x2="820" y2="690" stroke="#9ca3af" stroke-dasharray="4 4"/>
+
+  <!-- ========== QUERY ========== -->
+  <rect x="20" y="114" width="920" height="26" rx="6" fill="#f3f4f6"/>
+  <text class="t b" x="32" y="132" font-weight="700">① Query: read only</text>
+  <text class="t s" x="928" y="132" text-anchor="end">caller waits for the answer · no event written · needs a running Worker</text>
+
+  <line x1="140" y1="170" x2="816" y2="170" stroke="#374151" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text class="m" x="150" y="163">QueryWorkflow("cart-summary")</text>
+  <text class="t s" x="500" y="163">forwarded to a Worker</text>
+  <rect x="750" y="180" width="140" height="28" rx="6" fill="#dbeafe" stroke="#2563eb"/>
+  <text class="t b" x="820" y="199" text-anchor="middle">query handler</text>
+  <line x1="816" y1="226" x2="144" y2="226" stroke="#059669" stroke-width="1.5" stroke-dasharray="6 4" marker-end="url(#arrG)"/>
+  <text class="t b" x="150" y="219">CartSummary returned</text>
+  <text class="t s" x="500" y="246">(nothing added to the Event History)</text>
+
+  <!-- ========== SIGNAL ========== -->
+  <rect x="20" y="266" width="920" height="26" rx="6" fill="#f3f4f6"/>
+  <text class="t b" x="32" y="284" font-weight="700">② Signal: write, fire-and-forget</text>
+  <text class="t s" x="928" y="284" text-anchor="end">caller waits only until the Service accepts it · no return value</text>
+
+  <line x1="140" y1="322" x2="486" y2="322" stroke="#374151" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text class="m" x="150" y="315">SignalWorkflow("remove-item")</text>
+  <text class="ev" x="500" y="318">WorkflowExecutionSignaled</text>
+  <line x1="486" y1="346" x2="144" y2="346" stroke="#059669" stroke-width="1.5" stroke-dasharray="6 4" marker-end="url(#arrG)"/>
+  <text class="t b" x="150" y="364">accepted: the call returns now</text>
+  <line x1="494" y1="384" x2="816" y2="384" stroke="#374151" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text class="t s" x="500" y="377">Workflow Task, when a Worker picks it up</text>
+  <rect x="720" y="394" width="200" height="28" rx="6" fill="#dbeafe" stroke="#2563eb"/>
+  <text class="m" x="820" y="412" text-anchor="middle">ch.Receive → delete item</text>
+
+  <!-- ========== UPDATE ========== -->
+  <rect x="20" y="440" width="920" height="26" rx="6" fill="#f3f4f6"/>
+  <text class="t b" x="32" y="458" font-weight="700">③ Update: write and get an answer</text>
+  <text class="t s" x="928" y="458" text-anchor="end">caller waits until Accepted or Completed (WaitForStage) · needs a running Worker</text>
+
+  <line x1="140" y1="494" x2="816" y2="494" stroke="#374151" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text class="m" x="150" y="487">UpdateWorkflow("apply-coupon")</text>
+  <text class="t s" x="500" y="487">delivered to a Worker</text>
+  <rect x="740" y="504" width="160" height="28" rx="6" fill="#fef3c7" stroke="#d97706"/>
+  <text class="t b" x="820" y="523" text-anchor="middle">validator</text>
+
+  <!-- rejected branch -->
+  <line x1="816" y1="550" x2="144" y2="550" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="6 4" marker-end="url(#arrR)"/>
+  <text class="t b" x="150" y="543" style="fill:#dc2626">✕ rejected: "Update failed"</text>
+  <text class="t s" x="500" y="568">rejected → nothing written</text>
+
+  <!-- accepted branch -->
+  <text class="ev" x="500" y="590">accepted → WorkflowExecutionUpdateAccepted</text>
+  <rect x="720" y="600" width="200" height="40" rx="6" fill="#dbeafe" stroke="#2563eb"/>
+  <text class="t b" x="820" y="616" text-anchor="middle">update handler</text>
+  <text class="t s" x="820" y="632" text-anchor="middle">can run Activities, Timers</text>
+  <text class="ev" x="500" y="656">WorkflowExecutionUpdateCompleted</text>
+  <line x1="816" y1="672" x2="144" y2="672" stroke="#059669" stroke-width="1.5" stroke-dasharray="6 4" marker-end="url(#arrG)"/>
+  <text class="t b" x="150" y="665">✓ CartSummary or error</text>
+
+  <!-- Legend -->
+  <text class="t s" x="30" y="718">Purple = event added to the Workflow's Event History. Dashed = response to the caller. Long-lived Workflows: at most 10,000 Signals and 2,000 Updates per history.</text>
+</svg>

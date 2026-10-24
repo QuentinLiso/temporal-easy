@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 400" width="960" height="400" role="img" aria-labelledby="title desc">
+  <title id="title">Heartbeat checkpointing across attempts</title>
+  <desc id="desc">Attempt 1 heartbeats its progress, the Worker crashes, the Service keeps the last heartbeat details, and attempt 2 reads them and resumes after the last checkpoint.</desc>
+  <defs>
+    <style>
+      .t{font-family:-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;fill:#1f2937}
+      .h{font-size:15px;font-weight:700}
+      .b{font-size:12.5px}
+      .s{font-size:11.5px;fill:#4b5563}
+      .m{font-family:SFMono-Regular,Menlo,Consolas,monospace;font-size:11.5px;fill:#111827}
+    </style>
+    <marker id="arrG" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#059669"/>
+    </marker>
+    <marker id="arrP" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#7c3aed"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="960" height="400" rx="14" fill="#ffffff"/>
+  <text class="t h" x="30" y="34">Heartbeat details = a checkpoint that survives retries</text>
+
+  <!-- Lane labels -->
+  <text class="t b" x="30" y="92" style="font-weight:700">Attempt 1</text>
+  <text class="t s" x="30" y="108">Worker A</text>
+  <text class="t b" x="30" y="212" style="font-weight:700">Temporal</text>
+  <text class="t b" x="30" y="228" style="font-weight:700">Service</text>
+  <text class="t b" x="30" y="332" style="font-weight:700">Attempt 2</text>
+  <text class="t s" x="30" y="348">Worker B</text>
+
+  <!-- Attempt 1 bar -->
+  <rect x="130" y="76" width="380" height="36" rx="6" fill="#d1fae5" stroke="#059669"/>
+  <text class="t s" x="320" y="98" text-anchor="middle">rows 1 … 4 200 processed</text>
+  <text class="t h" x="526" y="102" style="fill:#dc2626">✕ Worker crashes</text>
+
+  <!-- heartbeats up -->
+  <g stroke="#059669" stroke-width="1.5">
+    <line x1="200" y1="114" x2="200" y2="190" marker-end="url(#arrG)"/>
+    <line x1="300" y1="114" x2="300" y2="190" marker-end="url(#arrG)"/>
+    <line x1="400" y1="114" x2="400" y2="190" marker-end="url(#arrG)"/>
+    <line x1="490" y1="114" x2="490" y2="190" marker-end="url(#arrG)"/>
+  </g>
+  <g class="m" text-anchor="middle">
+    <text x="207" y="150" text-anchor="start" style="font-size:10.5px">HB(1000)</text>
+    <text x="307" y="150" text-anchor="start" style="font-size:10.5px">HB(2000)</text>
+    <text x="407" y="150" text-anchor="start" style="font-size:10.5px">HB(3000)</text>
+    <text x="497" y="150" text-anchor="start" style="font-size:10.5px">HB(4000)</text>
+  </g>
+
+  <!-- Service box -->
+  <rect x="130" y="194" width="760" height="50" rx="8" fill="#ede9fe" stroke="#7c3aed"/>
+  <text class="t b" x="146" y="216">Stores only the <tspan style="font-weight:700">last</tspan> heartbeat details:</text>
+  <text class="m" x="360" y="216">lastProcessedRow = 4000</text>
+  <text class="t s" x="146" y="234">No heartbeat within HeartbeatTimeout → attempt 1 times out (Heartbeat) → Retry Policy schedules attempt 2</text>
+
+  <!-- down to attempt 2 -->
+  <line x1="560" y1="246" x2="560" y2="312" stroke="#7c3aed" stroke-width="1.5" marker-end="url(#arrP)"/>
+  <text class="m" x="572" y="276">activity.GetHeartbeatDetails(ctx, &amp;row)</text>
+  <text class="t s" x="572" y="294">→ row = 4000</text>
+
+  <!-- Attempt 2 bar -->
+  <rect x="130" y="316" width="420" height="36" rx="6" fill="#f3f4f6" stroke="#9ca3af" stroke-dasharray="4 3"/>
+  <text class="t s" x="340" y="338" text-anchor="middle">rows 1 … 4 000 skipped (already done)</text>
+  <rect x="552" y="316" width="338" height="36" rx="6" fill="#d1fae5" stroke="#059669"/>
+  <text class="t s" x="721" y="338" text-anchor="middle">resumes at row 4 001 → completes ✓</text>
+
+  <text class="t s" x="130" y="380">Rows 4 001 – 4 200 are processed twice → the per-row work must still be idempotent.</text>
+</svg>

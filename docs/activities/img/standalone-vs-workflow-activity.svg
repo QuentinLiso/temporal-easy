@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 520" width="960" height="520" role="img" aria-labelledby="title desc">
+  <title id="title">Standalone Activity versus Workflow Activity</title>
+  <desc id="desc">Both paths end on the same Activity Worker and Task Queue. A Workflow Activity is owned by a Workflow Execution and recorded in its Event History; a Standalone Activity is started by a Client and has its own state machine and Activity ID space.</desc>
+  <defs>
+    <style>
+      .t{font-family:-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;fill:#1f2937}
+      .h{font-size:15px;font-weight:700}
+      .b{font-size:12.5px}
+      .s{font-size:11.5px;fill:#4b5563}
+      .m{font-family:SFMono-Regular,Menlo,Consolas,monospace;font-size:11.5px;fill:#111827}
+    </style>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#374151"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="960" height="520" rx="14" fill="#ffffff"/>
+  <text class="t h" x="30" y="34">Same Activity, same Worker — different owner</text>
+
+  <!-- Column titles -->
+  <text class="t h" x="240" y="70" text-anchor="middle" style="fill:#1d4ed8">Workflow Activity</text>
+  <text class="t h" x="720" y="70" text-anchor="middle" style="fill:#c2410c">Standalone Activity</text>
+  <line x1="480" y1="56" x2="480" y2="330" stroke="#e5e7eb" stroke-width="2"/>
+
+  <!-- Left column -->
+  <rect x="90" y="86" width="300" height="44" rx="8" fill="#ffedd5" stroke="#ea580c"/>
+  <text class="m" x="240" y="113" text-anchor="middle">c.ExecuteWorkflow(…, CheckoutWorkflow, …)</text>
+  <line x1="240" y1="130" x2="240" y2="152" stroke="#374151" stroke-width="1.5" marker-end="url(#arr)"/>
+  <rect x="60" y="154" width="360" height="120" rx="10" fill="#dbeafe" stroke="#2563eb"/>
+  <text class="t b" x="76" y="176" style="font-weight:700">Workflow Execution  (CheckoutWorkflow)</text>
+  <text class="m" x="76" y="198">workflow.ExecuteActivity(ctx, a.ChargeCard, in)</text>
+  <rect x="76" y="210" width="328" height="52" rx="6" fill="#ffffff" stroke="#93c5fd"/>
+  <text class="t s" x="86" y="228">Event History: ActivityTaskScheduled →</text>
+  <text class="t s" x="86" y="246">ActivityTaskStarted → ActivityTaskCompleted</text>
+  <text class="t s" x="76" y="294">Result → Workflow · ID unique per Workflow Run</text>
+  <text class="t s" x="76" y="312">Cancel only via the Workflow · replay-safe</text>
+
+  <!-- Right column -->
+  <rect x="540" y="86" width="360" height="44" rx="8" fill="#ffedd5" stroke="#ea580c"/>
+  <text class="m" x="720" y="113" text-anchor="middle">c.ExecuteActivity(ctx, opts, a.ChargeCard, in)</text>
+  <line x1="720" y1="130" x2="720" y2="152" stroke="#374151" stroke-width="1.5" marker-end="url(#arr)"/>
+  <rect x="540" y="154" width="360" height="120" rx="10" fill="#fff7ed" stroke="#ea580c"/>
+  <text class="t b" x="556" y="176" style="font-weight:700">Standalone Activity Execution</text>
+  <text class="t s" x="556" y="198">Own state machine — no Workflow, no Event History</text>
+  <rect x="556" y="210" width="328" height="52" rx="6" fill="#ffffff" stroke="#fdba74"/>
+  <text class="t s" x="566" y="228">Activity ID = dedup key in its own ID space</text>
+  <text class="t s" x="566" y="246">Conflict policy · Reuse policy · retention</text>
+  <text class="t s" x="556" y="294">Result → Client via ActivityHandle.Get</text>
+  <text class="t s" x="556" y="312">List / Count / Describe / Cancel / Terminate / Delete</text>
+
+  <!-- Converge to task queue -->
+  <path d="M240 320 C 240 360, 400 360, 440 372" fill="none" stroke="#374151" stroke-width="1.5" marker-end="url(#arr)"/>
+  <path d="M720 320 C 720 360, 560 360, 520 372" fill="none" stroke="#374151" stroke-width="1.5" marker-end="url(#arr)"/>
+  <rect x="330" y="374" width="300" height="40" rx="8" fill="#ede9fe" stroke="#7c3aed"/>
+  <text class="t b" x="480" y="399" text-anchor="middle">Activity Task Queue  "payments"</text>
+  <line x1="480" y1="414" x2="480" y2="436" stroke="#374151" stroke-width="1.5" marker-end="url(#arr)"/>
+  <rect x="300" y="438" width="360" height="62" rx="10" fill="#d1fae5" stroke="#059669"/>
+  <text class="t b" x="480" y="462" text-anchor="middle" style="font-weight:700">The same Activity Worker</text>
+  <text class="m" x="480" y="484" text-anchor="middle">w.RegisterActivity(&amp;PaymentActivities{…})</text>
+</svg>

@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 470" width="960" height="470" role="img" aria-labelledby="title desc">
+  <title id="title">Activity timeouts on a timeline</title>
+  <desc id="desc">Timeline of an Activity Execution with two attempts, showing Schedule-To-Start, Start-To-Close per attempt, Schedule-To-Close across all attempts, and Heartbeat Timeout between heartbeats.</desc>
+  <defs>
+    <style>
+      .t{font-family:-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;fill:#1f2937}
+      .h{font-size:15px;font-weight:700}
+      .b{font-size:12.5px}
+      .s{font-size:11.5px;fill:#4b5563}
+      .m{font-family:SFMono-Regular,Menlo,Consolas,monospace;font-size:11.5px;fill:#111827}
+    </style>
+    <marker id="aB" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#2563eb"/>
+    </marker>
+    <marker id="aP" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#7c3aed"/>
+    </marker>
+    <marker id="aO" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#ea580c"/>
+    </marker>
+    <marker id="aG" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#059669"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="960" height="470" rx="14" fill="#ffffff"/>
+  <text class="t h" x="30" y="34">Which timeout measures what?</text>
+
+  <!-- Timeline axis -->
+  <line x1="60" y1="120" x2="910" y2="120" stroke="#374151" stroke-width="2"/>
+  <!-- ticks -->
+  <g class="t s" text-anchor="middle">
+    <line x1="80" y1="112" x2="80" y2="128" stroke="#374151" stroke-width="2"/>
+    <text x="80" y="100">Scheduled</text>
+    <line x1="220" y1="112" x2="220" y2="128" stroke="#374151" stroke-width="2"/>
+    <text x="220" y="100">Started #1</text>
+    <line x1="430" y1="112" x2="430" y2="128" stroke="#dc2626" stroke-width="2"/>
+    <text x="430" y="100" style="fill:#dc2626">Failed #1</text>
+    <line x1="530" y1="112" x2="530" y2="128" stroke="#374151" stroke-width="2"/>
+    <text x="530" y="100">Started #2</text>
+    <line x1="860" y1="112" x2="860" y2="128" stroke="#059669" stroke-width="2"/>
+    <text x="860" y="100" style="fill:#059669">Completed</text>
+  </g>
+
+  <!-- queue wait and backoff shading -->
+  <rect x="80" y="130" width="140" height="22" fill="#f3f4f6"/>
+  <text class="t s" x="150" y="146" text-anchor="middle">waiting in queue</text>
+  <rect x="220" y="130" width="210" height="22" fill="#fee2e2"/>
+  <text class="t s" x="325" y="146" text-anchor="middle">attempt 1 running</text>
+  <rect x="430" y="130" width="100" height="22" fill="#fef3c7"/>
+  <text class="t s" x="480" y="146" text-anchor="middle">retry backoff</text>
+  <rect x="530" y="130" width="330" height="22" fill="#d1fae5"/>
+  <text class="t s" x="695" y="146" text-anchor="middle">attempt 2 running</text>
+
+  <!-- Schedule-To-Start -->
+  <line x1="82" y1="190" x2="218" y2="190" stroke="#2563eb" stroke-width="2" marker-start="url(#aB)" marker-end="url(#aB)"/>
+  <text class="t b" x="150" y="182" text-anchor="middle" style="fill:#1d4ed8;font-weight:600">Schedule-To-Start</text>
+  <text class="t s" x="150" y="208" text-anchor="middle">queue wait · non-retryable</text>
+
+  <!-- Start-To-Close 1 -->
+  <line x1="222" y1="190" x2="428" y2="190" stroke="#7c3aed" stroke-width="2" marker-start="url(#aP)" marker-end="url(#aP)"/>
+  <text class="t b" x="325" y="182" text-anchor="middle" style="fill:#6d28d9;font-weight:600">Start-To-Close</text>
+  <text class="t s" x="325" y="208" text-anchor="middle">one attempt</text>
+
+  <!-- Start-To-Close 2 -->
+  <line x1="532" y1="190" x2="858" y2="190" stroke="#7c3aed" stroke-width="2" marker-start="url(#aP)" marker-end="url(#aP)"/>
+  <text class="t b" x="695" y="182" text-anchor="middle" style="fill:#6d28d9;font-weight:600">Start-To-Close</text>
+  <text class="t s" x="695" y="208" text-anchor="middle">re-armed for every attempt</text>
+
+  <!-- Schedule-To-Close -->
+  <line x1="82" y1="250" x2="858" y2="250" stroke="#ea580c" stroke-width="2.5" marker-start="url(#aO)" marker-end="url(#aO)"/>
+  <text class="t b" x="470" y="242" text-anchor="middle" style="fill:#c2410c;font-weight:600">Schedule-To-Close — the whole Activity Execution, all attempts and backoffs included</text>
+
+  <!-- Heartbeats on attempt 2 -->
+  <g stroke="#059669" stroke-width="2">
+    <line x1="580" y1="300" x2="580" y2="322"/>
+    <line x1="640" y1="300" x2="640" y2="322"/>
+    <line x1="700" y1="300" x2="700" y2="322"/>
+    <line x1="760" y1="300" x2="760" y2="322"/>
+    <line x1="820" y1="300" x2="820" y2="322"/>
+  </g>
+  <g fill="#059669">
+    <circle cx="580" cy="300" r="4"/><circle cx="640" cy="300" r="4"/><circle cx="700" cy="300" r="4"/><circle cx="760" cy="300" r="4"/><circle cx="820" cy="300" r="4"/>
+  </g>
+  <text class="t b" x="700" y="286" text-anchor="middle" style="fill:#047857;font-weight:600">RecordHeartbeat</text>
+  <line x1="642" y1="338" x2="698" y2="338" stroke="#059669" stroke-width="2" marker-start="url(#aG)" marker-end="url(#aG)"/>
+  <text class="t b" x="670" y="358" text-anchor="middle" style="fill:#047857;font-weight:600">≤ Heartbeat Timeout</text>
+  <text class="t s" x="670" y="374" text-anchor="middle">max gap between two heartbeats</text>
+
+  <!-- Legend / rules -->
+  <rect x="40" y="290" width="440" height="160" rx="10" fill="#f9fafb" stroke="#d1d5db"/>
+  <text class="t b" x="56" y="314" style="font-weight:700">Rules of thumb</text>
+  <text class="t s" x="56" y="336">• You MUST set Start-To-Close or Schedule-To-Close.</text>
+  <text class="t s" x="56" y="356">• Prefer Start-To-Close: it is how the Service detects a crashed Worker.</text>
+  <text class="t s" x="56" y="376">• Add Schedule-To-Close to cap total time spent retrying.</text>
+  <text class="t s" x="56" y="396">• Long-running? Set HeartbeatTimeout + call RecordHeartbeat.</text>
+  <text class="t s" x="56" y="416">• Schedule-To-Start is rarely needed (host-specific routing only).</text>
+  <text class="t s" x="56" y="436">• Timers keep running while an Activity is Paused.</text>
+</svg>

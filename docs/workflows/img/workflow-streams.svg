@@ -1,0 +1,130 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 600" width="980" height="600" role="img" aria-labelledby="title desc">
+  <title id="title">Workflow Streams architecture</title>
+  <desc id="desc">Publishers (the Workflow itself, Activities, any client) append events to topics. Client publishers send batches through a publish Signal. The Workflow hosts an in-memory append-only log with global offsets. Subscribers long-poll with an Update and can read the current offset with a Query.</desc>
+  <defs>
+    <style>
+      .t{font-family:-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;fill:#1f2937}
+      .h{font-size:15px;font-weight:700}
+      .b{font-size:12.5px}
+      .s{font-size:11.5px;fill:#4b5563}
+      .m{font-family:SFMono-Regular,Menlo,Consolas,monospace;font-size:11.5px;fill:#111827}
+      .ev{font-family:SFMono-Regular,Menlo,Consolas,monospace;font-size:11px;fill:#6d28d9}
+    </style>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#374151"/>
+    </marker>
+    <marker id="arrP" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#7c3aed"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="980" height="600" rx="14" fill="#ffffff"/>
+  <text class="t h" x="30" y="34">Workflow Streams: publishers → durable log in the Workflow → subscribers</text>
+
+  <!-- Publishers column -->
+  <text class="t h" x="140" y="74" text-anchor="middle">Publishers</text>
+  <rect x="30" y="90" width="220" height="92" rx="8" fill="#dbeafe" stroke="#2563eb"/>
+  <text class="t b" x="140" y="112" text-anchor="middle" font-weight="700">Activity of the Workflow</text>
+  <text class="m" x="44" y="134">NewClientFromActivity(ctx,…)</text>
+  <text class="m" x="44" y="152">.Topic("delta")</text>
+  <text class="m" x="44" y="170">.Publish(v, forceFlush)</text>
+
+  <rect x="30" y="200" width="220" height="92" rx="8" fill="#dbeafe" stroke="#2563eb"/>
+  <text class="t b" x="140" y="222" text-anchor="middle" font-weight="700">Any process with a Client</text>
+  <text class="m" x="44" y="244">NewClient(c, workflowID, …)</text>
+  <text class="t s" x="44" y="264">HTTP backend, script,</text>
+  <text class="t s" x="44" y="280">Standalone Activity</text>
+
+  <rect x="30" y="310" width="220" height="104" rx="8" fill="#fef3c7" stroke="#d97706"/>
+  <text class="t b" x="140" y="332" text-anchor="middle" font-weight="700">Client-side buffer (both)</text>
+  <text class="t s" x="44" y="354">batches every BatchInterval (2s)</text>
+  <text class="t s" x="44" y="372">or now with forceFlush=true</text>
+  <text class="m" x="44" y="392">Flush(ctx) = barrier</text>
+  <text class="m" x="44" y="408">Close(ctx) = flush + stop</text>
+
+  <line x1="140" y1="292" x2="140" y2="308" stroke="#374151" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- Temporal Service band -->
+  <rect x="290" y="60" width="400" height="500" rx="10" fill="#f5f3ff" stroke="#7c3aed" stroke-dasharray="6 4"/>
+  <text class="t h" x="490" y="84" text-anchor="middle">Temporal Service</text>
+  <text class="t s" x="490" y="102" text-anchor="middle">Signals · Updates · Queries are durable messages</text>
+
+  <!-- publish signal arrow -->
+  <line x1="250" y1="362" x2="336" y2="362" stroke="#7c3aed" stroke-width="2" marker-end="url(#arrP)"/>
+  <rect x="262" y="320" width="68" height="16" rx="3" fill="#ffffff"/>
+  <text class="t b" x="296" y="332" text-anchor="middle">batch</text>
+  <rect x="262" y="336" width="68" height="16" rx="3" fill="#ffffff"/>
+  <text class="t b" x="296" y="348" text-anchor="middle">= 1 Signal</text>
+
+  <!-- Workflow box -->
+  <rect x="340" y="120" width="300" height="420" rx="10" fill="#ede9fe" stroke="#7c3aed"/>
+  <text class="t h" x="490" y="144" text-anchor="middle">Workflow (hosts the stream)</text>
+  <text class="m" x="356" y="168">NewWorkflowStream(ctx, state)</text>
+  <text class="t s" x="356" y="186">once, at the top, before any blocking call</text>
+
+  <rect x="356" y="200" width="268" height="60" rx="6" fill="#dbeafe" stroke="#2563eb"/>
+  <text class="t b" x="366" y="222" font-weight="700">Workflow code can publish too</text>
+  <text class="m" x="366" y="244">stream.Topic("status").Publish(v)</text>
+
+  <!-- log -->
+  <text class="t b" x="356" y="288" font-weight="700">In-memory append-only log</text>
+  <g>
+    <rect x="356" y="298" width="64" height="58" rx="4" fill="#ffffff" stroke="#7c3aed"/>
+    <text class="ev" x="388" y="316" text-anchor="middle">#0</text>
+    <text class="t s" x="388" y="332" text-anchor="middle">status</text>
+    <text class="t s" x="388" y="348" text-anchor="middle">validating</text>
+    <rect x="424" y="298" width="64" height="58" rx="4" fill="#ffffff" stroke="#7c3aed"/>
+    <text class="ev" x="456" y="316" text-anchor="middle">#1</text>
+    <text class="t s" x="456" y="332" text-anchor="middle">progress</text>
+    <text class="t s" x="456" y="348" text-anchor="middle">dhl quoted</text>
+    <rect x="492" y="298" width="64" height="58" rx="4" fill="#ffffff" stroke="#7c3aed"/>
+    <text class="ev" x="524" y="316" text-anchor="middle">#2</text>
+    <text class="t s" x="524" y="332" text-anchor="middle">status</text>
+    <text class="t s" x="524" y="348" text-anchor="middle">charging</text>
+    <rect x="560" y="298" width="64" height="58" rx="4" fill="#ffffff" stroke="#7c3aed" stroke-dasharray="3 3"/>
+    <text class="ev" x="592" y="332" text-anchor="middle">#3 …</text>
+  </g>
+  <text class="t s" x="356" y="376">topic + payload + global offset per item</text>
+
+  <rect x="356" y="392" width="268" height="62" rx="6" fill="#ffffff" stroke="#7c3aed"/>
+  <text class="t b" x="366" y="412" font-weight="700">Handlers registered by the library</text>
+  <text class="t s" x="366" y="430">publish Signal · poll Update · offset Query</text>
+  <text class="t s" x="366" y="446">dedup per publisher (TTL 15m)</text>
+
+  <rect x="356" y="466" width="268" height="62" rx="6" fill="#fef3c7" stroke="#d97706"/>
+  <text class="t b" x="366" y="486" font-weight="700">Continue-As-New</text>
+  <text class="m" x="366" y="504">stream.NewContinueAsNewError(…)</text>
+  <text class="t s" x="366" y="520">carries WorkflowStreamState to next run</text>
+
+  <!-- Subscribers -->
+  <text class="t h" x="855" y="74" text-anchor="middle">Subscribers</text>
+  <rect x="750" y="150" width="210" height="130" rx="8" fill="#d1fae5" stroke="#059669"/>
+  <text class="t b" x="855" y="172" text-anchor="middle" font-weight="700">UI / SSE endpoint / CLI</text>
+  <text class="m" x="762" y="196">for item, err := range</text>
+  <text class="m" x="762" y="212">  c.Subscribe(ctx, opts)</text>
+  <text class="t s" x="762" y="234">Topics filter · FromOffset</text>
+  <text class="t s" x="762" y="250">decode item.Data</text>
+  <text class="t s" x="762" y="266">stop on terminator event</text>
+
+  <rect x="750" y="330" width="210" height="70" rx="8" fill="#d1fae5" stroke="#059669"/>
+  <text class="t b" x="855" y="352" text-anchor="middle" font-weight="700">Ops / resume logic</text>
+  <text class="m" x="762" y="374">c.GetOffset(ctx)</text>
+  <text class="t s" x="762" y="390">current global offset</text>
+
+  <rect x="750" y="440" width="210" height="90" rx="8" fill="#fef3c7" stroke="#d97706"/>
+  <text class="t b" x="855" y="462" text-anchor="middle" font-weight="700">Clean ending</text>
+  <text class="t s" x="762" y="484">1. terminator event in the stream</text>
+  <text class="t s" x="762" y="502">2. overlap: Sleep, or ack Signal</text>
+  <text class="t s" x="762" y="520">   + AwaitWithTimeout</text>
+
+  <!-- poll update arrows -->
+  <line x1="748" y1="196" x2="644" y2="196" stroke="#7c3aed" stroke-width="2" marker-end="url(#arrP)"/>
+  <rect x="662" y="176" width="70" height="16" rx="3" fill="#ffffff"/>
+  <text class="t s" x="697" y="188" text-anchor="middle">poll Update</text>
+  <line x1="644" y1="244" x2="746" y2="244" stroke="#059669" stroke-width="2" marker-end="url(#arr)"/>
+  <rect x="665" y="224" width="64" height="16" rx="3" fill="#ffffff"/>
+  <text class="t s" x="697" y="236" text-anchor="middle">new items</text>
+  <line x1="748" y1="366" x2="644" y2="366" stroke="#7c3aed" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#arrP)"/>
+  <rect x="677" y="346" width="40" height="16" rx="3" fill="#ffffff"/>
+  <text class="t s" x="697" y="358" text-anchor="middle">Query</text>
+</svg>

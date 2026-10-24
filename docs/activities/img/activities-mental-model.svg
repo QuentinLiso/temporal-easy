@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 500" width="960" height="500" role="img" aria-labelledby="title desc">
+  <title id="title">Activities mental model</title>
+  <desc id="desc">One Activity Definition is registered once on a Worker and can be invoked three ways: as a Workflow Activity, as a Standalone Activity, or as a Local Activity.</desc>
+  <defs>
+    <style>
+      .t{font-family:-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;fill:#1f2937}
+      .h{font-size:16px;font-weight:700}
+      .b{font-size:13px}
+      .s{font-size:11.5px;fill:#4b5563}
+      .m{font-family:SFMono-Regular,Menlo,Consolas,monospace;font-size:11.5px;fill:#111827}
+    </style>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#6b7280"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="960" height="500" rx="14" fill="#ffffff"/>
+  <text class="t h" x="30" y="38">Write once, register once, invoke three ways</text>
+
+  <!-- Definition -->
+  <rect x="30" y="80" width="260" height="120" rx="10" fill="#d1fae5" stroke="#059669" stroke-width="1.5"/>
+  <text class="t h" x="45" y="106">Activity Definition</text>
+  <text class="m" x="45" y="132">func (a *PaymentActivities)</text>
+  <text class="m" x="45" y="150">  ChargeCard(ctx, ChargeCardInput)</text>
+  <text class="m" x="45" y="168">  (ChargeReceipt, error)</text>
+  <text class="t s" x="45" y="190">Plain Go. Any library. Non-deterministic OK.</text>
+
+  <!-- Worker registration -->
+  <rect x="30" y="250" width="260" height="120" rx="10" fill="#f3f4f6" stroke="#6b7280" stroke-width="1.5"/>
+  <text class="t h" x="45" y="276">Worker registration</text>
+  <text class="m" x="45" y="302">w := worker.New(c, "payments", …)</text>
+  <text class="m" x="45" y="320">w.RegisterActivity(paymentActs)</text>
+  <text class="t s" x="45" y="344">Maps Activity Type name → code.</text>
+  <text class="t s" x="45" y="360">Polls the Task Queue.</text>
+  <line x1="160" y1="200" x2="160" y2="246" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- Branches -->
+  <path d="M290 310 C 340 310, 340 120, 400 120" fill="none" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arr)"/>
+  <path d="M290 310 L 400 270" fill="none" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arr)"/>
+  <path d="M290 310 C 340 310, 340 420, 400 420" fill="none" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- Workflow Activity -->
+  <rect x="402" y="70" width="530" height="110" rx="10" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+  <text class="t h" x="418" y="96">① Workflow Activity</text>
+  <text class="m" x="418" y="120">workflow.ExecuteActivity(ctx, a.ChargeCard, input)</text>
+  <text class="t b" x="418" y="144">Started by Workflow code · lifetime scoped to the Workflow Run</text>
+  <text class="t s" x="418" y="164">Durable · retried by the Service · in the Workflow Event History · multi-step orchestration</text>
+
+  <!-- Standalone Activity -->
+  <rect x="402" y="215" width="530" height="110" rx="10" fill="#ffedd5" stroke="#ea580c" stroke-width="1.5"/>
+  <text class="t h" x="418" y="241">② Standalone Activity</text>
+  <text class="m" x="418" y="265">client.ExecuteActivity(ctx, opts, a.ChargeCard, input)</text>
+  <text class="t b" x="418" y="289">Started by a Temporal Client · independent top-level execution</text>
+  <text class="t s" x="418" y="309">Durable · retried by the Service · no Workflow, no Event History · durable job queue</text>
+
+  <!-- Local Activity -->
+  <rect x="402" y="360" width="530" height="110" rx="10" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+  <text class="t h" x="418" y="386">③ Local Activity</text>
+  <text class="m" x="418" y="410">workflow.ExecuteLocalActivity(ctx, a.ChargeCard, input)</text>
+  <text class="t b" x="418" y="434">Runs inside the Workflow Worker process · no Activity Task Queue</text>
+  <text class="t s" x="418" y="454">Low latency · result stored as a MarkerRecorded event · performance optimization only</text>
+</svg>

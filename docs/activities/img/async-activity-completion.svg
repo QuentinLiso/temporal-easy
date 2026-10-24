@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 600" width="960" height="600" role="img" aria-labelledby="title desc">
+  <title id="title">Asynchronous Activity Completion</title>
+  <desc id="desc">The Activity hands its Task Token to an external system and returns ErrResultPending; the Activity Execution stays open while the external system heartbeats and finally completes it through a Temporal Client.</desc>
+  <defs>
+    <style>
+      .t{font-family:-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;fill:#1f2937}
+      .h{font-size:15px;font-weight:700}
+      .b{font-size:12.5px}
+      .s{font-size:11.5px;fill:#4b5563}
+      .m{font-family:SFMono-Regular,Menlo,Consolas,monospace;font-size:11px;fill:#111827}
+    </style>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#374151"/>
+    </marker>
+    <marker id="arrO" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#ea580c"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="960" height="600" rx="14" fill="#ffffff"/>
+  <text class="t h" x="30" y="34">Asynchronous completion — the function returns, the Activity stays open</text>
+
+  <!-- lane headers -->
+  <rect x="30" y="54" width="190" height="44" rx="8" fill="#dbeafe" stroke="#2563eb"/>
+  <text class="t h" x="125" y="81" text-anchor="middle">Workflow</text>
+  <rect x="270" y="54" width="190" height="44" rx="8" fill="#ede9fe" stroke="#7c3aed"/>
+  <text class="t h" x="365" y="81" text-anchor="middle">Temporal Service</text>
+  <rect x="510" y="54" width="190" height="44" rx="8" fill="#d1fae5" stroke="#059669"/>
+  <text class="t h" x="605" y="81" text-anchor="middle">Activity Worker</text>
+  <rect x="750" y="54" width="190" height="44" rx="8" fill="#ffedd5" stroke="#ea580c"/>
+  <text class="t h" x="845" y="74" text-anchor="middle">External system</text>
+  <text class="t s" x="845" y="91" text-anchor="middle">fraud-review console</text>
+
+  <g stroke="#9ca3af" stroke-dasharray="4 4">
+    <line x1="125" y1="98" x2="125" y2="580"/>
+    <line x1="365" y1="98" x2="365" y2="580"/>
+    <line x1="605" y1="98" x2="605" y2="580"/>
+    <line x1="845" y1="98" x2="845" y2="580"/>
+  </g>
+
+  <!-- open activity bar on the service -->
+  <rect x="357" y="140" width="16" height="370" rx="3" fill="#c4b5fd"/>
+  <text class="t b" x="240" y="330" text-anchor="middle" style="fill:#6d28d9;font-weight:700">Activity Execution stays OPEN</text>
+  <text class="t s" x="240" y="348" text-anchor="middle">waiting for the external completion</text>
+
+  <!-- 1 schedule -->
+  <line x1="125" y1="130" x2="355" y2="130" stroke="#374151" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text class="m" x="240" y="122" text-anchor="middle">ExecuteActivity(RequestManualReview)</text>
+  <!-- 2 task -->
+  <line x1="375" y1="166" x2="601" y2="166" stroke="#374151" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text class="t b" x="488" y="158" text-anchor="middle">Activity Task</text>
+
+  <rect x="520" y="178" width="170" height="44" rx="6" fill="#ffffff" stroke="#059669"/>
+  <text class="m" x="605" y="196" text-anchor="middle">activity.GetInfo(ctx)</text>
+  <text class="m" x="605" y="212" text-anchor="middle">.TaskToken</text>
+
+  <!-- 3 submit -->
+  <line x1="609" y1="244" x2="841" y2="244" stroke="#374151" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text class="t b" x="725" y="236" text-anchor="middle">① submit case + token</text>
+
+  <!-- 4 pending -->
+  <line x1="601" y1="280" x2="375" y2="280" stroke="#374151" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text class="t b" x="488" y="272" text-anchor="middle">② return ErrResultPending</text>
+  <text class="t s" x="488" y="298" text-anchor="middle">Worker slot freed, nothing completed</text>
+
+  <!-- human work -->
+  <rect x="770" y="300" width="150" height="70" rx="8" fill="#fff7ed" stroke="#ea580c"/>
+  <text class="t b" x="845" y="324" text-anchor="middle">analyst reviews</text>
+  <text class="t s" x="845" y="342" text-anchor="middle">minutes … days</text>
+  <text class="t s" x="845" y="358" text-anchor="middle">(within StartToClose)</text>
+
+  <!-- heartbeat -->
+  <line x1="841" y1="396" x2="377" y2="396" stroke="#ea580c" stroke-width="1.5" stroke-dasharray="6 4" marker-end="url(#arrO)"/>
+  <text class="m" x="610" y="388" text-anchor="middle">③ c.RecordActivityHeartbeat(ctx, token, progress)</text>
+
+  <!-- complete -->
+  <line x1="841" y1="446" x2="377" y2="446" stroke="#ea580c" stroke-width="2" marker-end="url(#arrO)"/>
+  <text class="m" x="610" y="438" text-anchor="middle">④ c.CompleteActivity(ctx, token, verdict, nil)</text>
+  <text class="t s" x="610" y="464" text-anchor="middle">or pass an error to fail it · or CompleteActivityByID(namespace, wfID, runID, activityID, …)</text>
+
+  <!-- back to workflow -->
+  <line x1="355" y1="520" x2="129" y2="520" stroke="#374151" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text class="t b" x="240" y="512" text-anchor="middle">⑤ ActivityTaskCompleted</text>
+  <text class="m" x="135" y="548">future.Get(ctx, &amp;verdict)</text>
+  <text class="t s" x="135" y="566">returns the external verdict</text>
+</svg>

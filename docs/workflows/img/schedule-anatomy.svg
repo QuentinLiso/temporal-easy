@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 640" width="960" height="640" role="img" aria-labelledby="title desc">
+  <title id="title">Anatomy of a Temporal Schedule</title>
+  <desc id="desc">A Schedule, identified by its Schedule ID, combines a Spec (when), an Action (what), Policies (overlap, catchup window, pause on failure) and State (paused, note, remaining actions). It starts Workflow Executions whose Workflow ID gets the action timestamp appended and which carry the TemporalScheduledStartTime and TemporalScheduledById search attributes.</desc>
+  <defs>
+    <style>
+      .t{font-family:-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;fill:#1f2937}
+      .h{font-size:15px;font-weight:700}
+      .b{font-size:12.5px}
+      .s{font-size:11.5px;fill:#4b5563}
+      .m{font-family:SFMono-Regular,Menlo,Consolas,monospace;font-size:11.5px;fill:#111827}
+    </style>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#374151"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="960" height="640" rx="14" fill="#ffffff"/>
+  <text class="t h" x="30" y="34">Anatomy of a Schedule (lives in the Temporal Service, independent of any Execution)</text>
+
+  <!-- Schedule container -->
+  <rect x="30" y="54" width="600" height="560" rx="12" fill="#f5f3ff" stroke="#7c3aed" stroke-width="1.5"/>
+  <text class="t h" x="50" y="80">Schedule</text>
+  <text class="m" x="128" y="80">ID: "daily-sales-report"</text>
+
+  <!-- Spec -->
+  <rect x="50" y="96" width="270" height="250" rx="8" fill="#ffffff" stroke="#7c3aed"/>
+  <text class="t h" x="64" y="120">Spec · when?</text>
+  <text class="t b" x="64" y="146">• Intervals: every 30m, 10 days…</text>
+  <text class="t s" x="76" y="164">aligned to Unix epoch, + phase Offset</text>
+  <text class="t b" x="64" y="188">• Calendars: hour, dayOfWeek…</text>
+  <text class="t s" x="76" y="206">h/m/s default 0, others default *</text>
+  <text class="t b" x="64" y="230">• CronExpressions: "0 12 * * MON"</text>
+  <text class="t b" x="64" y="254">• Skip: exclusions (holidays)</text>
+  <text class="t b" x="64" y="278">• StartAt / EndAt bounds</text>
+  <text class="t b" x="64" y="302">• Jitter: random 0..N delay</text>
+  <text class="t b" x="64" y="326">• TimeZoneName (default UTC)</text>
+
+  <!-- Action -->
+  <rect x="340" y="96" width="270" height="250" rx="8" fill="#ffffff" stroke="#7c3aed"/>
+  <text class="t h" x="354" y="120">Action · what?</text>
+  <text class="t b" x="354" y="146">Start a Workflow Execution:</text>
+  <text class="t b" x="354" y="170">• Workflow Type + Args</text>
+  <text class="t b" x="354" y="194">• Task Queue</text>
+  <text class="t b" x="354" y="218">• Workflow ID (prefix)</text>
+  <text class="t b" x="354" y="242">• Timeouts, Retry Policy</text>
+  <text class="t b" x="354" y="266">• Memo, Search Attributes</text>
+  <text class="m" x="354" y="300">client.ScheduleWorkflowAction</text>
+
+  <!-- Policies -->
+  <rect x="50" y="362" width="270" height="236" rx="8" fill="#fef3c7" stroke="#d97706"/>
+  <text class="t h" x="64" y="386">Policies · what if…?</text>
+  <text class="t b" x="64" y="410">Overlap (previous run still open):</text>
+  <text class="m" x="76" y="430">SKIP (default) · BUFFER_ONE</text>
+  <text class="m" x="76" y="448">BUFFER_ALL · CANCEL_OTHER</text>
+  <text class="m" x="76" y="466">TERMINATE_OTHER · ALLOW_ALL</text>
+  <text class="t b" x="64" y="494">Catchup window (late actions):</text>
+  <text class="t s" x="76" y="512">default 1 year, minimum 10s</text>
+  <text class="t b" x="64" y="540">Pause on failure:</text>
+  <text class="t s" x="76" y="558">a failed / timed-out run pauses</text>
+  <text class="t s" x="76" y="576">the Schedule automatically</text>
+
+  <!-- State -->
+  <rect x="340" y="362" width="270" height="236" rx="8" fill="#ffffff" stroke="#7c3aed"/>
+  <text class="t h" x="354" y="386">State</text>
+  <text class="t b" x="354" y="412">• Paused (Spec has no effect;</text>
+  <text class="t b" x="366" y="430">Trigger still works)</text>
+  <text class="t b" x="354" y="456">• Note: why it's paused</text>
+  <text class="t b" x="354" y="482">• RemainingActions: stop after N</text>
+  <text class="t h" x="354" y="520">Operations</text>
+  <text class="t s" x="354" y="542">Create · Describe · List · Update</text>
+  <text class="t s" x="354" y="560">Pause / Unpause · Trigger</text>
+  <text class="t s" x="354" y="578">Backfill · Delete</text>
+
+  <!-- Arrow to executions -->
+  <line x1="632" y1="230" x2="684" y2="230" stroke="#374151" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text class="t s" x="658" y="220" text-anchor="middle">starts</text>
+
+  <!-- Executions -->
+  <rect x="688" y="96" width="246" height="268" rx="10" fill="#dbeafe" stroke="#2563eb"/>
+  <text class="t h" x="702" y="120">Workflow Executions</text>
+  <rect x="702" y="134" width="218" height="54" rx="6" fill="#ffffff" stroke="#2563eb"/>
+  <text class="m" x="712" y="154">daily-sales-report-</text>
+  <text class="m" x="712" y="172">2026-10-23T06:00:00Z</text>
+  <rect x="702" y="196" width="218" height="54" rx="6" fill="#ffffff" stroke="#2563eb"/>
+  <text class="m" x="712" y="216">daily-sales-report-</text>
+  <text class="m" x="712" y="234">2026-10-26T06:00:00Z</text>
+  <text class="t s" x="702" y="272">Action timestamp appended to</text>
+  <text class="t s" x="702" y="288">the Workflow ID. Search Attributes:</text>
+  <text class="m" x="702" y="310">TemporalScheduledStartTime</text>
+  <text class="m" x="702" y="328">TemporalScheduledById</text>
+  <text class="t s" x="702" y="350">Last result → next run</text>
+
+  <!-- Notes -->
+  <rect x="688" y="384" width="246" height="214" rx="10" fill="#d1fae5" stroke="#059669"/>
+  <text class="t h" x="702" y="408">Good to know</text>
+  <text class="t s" x="702" y="432">• Deleting or pausing a Schedule</text>
+  <text class="t s" x="714" y="450">doesn't touch started runs.</text>
+  <text class="t s" x="702" y="474">• A Paused Execution still counts</text>
+  <text class="t s" x="714" y="492">as "running" for Overlap.</text>
+  <text class="t s" x="702" y="516">• One-off future start? Use</text>
+  <text class="t s" x="714" y="534">StartDelay, not a Schedule.</text>
+  <text class="t s" x="702" y="558">• List/Count are eventually</text>
+  <text class="t s" x="714" y="576">consistent (Visibility).</text>
+</svg>
