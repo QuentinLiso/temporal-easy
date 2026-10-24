@@ -1,0 +1,12 @@
+{
+    "permissions": {
+        "allow": [
+            "WebFetch(domain:opentelemetry.io)",
+            "Read(./**)",
+            "Edit(./**)",
+            "Skill(qdoc)",
+            "Skill(temporal-doc)",
+            "Skill(temporal-vitepress)"
+        ]
+    }
+}

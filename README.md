@@ -14,6 +14,8 @@ temporal-easy/
 ├── package.json             # scripts + vitepress dependency
 ├── .npmrc                   # project registry (public npm, not Artifactory)
 ├── pnpm-workspace.yaml      # pnpm settings (allows esbuild's install script)
+├── topics/<feature>.md      # sources of each guide, read by /temporal-doc
+├── .claude/                 # /temporal-doc command + temporal-doc and temporal-vitepress skills
 └── docs/                    # VitePress source root
     ├── .vitepress/
     │   ├── config.mts         # site config; builds nav + sidebar from the folders
@@ -54,3 +56,4 @@ The project uses pnpm. The local `.npmrc` points it at the public npm registry, 
   - Use production-like names such as `ProcessInvoiceWorkflow`, not `YourWorkflow`.
 - **Vue syntax:** VitePress compiles Markdown through Vue. Put `{{ }}` and anything that looks like an HTML tag (`<T>`, `<nil>`) in prose inside backticks.
 - **Before pushing:** run `pnpm docs:build`. It fails on dead internal links. Links to the local Temporal UI (`http://localhost:8233`) are allowed.
+- **Generating a guide with Claude Code:** write `topics/<feature>.md` (copy an existing one: feature name, Encyclopedia URLs, Go SDK URLs), then run `/temporal-doc topics/<feature>.md`.
