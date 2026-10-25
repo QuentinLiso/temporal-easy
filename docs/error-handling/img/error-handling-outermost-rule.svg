@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 520" width="960" height="520" role="img" aria-labelledby="title desc">
+  <title id="title">The outermost error decides retryability</title>
+  <desc id="desc">Left: an Activity returns fmt.Errorf wrapping a non-retryable ApplicationError. The SDK converts the outermost error, a fmt.wrapError, into a retryable ApplicationFailure of type wrapError; the non-retryable InvalidCard failure is only in the cause chain, which the Service ignores for retry decisions, so the Activity is retried until MaximumAttempts. Right: the Activity wraps with a new ApplicationError that copies the type and the non-retryable flag; the top-level failure is non-retryable, so the Activity runs once.</desc>
+  <defs>
+    <style>
+      .t{font-family:-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;fill:#1f2937}
+      .h{font-size:16px;font-weight:700}
+      .b{font-size:13px}
+      .bb{font-size:13px;font-weight:700}
+      .s{font-size:12px;fill:#4b5563}
+      .m{font-family:SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;fill:#111827}
+    </style>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#6b7280"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="960" height="520" rx="14" fill="#ffffff"/>
+  <text class="t h" x="30" y="38">The Service reads only the top-level Failure</text>
+
+  <!-- left column -->
+  <text class="t bb" x="30" y="74" fill="#dc2626">❌ fmt.Errorf("refund order %s: %w", id, err)</text>
+  <rect x="30" y="88" width="440" height="96" rx="10" fill="#fee2e2" stroke="#dc2626" stroke-width="1.5"/>
+  <text class="t s" x="46" y="110">Activity returns</text>
+  <text class="m" x="46" y="132">*fmt.wrapError</text>
+  <rect x="46" y="142" width="408" height="32" rx="6" fill="#ffffff" stroke="#9ca3af" stroke-width="1.5"/>
+  <text class="m" x="58" y="163">ApplicationError{RefundWindowClosed, nonRetryable}</text>
+  <line x1="250" y1="184" x2="250" y2="214" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text class="t s" x="262" y="204">switch err.(type) → default branch</text>
+  <rect x="30" y="218" width="440" height="110" rx="10" fill="#f3f4f6" stroke="#6b7280" stroke-width="1.5"/>
+  <text class="t s" x="46" y="240">Failure sent to the Service</text>
+  <text class="m" x="46" y="262">type: "wrapError"   non_retryable: false</text>
+  <rect x="46" y="274" width="408" height="42" rx="6" fill="#ffffff" stroke="#9ca3af" stroke-width="1.5" stroke-dasharray="5 4"/>
+  <text class="t s" x="58" y="291">cause (ignored for retries)</text>
+  <text class="m" x="58" y="308">type: "RefundWindowClosed"  non_retryable: true</text>
+  <line x1="250" y1="328" x2="250" y2="358" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arr)"/>
+  <rect x="30" y="362" width="440" height="70" rx="10" fill="#fee2e2" stroke="#dc2626" stroke-width="1.5"/>
+  <text class="t bb" x="46" y="388">Retried until MaximumAttempts</text>
+  <text class="t s" x="46" y="410">Workflow sees Type "wrapError", NonRetryable false</text>
+
+  <!-- right column -->
+  <text class="t bb" x="490" y="74" fill="#059669">✅ temporalerr.Wrap("refund order …", err)</text>
+  <rect x="490" y="88" width="440" height="96" rx="10" fill="#d1fae5" stroke="#059669" stroke-width="1.5"/>
+  <text class="t s" x="506" y="110">Activity returns</text>
+  <text class="m" x="506" y="132">ApplicationError{RefundWindowClosed, nonRetryable}</text>
+  <rect x="506" y="142" width="408" height="32" rx="6" fill="#ffffff" stroke="#9ca3af" stroke-width="1.5"/>
+  <text class="m" x="518" y="163">ApplicationError{RefundWindowClosed, nonRetryable}</text>
+  <line x1="710" y1="184" x2="710" y2="214" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text class="t s" x="722" y="204">case *ApplicationError</text>
+  <rect x="490" y="218" width="440" height="110" rx="10" fill="#f3f4f6" stroke="#6b7280" stroke-width="1.5"/>
+  <text class="t s" x="506" y="240">Failure sent to the Service</text>
+  <text class="m" x="506" y="262">type: "RefundWindowClosed"  non_retryable: true</text>
+  <rect x="506" y="274" width="408" height="42" rx="6" fill="#ffffff" stroke="#9ca3af" stroke-width="1.5" stroke-dasharray="5 4"/>
+  <text class="t s" x="518" y="291">cause (kept for debugging)</text>
+  <text class="m" x="518" y="308">the PSP's original error</text>
+  <line x1="710" y1="328" x2="710" y2="358" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arr)"/>
+  <rect x="490" y="362" width="440" height="70" rx="10" fill="#d1fae5" stroke="#059669" stroke-width="1.5"/>
+  <text class="t bb" x="506" y="388">Runs once, fails fast</text>
+  <text class="t s" x="506" y="410">Workflow sees Type "RefundWindowClosed", NonRetryable true</text>
+
+  <text class="t s" x="30" y="470">Same rule for the Benign category: the SDK checks it on the outermost error only.</text>
+  <text class="t s" x="30" y="492">Checked on a dev server with Go SDK v1.50.0: wrapped with fmt.Errorf, 3 of 3 attempts; with Wrap, 1 attempt.</text>
+</svg>

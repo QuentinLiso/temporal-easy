@@ -9,7 +9,8 @@
 > Companion guides: [Temporal Architecture with Go](../../architecture/docs/README.md) (where Workers
 > fit), [Temporal Workflows with Go](../../workflows/docs/README.md) and
 > [Temporal Activities with Go](../../activities/docs/README.md) (the code Workers run),
-> [Temporal Client with Go](../../client/docs/README.md) (how work reaches the Task Queue).
+> [Temporal Client with Go](../../client/docs/README.md) (how work reaches the Task Queue),
+> [Temporal Error handling with Go](../../error-handling/docs/README.md) (what happens when a Task fails).
 
 ![Temporal Workers mental model](../img/workers-mental-model.svg)
 

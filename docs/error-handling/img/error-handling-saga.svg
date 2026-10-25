@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 460" width="960" height="460" role="img" aria-labelledby="title desc">
+  <title id="title">Saga compensation in a checkout Workflow</title>
+  <desc id="desc">Forward path: ReserveStock succeeds and pushes ReleaseStock on the compensation stack, ChargePayment succeeds and pushes RefundPayment, BookShipment fails with a non-retryable AddressUndeliverable error. Backward path: the Workflow runs the compensations in reverse order on a disconnected context, first RefundPayment then ReleaseStock, and then fails with OrderUndeliverable.</desc>
+  <defs>
+    <style>
+      .t{font-family:-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;fill:#1f2937}
+      .h{font-size:16px;font-weight:700}
+      .b{font-size:13px}
+      .bb{font-size:13px;font-weight:700}
+      .s{font-size:12px;fill:#4b5563}
+      .m{font-family:SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;fill:#111827}
+    </style>
+    <marker id="arrb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#2563eb"/>
+    </marker>
+    <marker id="arrr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#dc2626"/>
+    </marker>
+    <marker id="arrg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#6b7280"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="960" height="460" rx="14" fill="#ffffff"/>
+  <text class="t h" x="30" y="38">Forward until a permanent failure, then backward in reverse order</text>
+
+  <text class="t bb" x="30" y="78" style="fill:#2563eb">Forward (steps)</text>
+  <rect x="30" y="92" width="200" height="58" rx="10" fill="#d1fae5" stroke="#059669" stroke-width="1.5"/>
+  <text class="t bb" x="46" y="117">1. ReserveStock</text>
+  <text class="t s" x="46" y="137">✓ push ReleaseStock</text>
+  <line x1="230" y1="121" x2="290" y2="121" stroke="#2563eb" stroke-width="1.5" marker-end="url(#arrb)"/>
+  <rect x="294" y="92" width="200" height="58" rx="10" fill="#d1fae5" stroke="#059669" stroke-width="1.5"/>
+  <text class="t bb" x="310" y="117">2. ChargePayment</text>
+  <text class="t s" x="310" y="137">✓ push RefundPayment</text>
+  <line x1="494" y1="121" x2="554" y2="121" stroke="#2563eb" stroke-width="1.5" marker-end="url(#arrb)"/>
+  <rect x="558" y="92" width="220" height="58" rx="10" fill="#fee2e2" stroke="#dc2626" stroke-width="1.5"/>
+  <text class="t bb" x="574" y="117">3. BookShipment</text>
+  <text class="t s" x="574" y="137">✕ AddressUndeliverable</text>
+  <text class="t s" x="790" y="117">non-retryable:</text>
+  <text class="t s" x="790" y="135">no point retrying</text>
+
+  <!-- stack -->
+  <text class="t bb" x="30" y="196">Compensation stack (Workflow state, durable)</text>
+  <rect x="30" y="208" width="240" height="34" rx="6" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+  <text class="m" x="46" y="230">RefundPayment(pay-1)  ← top</text>
+  <rect x="30" y="246" width="240" height="34" rx="6" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+  <text class="m" x="46" y="268">ReleaseStock(order)</text>
+
+  <!-- backward -->
+  <text class="t bb" x="380" y="196" style="fill:#dc2626">Backward: compensations, last first</text>
+  <line x1="680" y1="150" x2="680" y2="206" stroke="#dc2626" stroke-width="1.5" marker-end="url(#arrr)"/>
+  <rect x="600" y="210" width="160" height="40" rx="10" fill="#fee2e2" stroke="#dc2626" stroke-width="1.5"/>
+  <text class="t bb" x="616" y="235">1. RefundPayment</text>
+  <line x1="600" y1="230" x2="544" y2="230" stroke="#dc2626" stroke-width="1.5" marker-end="url(#arrr)"/>
+  <rect x="380" y="210" width="160" height="40" rx="10" fill="#fee2e2" stroke="#dc2626" stroke-width="1.5"/>
+  <text class="t bb" x="396" y="235">2. ReleaseStock</text>
+  <line x1="460" y1="250" x2="460" y2="272" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arrg)"/>
+  <rect x="330" y="276" width="300" height="40" rx="10" fill="#f3f4f6" stroke="#6b7280" stroke-width="1.5"/>
+  <text class="t bb" x="346" y="301">Workflow fails: OrderUndeliverable</text>
+
+  <!-- rules -->
+  <rect x="30" y="336" width="900" height="110" rx="10" fill="#f9fafb" stroke="#e5e7eb" stroke-width="1"/>
+  <text class="t bb" x="50" y="362">Rules</text>
+  <text class="t b" x="50" y="386">• Push a compensation only after its step succeeded (or before, if the step can partly succeed, as a safe no-op).</text>
+  <text class="t b" x="50" y="408">• Compensations are idempotent (keyed by order ID) and keep unlimited retries: a refund must not be dropped.</text>
+  <text class="t b" x="50" y="430">• Run them on workflow.NewDisconnectedContext so they still run when the Workflow was canceled.</text>
+</svg>

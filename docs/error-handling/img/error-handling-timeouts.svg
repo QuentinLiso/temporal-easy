@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 520" width="960" height="520" role="img" aria-labelledby="title desc">
+  <title id="title">Activity timeouts as failure detectors</title>
+  <desc id="desc">Timeline of one Activity Execution with two attempts. Each attempt first waits in the Task Queue, bounded by the Schedule-To-Start Timeout, then runs, bounded by the Start-To-Close Timeout. During the first attempt the Activity heartbeats, then goes silent: the Heartbeat Timeout fires and the attempt fails. After the retry interval, attempt 2 is queued again and completes. The Schedule-To-Close Timeout bounds the whole execution across attempts. Schedule-To-Start is never retried; Start-To-Close and Heartbeat timeouts are retried by the Retry Policy; Schedule-To-Close stops retrying.</desc>
+  <defs>
+    <style>
+      .t{font-family:-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;fill:#1f2937}
+      .h{font-size:16px;font-weight:700}
+      .b{font-size:13px}
+      .bb{font-size:13px;font-weight:700}
+      .s{font-size:12px;fill:#4b5563}
+      .m{font-family:SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;fill:#111827}
+    </style>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#6b7280"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="960" height="520" rx="14" fill="#ffffff"/>
+  <text class="t h" x="30" y="38">One Activity Execution, two attempts: which timeout watches what</text>
+
+  <!-- time axis -->
+  <line x1="40" y1="250" x2="920" y2="250" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text class="t s" x="890" y="270">time</text>
+
+  <!-- Attempt 1 -->
+  <text class="t bb" x="60" y="150">Attempt 1</text>
+  <rect x="60" y="160" width="100" height="40" rx="6" fill="#fef3c7" stroke="#d97706" stroke-width="1.5"/>
+  <text class="t s" x="72" y="185">in the queue</text>
+  <rect x="160" y="160" width="300" height="40" rx="6" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+  <text class="t s" x="172" y="185">running on a Worker</text>
+  <!-- heartbeats -->
+  <circle cx="200" cy="215" r="5" fill="#059669"/>
+  <circle cx="240" cy="215" r="5" fill="#059669"/>
+  <circle cx="280" cy="215" r="5" fill="#059669"/>
+  <text class="t s" x="186" y="236">Heartbeats</text>
+  <line x1="280" y1="222" x2="420" y2="222" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="5 4"/>
+  <text class="t s" x="300" y="240" style="fill:#dc2626">silence &gt; Heartbeat Timeout</text>
+  <text class="t bb" x="440" y="152" style="fill:#dc2626">✕</text>
+  <line x1="460" y1="160" x2="460" y2="200" stroke="#dc2626" stroke-width="2"/>
+
+  <!-- retry wait -->
+  <rect x="460" y="168" width="90" height="24" rx="6" fill="#f3f4f6" stroke="#9ca3af" stroke-width="1"/>
+  <text class="t s" x="470" y="185">retry interval</text>
+
+  <!-- Attempt 2 -->
+  <text class="t bb" x="550" y="150">Attempt 2</text>
+  <rect x="550" y="160" width="80" height="40" rx="6" fill="#fef3c7" stroke="#d97706" stroke-width="1.5"/>
+  <text class="t s" x="558" y="185">queue</text>
+  <rect x="630" y="160" width="200" height="40" rx="6" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+  <text class="t s" x="642" y="185">running → completes</text>
+  <text class="t bb" x="836" y="186" style="fill:#059669">✓</text>
+
+  <!-- per-attempt brackets -->
+  <path d="M60,120 L60,112 L160,112 L160,120" fill="none" stroke="#d97706" stroke-width="1.5"/>
+  <text class="t s" x="62" y="104">Schedule-To-Start</text>
+  <path d="M160,120 L160,112 L460,112 L460,120" fill="none" stroke="#2563eb" stroke-width="1.5"/>
+  <text class="t s" x="250" y="104">Start-To-Close (per attempt)</text>
+  <path d="M550,120 L550,112 L630,112 L630,120" fill="none" stroke="#d97706" stroke-width="1.5"/>
+  <text class="t s" x="548" y="104">S-T-S</text>
+  <path d="M630,120 L630,112 L830,112 L830,120" fill="none" stroke="#2563eb" stroke-width="1.5"/>
+  <text class="t s" x="680" y="104">Start-To-Close</text>
+
+  <!-- schedule to close -->
+  <text class="t bb" x="300" y="66" style="fill:#7c3aed">Schedule-To-Close: the whole execution, all attempts</text>
+  <path d="M60,84 L60,74 L860,74 L860,84" fill="none" stroke="#7c3aed" stroke-width="2"/>
+
+  <!-- legend table -->
+  <rect x="30" y="290" width="900" height="210" rx="10" fill="#f9fafb" stroke="#e5e7eb" stroke-width="1"/>
+  <text class="t bb" x="50" y="318">Timeout</text>
+  <text class="t bb" x="250" y="318">Detects</text>
+  <text class="t bb" x="560" y="318">When it fires</text>
+  <line x1="46" y1="328" x2="914" y2="328" stroke="#e5e7eb"/>
+  <text class="t b" x="50" y="352" style="fill:#d97706">Schedule-To-Start</text>
+  <text class="t b" x="250" y="352">no Worker picks the Task up</text>
+  <text class="t b" x="560" y="352">never retried · TimeoutError ScheduleToStart</text>
+  <text class="t b" x="50" y="384" style="fill:#2563eb">Start-To-Close</text>
+  <text class="t b" x="250" y="384">an attempt ran too long / Worker died</text>
+  <text class="t b" x="560" y="384">retried by the Retry Policy</text>
+  <text class="t b" x="50" y="416" style="fill:#dc2626">Heartbeat</text>
+  <text class="t b" x="250" y="416">a long attempt went silent (sooner)</text>
+  <text class="t b" x="560" y="416">retried · last details kept on TimeoutError</text>
+  <text class="t b" x="50" y="448" style="fill:#7c3aed">Schedule-To-Close</text>
+  <text class="t b" x="250" y="448">the Activity as a whole took too long</text>
+  <text class="t b" x="560" y="448">stops retrying · wraps the last error</text>
+  <text class="t s" x="50" y="482">Required: Start-To-Close or Schedule-To-Close. Heartbeat Timeout 0 = disabled, and it is capped at Start-To-Close.</text>
+</svg>

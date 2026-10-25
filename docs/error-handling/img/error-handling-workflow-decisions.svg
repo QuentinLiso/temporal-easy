@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 560" width="960" height="560" role="img" aria-labelledby="title desc">
+  <title id="title">Deciding what to do with an Activity error in a Workflow</title>
+  <desc id="desc">workflow.ExecuteActivity(...).Get returns nil or an error wrapped in an ActivityError (or a ChildWorkflowExecutionError for a child). The Workflow checks the cause with errors.As, in order: TimeoutError, CanceledError, PanicError, then ApplicationError. For an ApplicationError it switches on Type: a business Type such as CardDeclined becomes a non-retryable PaymentDeclined error and the Workflow fails; an infrastructure Type such as ProviderUnavailable triggers a fallback Activity and the Workflow continues; an unknown Type is returned unchanged and the Workflow fails with the full chain.</desc>
+  <defs>
+    <style>
+      .t{font-family:-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;fill:#1f2937}
+      .h{font-size:16px;font-weight:700}
+      .b{font-size:13px}
+      .bb{font-size:13px;font-weight:700}
+      .s{font-size:12px;fill:#4b5563}
+      .m{font-family:SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;fill:#111827}
+    </style>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#6b7280"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="960" height="560" rx="14" fill="#ffffff"/>
+  <text class="t h" x="30" y="38">err := workflow.ExecuteActivity(…).Get(ctx, &amp;out): what next?</text>
+
+  <!-- Get -->
+  <rect x="30" y="62" width="250" height="64" rx="10" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+  <text class="m" x="46" y="88">ExecuteActivity(…).Get</text>
+  <text class="t s" x="46" y="110">returns only after retries end</text>
+  <line x1="280" y1="94" x2="346" y2="94" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text class="t s" x="292" y="86">err = nil</text>
+  <rect x="350" y="72" width="170" height="44" rx="10" fill="#d1fae5" stroke="#059669" stroke-width="1.5"/>
+  <text class="t bb" x="366" y="99">continue</text>
+
+  <!-- wrapper -->
+  <line x1="155" y1="126" x2="155" y2="168" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arr)"/>
+  <rect x="30" y="172" width="250" height="78" rx="10" fill="#f3f4f6" stroke="#6b7280" stroke-width="1.5"/>
+  <text class="t bb" x="46" y="196">Wrapper</text>
+  <text class="m" x="46" y="216">*temporal.ActivityError</text>
+  <text class="t s" x="46" y="236">(ChildWorkflowExecutionError for children)</text>
+
+  <!-- checks column -->
+  <line x1="280" y1="211" x2="346" y2="211" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text class="t s" x="290" y="200">errors.As,</text>
+  <text class="t s" x="290" y="232">in order</text>
+
+  <rect x="350" y="148" width="220" height="40" rx="8" fill="#fef3c7" stroke="#d97706" stroke-width="1.5"/>
+  <text class="t bb" x="364" y="166">1. TimeoutError</text>
+  <text class="t s" x="364" y="181">TimeoutType() tells which</text>
+  <rect x="350" y="196" width="220" height="40" rx="8" fill="#fef3c7" stroke="#d97706" stroke-width="1.5"/>
+  <text class="t bb" x="364" y="214">2. CanceledError</text>
+  <text class="t s" x="364" y="229">clean up, return</text>
+  <rect x="350" y="244" width="220" height="40" rx="8" fill="#fee2e2" stroke="#dc2626" stroke-width="1.5"/>
+  <text class="t bb" x="364" y="262">3. PanicError</text>
+  <text class="t s" x="364" y="277">a bug: return err</text>
+  <rect x="350" y="292" width="220" height="40" rx="8" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+  <text class="t bb" x="364" y="310">4. ApplicationError</text>
+  <text class="t s" x="364" y="325">switch appErr.Type()</text>
+
+  <rect x="610" y="148" width="320" height="40" rx="8" fill="#d1fae5" stroke="#059669" stroke-width="1.5"/>
+  <text class="t b" x="624" y="173">reroute / fall back (Workflow continues)</text>
+  <line x1="570" y1="168" x2="606" y2="168" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- type switch -->
+  <line x1="460" y1="332" x2="460" y2="364" stroke="#7c3aed" stroke-width="1.5" marker-end="url(#arr)"/>
+  <rect x="30" y="368" width="280" height="132" rx="10" fill="#fee2e2" stroke="#dc2626" stroke-width="1.5"/>
+  <text class="t bb" x="46" y="392">Business Type</text>
+  <text class="m" x="46" y="412">CardDeclined, InsufficientFunds</text>
+  <text class="t s" x="46" y="434">return NewNonRetryableApplicationError(</text>
+  <text class="t s" x="46" y="452">  "payment declined", PaymentDeclined, err)</text>
+  <text class="t bb" x="46" y="482">Workflow: Failed (expected)</text>
+
+  <rect x="340" y="368" width="280" height="132" rx="10" fill="#d1fae5" stroke="#059669" stroke-width="1.5"/>
+  <text class="t bb" x="356" y="392">Infrastructure Type</text>
+  <text class="m" x="356" y="412">ProviderUnavailable</text>
+  <text class="t s" x="356" y="434">ExecuteActivity(ChargeWithBackup)</text>
+  <text class="t s" x="356" y="452">or another compensation</text>
+  <text class="t bb" x="356" y="482">Workflow: continues</text>
+
+  <rect x="650" y="368" width="280" height="132" rx="10" fill="#f3f4f6" stroke="#6b7280" stroke-width="1.5"/>
+  <text class="t bb" x="666" y="392">Unknown Type (default)</text>
+  <text class="m" x="666" y="412">"", "wrapError", new Types…</text>
+  <text class="t s" x="666" y="434">return err unchanged</text>
+  <text class="t s" x="666" y="452">full chain in the history</text>
+  <text class="t bb" x="666" y="482">Workflow: Failed (investigate)</text>
+
+  <path d="M 460 364 L 170 364 L 170 368" fill="none" stroke="#7c3aed" stroke-width="1.5"/>
+  <path d="M 460 364 L 790 364 L 790 368" fill="none" stroke="#7c3aed" stroke-width="1.5"/>
+  <text class="t s" x="30" y="534">Branch on Types, not on RetryState: Get only returns once the Retry Policy has given up.</text>
+</svg>

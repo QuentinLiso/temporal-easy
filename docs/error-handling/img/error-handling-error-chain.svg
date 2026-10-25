@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 560" width="960" height="560" role="img" aria-labelledby="title desc">
+  <title id="title">The error chain a Workflow and a Client see</title>
+  <desc id="desc">An Activity returns a Go error. The SDK failure converter looks at the outermost error: an ApplicationError keeps its Type, NonRetryable flag and Details; any other error becomes a retryable ApplicationError named after its Go type. Causes are converted one by one through errors.Unwrap and stored as a failure in the Event History. The Workflow gets an ActivityError whose cause is the ApplicationError. If the Workflow returns it, the Client gets a WorkflowExecutionError wrapping the same chain. Message, Type, NonRetryable, Details and panic stack traces survive; Go identity used by errors.Is and errors.As on your own types does not.</desc>
+  <defs>
+    <style>
+      .t{font-family:-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;fill:#1f2937}
+      .h{font-size:16px;font-weight:700}
+      .b{font-size:13px}
+      .bb{font-size:13px;font-weight:700}
+      .s{font-size:12px;fill:#4b5563}
+      .m{font-family:SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;fill:#111827}
+    </style>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#6b7280"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="960" height="560" rx="14" fill="#ffffff"/>
+  <text class="t h" x="30" y="38">From a Go error in an Activity to the error your Workflow and Client see</text>
+
+  <!-- Activity -->
+  <text class="t bb" x="30" y="76">1 · Activity returns</text>
+  <rect x="20" y="88" width="290" height="104" rx="10" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+  <text class="m" x="34" y="114">NewNonRetryableApplicationError(</text>
+  <text class="m" x="46" y="134">"card declined",</text>
+  <text class="m" x="46" y="154">"CardDeclined", cause,</text>
+  <text class="m" x="46" y="174">DeclineDetails{…})</text>
+
+  <!-- Converter -->
+  <text class="t bb" x="350" y="76">2 · Failure converter (outermost type)</text>
+  <rect x="340" y="88" width="290" height="104" rx="10" fill="#f3f4f6" stroke="#6b7280" stroke-width="1.5"/>
+  <text class="t b" x="354" y="112">*ApplicationError → keeps Type,</text>
+  <text class="t b" x="354" y="130">NonRetryable, Details</text>
+  <text class="t b" x="354" y="152">anything else → retryable, Type =</text>
+  <text class="t b" x="354" y="170">Go type name ("" for errors.New)</text>
+  <text class="t s" x="354" y="186">causes: errors.Unwrap, one by one</text>
+  <line x1="310" y1="140" x2="336" y2="140" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- History -->
+  <text class="t bb" x="670" y="76">3 · Stored as data</text>
+  <rect x="660" y="88" width="280" height="104" rx="10" fill="#fef3c7" stroke="#d97706" stroke-width="1.5"/>
+  <text class="t b" x="674" y="112">Failure in the Event History</text>
+  <text class="t b" x="674" y="132">message, type, non_retryable,</text>
+  <text class="t b" x="674" y="150">details, stack trace, cause</text>
+  <text class="t s" x="674" y="176">no Go values, no pointers</text>
+  <line x1="630" y1="140" x2="656" y2="140" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- Workflow view -->
+  <text class="t bb" x="30" y="236">4 · Workflow: ExecuteActivity(…).Get(ctx, &amp;out)</text>
+  <rect x="20" y="248" width="420" height="44" rx="8" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+  <text class="m" x="34" y="268">*temporal.ActivityError</text>
+  <text class="t s" x="34" y="284">what: ActivityType, ActivityID, RetryState</text>
+  <rect x="50" y="304" width="390" height="44" rx="8" fill="#fee2e2" stroke="#dc2626" stroke-width="1.5"/>
+  <text class="m" x="64" y="324">cause *temporal.ApplicationError</text>
+  <text class="t s" x="64" y="340">why: Type "CardDeclined", NonRetryable, Details</text>
+  <rect x="80" y="360" width="360" height="44" rx="8" fill="#f3f4f6" stroke="#6b7280" stroke-width="1.5"/>
+  <text class="m" x="94" y="380">cause *temporal.ApplicationError</text>
+  <text class="t s" x="94" y="396">the wrapped Go error, message only</text>
+  <line x1="36" y1="292" x2="36" y2="326" stroke="#6b7280" stroke-width="1.5"/>
+  <line x1="36" y1="326" x2="46" y2="326" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="66" y1="348" x2="66" y2="382" stroke="#6b7280" stroke-width="1.5"/>
+  <line x1="66" y1="382" x2="76" y2="382" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arr)"/>
+  <path d="M 800 192 C 800 222, 430 212, 430 244" fill="none" stroke="#6b7280" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#arr)"/>
+
+  <!-- Client view -->
+  <text class="t bb" x="490" y="236">5 · Client: run.Get(ctx, &amp;out)</text>
+  <rect x="480" y="248" width="460" height="44" rx="8" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+  <text class="m" x="494" y="268">*temporal.WorkflowExecutionError</text>
+  <text class="t s" x="494" y="284">what: the Workflow closed with a failure</text>
+  <rect x="510" y="304" width="430" height="44" rx="8" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+  <text class="m" x="524" y="324">cause *temporal.ActivityError</text>
+  <text class="t s" x="524" y="340">only if the Workflow returned the Activity's error as is</text>
+  <rect x="540" y="360" width="400" height="44" rx="8" fill="#fee2e2" stroke="#dc2626" stroke-width="1.5"/>
+  <text class="m" x="554" y="380">cause *temporal.ApplicationError</text>
+  <text class="t s" x="554" y="396">same Type, NonRetryable, Details</text>
+  <line x1="496" y1="292" x2="496" y2="326" stroke="#6b7280" stroke-width="1.5"/>
+  <line x1="496" y1="326" x2="506" y2="326" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="526" y1="348" x2="526" y2="382" stroke="#6b7280" stroke-width="1.5"/>
+  <line x1="526" y1="382" x2="536" y2="382" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="440" y1="270" x2="476" y2="270" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text class="t s" x="446" y="262">returned</text>
+
+  <!-- Survives -->
+  <rect x="20" y="430" width="440" height="104" rx="10" fill="#d1fae5" stroke="#059669" stroke-width="1.5"/>
+  <text class="t bb" x="36" y="454">Survives the trip</text>
+  <text class="t b" x="36" y="476">Message() and the causes' messages</text>
+  <text class="t b" x="36" y="496">Type(), NonRetryable(), Details(&amp;v)</text>
+  <text class="t b" x="36" y="516">PanicError.StackTrace(), TimeoutType()</text>
+  <rect x="490" y="430" width="450" height="104" rx="10" fill="#fee2e2" stroke="#dc2626" stroke-width="1.5"/>
+  <text class="t bb" x="506" y="454">Lost</text>
+  <text class="t b" x="506" y="476">errors.Is(err, ErrOutOfStock) is false</text>
+  <text class="t b" x="506" y="496">errors.As(err, &amp;myErr) on your types is false</text>
+  <text class="t b" x="506" y="516">fields of your error structs (put them in Details)</text>
+</svg>

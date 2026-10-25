@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 500" width="960" height="500" role="img" aria-labelledby="title desc">
+  <title id="title">Retry interval with the default Retry Policy</title>
+  <desc id="desc">Bar chart of the wait before each retry with the default Activity Retry Policy: 1, 2, 4, 8, 16, 32 and 64 seconds, then capped at the Maximum Interval of 100 seconds (100 times the Initial Interval) for every later retry. Retries stop early on a non-retryable error, when MaximumAttempts is reached, or when the Schedule-To-Close Timeout leaves no time for the next attempt.</desc>
+  <defs>
+    <style>
+      .t{font-family:-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;fill:#1f2937}
+      .h{font-size:16px;font-weight:700}
+      .b{font-size:13px}
+      .bb{font-size:13px;font-weight:700}
+      .s{font-size:12px;fill:#4b5563}
+      .m{font-family:SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;fill:#111827}
+    </style>
+  </defs>
+  <rect x="0" y="0" width="960" height="500" rx="14" fill="#ffffff"/>
+  <text class="t h" x="30" y="38">Wait before each retry: min(InitialInterval × BackoffCoefficient^(n-1), MaximumInterval)</text>
+  <text class="m" x="30" y="62">defaults: InitialInterval 1s · BackoffCoefficient 2.0 · MaximumInterval 100 × InitialInterval = 100s</text>
+
+  <!-- axis -->
+  <line x1="80" y1="380" x2="900" y2="380" stroke="#6b7280" stroke-width="1.5"/>
+  <line x1="80" y1="380" x2="80" y2="110" stroke="#6b7280" stroke-width="1.5"/>
+  <text class="t s" x="30" y="134">100s</text>
+  <text class="t s" x="36" y="384">0s</text>
+  <!-- cap line -->
+  <line x1="80" y1="130" x2="900" y2="130" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="6 4"/>
+  <text class="t s" x="700" y="122" style="fill:#dc2626">MaximumInterval cap (100s)</text>
+
+  <!-- bars: base y=380, scale 2.5px per second -->
+  <rect x="96"  y="377" width="56" height="3"   rx="2" fill="#2563eb"/>
+  <rect x="176" y="375" width="56" height="5"   rx="2" fill="#2563eb"/>
+  <rect x="256" y="370" width="56" height="10"  rx="2" fill="#2563eb"/>
+  <rect x="336" y="360" width="56" height="20"  rx="2" fill="#2563eb"/>
+  <rect x="416" y="340" width="56" height="40"  rx="2" fill="#2563eb"/>
+  <rect x="496" y="300" width="56" height="80"  rx="2" fill="#2563eb"/>
+  <rect x="576" y="220" width="56" height="160" rx="2" fill="#2563eb"/>
+  <rect x="656" y="130" width="56" height="250" rx="2" fill="#7c3aed"/>
+  <rect x="736" y="130" width="56" height="250" rx="2" fill="#7c3aed"/>
+  <rect x="816" y="130" width="56" height="250" rx="2" fill="#7c3aed"/>
+
+  <!-- values -->
+  <text class="t bb" x="114" y="370">1s</text>
+  <text class="t bb" x="194" y="368">2s</text>
+  <text class="t bb" x="274" y="363">4s</text>
+  <text class="t bb" x="354" y="353">8s</text>
+  <text class="t bb" x="429" y="333">16s</text>
+  <text class="t bb" x="509" y="293">32s</text>
+  <text class="t bb" x="589" y="213">64s</text>
+
+  <!-- x labels -->
+  <text class="t s" x="104" y="400">retry 1</text>
+  <text class="t s" x="184" y="400">retry 2</text>
+  <text class="t s" x="264" y="400">retry 3</text>
+  <text class="t s" x="344" y="400">retry 4</text>
+  <text class="t s" x="424" y="400">retry 5</text>
+  <text class="t s" x="504" y="400">retry 6</text>
+  <text class="t s" x="584" y="400">retry 7</text>
+  <text class="t s" x="664" y="400">retry 8</text>
+  <text class="t s" x="744" y="400">retry 9</text>
+  <text class="t s" x="820" y="400">retry 10+</text>
+
+  <!-- stop conditions -->
+  <rect x="30" y="420" width="900" height="64" rx="10" fill="#fef3c7" stroke="#d97706" stroke-width="1.5"/>
+  <text class="t bb" x="46" y="444">Retries stop when:</text>
+  <text class="t b" x="190" y="444">the error is non-retryable (NonRetryable flag or NonRetryableErrorTypes) · MaximumAttempts is reached</text>
+  <text class="t b" x="190" y="468">Schedule-To-Close leaves no time for the next attempt · the Workflow cancels the Activity</text>
+</svg>
