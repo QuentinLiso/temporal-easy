@@ -435,7 +435,8 @@ use `activity.GetLogger(ctx)`.
 
 ## 7. Beyond one Execution: metrics and tracing
 
-The debugging page also points to production tools that this guide doesn't cover in detail:
+The debugging page also points to production tools that this guide doesn't cover in detail (the
+[Observability guide](../../observability/docs/README.md) does):
 
 - **Tracing** (OpenTelemetry, Datadog, OpenTracing interceptors) follows one request from the Client
   through the Workflow and its Activities: [Go SDK — Tracing](https://docs.temporal.io/develop/go/platform/observability#tracing).

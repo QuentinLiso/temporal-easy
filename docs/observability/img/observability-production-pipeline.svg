@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 620" width="960" height="620" role="img" aria-labelledby="title desc" font-family="Inter, Helvetica, Arial, sans-serif">
+  <title id="title">Observability pipeline in production</title>
+  <desc id="desc">Two application processes, the shop API and the checkout Worker, each call telemetry.Setup. Each emits logs as JSON on stdout to a log agent and a log store, traces over OTLP gRPC to the OpenTelemetry Collector and a trace backend, and metrics on a /metrics endpoint scraped by Prometheus and shown in Grafana. The processes talk to the Temporal Service, which keeps the Event History, shown in the Web UI and the CLI, and exposes server metrics. The signals are joined by TraceID, WorkflowID and the service and team tags.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#4b5563"/>
+    </marker>
+  </defs>
+  <rect width="960" height="620" fill="#ffffff"/>
+
+  <text x="32" y="40" font-size="20" font-weight="700" fill="#1f2937">Three signals, one identity</text>
+  <text x="32" y="64" font-size="13" fill="#4b5563">Every process calls telemetry.Setup: same service, team, environment and version on logs, spans and metrics.</text>
+
+  <!-- processes column -->
+  <rect x="32" y="96" width="240" height="190" rx="10" fill="#eff6ff" stroke="#2563eb"/>
+  <text x="48" y="122" font-size="15" font-weight="700" fill="#1e3a8a">Your processes</text>
+  <rect x="48" y="136" width="208" height="58" rx="8" fill="#ffffff" stroke="#2563eb"/>
+  <text x="60" y="160" font-size="14" font-weight="600" fill="#1f2937">shop-api</text>
+  <text x="60" y="180" font-size="12" fill="#4b5563">root span, tenant, Client</text>
+  <rect x="48" y="208" width="208" height="58" rx="8" fill="#ffffff" stroke="#2563eb"/>
+  <text x="60" y="232" font-size="14" font-weight="600" fill="#1f2937">shop-checkout-worker</text>
+  <text x="60" y="252" font-size="12" fill="#4b5563">Workflows, Activities, plugin</text>
+
+  <!-- Temporal service -->
+  <rect x="32" y="340" width="240" height="190" rx="10" fill="#f5f3ff" stroke="#7c3aed"/>
+  <text x="48" y="366" font-size="15" font-weight="700" fill="#4c1d95">Temporal Service</text>
+  <text x="48" y="392" font-size="13" fill="#1f2937">Event History per Workflow</text>
+  <text x="48" y="412" font-size="12" fill="#4b5563">(headers: _tracer-data,</text>
+  <text x="48" y="430" font-size="12" fill="#4b5563">acme-shop-tenant, in clear text)</text>
+  <text x="48" y="460" font-size="13" fill="#1f2937">Web UI · temporal workflow show</text>
+  <text x="48" y="486" font-size="13" fill="#1f2937">Server metrics</text>
+  <line x1="152" y1="286" x2="152" y2="336" stroke="#7c3aed" stroke-width="2" marker-end="url(#arrow)" marker-start="url(#arrow)"/>
+  <text x="162" y="316" font-size="12" fill="#4b5563">gRPC: tasks, headers</text>
+
+  <!-- channels -->
+  <!-- logs -->
+  <rect x="340" y="96" width="190" height="70" rx="8" fill="#ecfdf5" stroke="#16a34a"/>
+  <text x="352" y="122" font-size="14" font-weight="600" fill="#14532d">Logs</text>
+  <text x="352" y="142" font-size="12" fill="#1f2937">JSON on stdout</text>
+  <text x="352" y="158" font-size="12" fill="#1f2937">TraceID, WorkflowID, …</text>
+  <!-- traces -->
+  <rect x="340" y="196" width="190" height="70" rx="8" fill="#fff7ed" stroke="#ea580c"/>
+  <text x="352" y="222" font-size="14" font-weight="600" fill="#7c2d12">Traces</text>
+  <text x="352" y="242" font-size="12" fill="#1f2937">OTLP gRPC, batched</text>
+  <text x="352" y="258" font-size="12" fill="#1f2937">replay-safe provider + plugin</text>
+  <!-- metrics -->
+  <rect x="340" y="296" width="190" height="70" rx="8" fill="#fefce8" stroke="#ca8a04"/>
+  <text x="352" y="322" font-size="14" font-weight="600" fill="#713f12">Metrics</text>
+  <text x="352" y="342" font-size="12" fill="#1f2937">/metrics (scraped)</text>
+  <text x="352" y="358" font-size="12" fill="#1f2937">team · service · task_queue</text>
+
+  <line x1="272" y1="160" x2="336" y2="131" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="272" y1="200" x2="336" y2="231" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="272" y1="250" x2="336" y2="325" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- collectors -->
+  <rect x="580" y="96" width="150" height="70" rx="8" fill="#ffffff" stroke="#16a34a"/>
+  <text x="592" y="124" font-size="13" font-weight="600" fill="#1f2937">Log agent</text>
+  <text x="592" y="144" font-size="12" fill="#4b5563">Fluent Bit, Vector</text>
+  <rect x="580" y="196" width="150" height="70" rx="8" fill="#ffffff" stroke="#ea580c"/>
+  <text x="592" y="224" font-size="13" font-weight="600" fill="#1f2937">OTel Collector</text>
+  <text x="592" y="244" font-size="12" fill="#4b5563">sampling, batching</text>
+  <rect x="580" y="296" width="150" height="70" rx="8" fill="#ffffff" stroke="#ca8a04"/>
+  <text x="592" y="324" font-size="13" font-weight="600" fill="#1f2937">Prometheus</text>
+  <text x="592" y="344" font-size="12" fill="#4b5563">scrape + alert rules</text>
+  <line x1="530" y1="131" x2="576" y2="131" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="530" y1="231" x2="576" y2="231" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="580" y1="331" x2="534" y2="331" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="537" y="320" font-size="12" fill="#4b5563">pull</text>
+
+  <!-- backends -->
+  <rect x="770" y="96" width="160" height="70" rx="8" fill="#ffffff" stroke="#6b7280"/>
+  <text x="782" y="124" font-size="13" font-weight="600" fill="#1f2937">Log store</text>
+  <text x="782" y="144" font-size="12" fill="#4b5563">Loki, Elasticsearch</text>
+  <rect x="770" y="196" width="160" height="70" rx="8" fill="#ffffff" stroke="#6b7280"/>
+  <text x="782" y="224" font-size="13" font-weight="600" fill="#1f2937">Trace backend</text>
+  <text x="782" y="244" font-size="12" fill="#4b5563">Jaeger, Tempo</text>
+  <rect x="770" y="296" width="160" height="70" rx="8" fill="#ffffff" stroke="#6b7280"/>
+  <text x="782" y="324" font-size="13" font-weight="600" fill="#1f2937">Grafana</text>
+  <text x="782" y="344" font-size="12" fill="#4b5563">dashboards, alerts</text>
+  <line x1="730" y1="131" x2="766" y2="131" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="730" y1="231" x2="766" y2="231" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="730" y1="331" x2="766" y2="331" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- joins -->
+  <rect x="340" y="410" width="590" height="120" rx="10" fill="#f9fafb" stroke="#d1d5db"/>
+  <text x="356" y="436" font-size="15" font-weight="700" fill="#1f2937">How an investigation moves between them</text>
+  <text x="356" y="462" font-size="13" fill="#1f2937">Alert (team, task_queue) → dashboard → trace search by service</text>
+  <text x="356" y="486" font-size="13" fill="#1f2937">Log line → TraceID → trace → temporalWorkflowID → Event History in the Web UI</text>
+  <text x="356" y="510" font-size="13" fill="#1f2937">Customer's order ID → logs (OrderID, MerchantID) → WorkflowID</text>
+
+  <text x="32" y="580" font-size="12" fill="#4b5563">Shutdown order on SIGTERM: Worker.Stop → Client.Close → flush traces and metrics → stop /metrics.</text>
+</svg>

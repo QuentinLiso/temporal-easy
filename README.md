@@ -10,6 +10,7 @@ Onboarding guides for Temporal with Go:
 - `docs/error-handling/`: Temporal Error handling (9 chapters)
 - `docs/namespaces/`: Temporal Namespaces (6 chapters)
 - `docs/testing/`: Temporal Testing (9 chapters)
+- `docs/observability/`: Temporal Observability (8 chapters)
 
 The guides are plain Markdown. [VitePress](https://vitepress.dev) turns them into a static website with a left sidebar, search and a per-page table of contents.
 
@@ -36,6 +37,7 @@ temporal-easy/
     ├── error-handling/        # same layout as workflows/
     ├── namespaces/            # same layout as workflows/
     ├── testing/               # same layout as workflows/
+    ├── observability/         # same layout as workflows/
     ├── workflows/
     │   ├── docs/*.md          # chapters (README.md is the overview)
     │   └── img/*.svg          # diagrams

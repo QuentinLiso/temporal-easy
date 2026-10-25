@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 580" width="960" height="580" font-family="Helvetica, Arial, sans-serif" role="img" aria-labelledby="title desc">
+  <title id="title">Observability in Temporal: one order, four signals</title>
+  <desc id="desc">A Client starts a Workflow on the Temporal Service, which records the Event History and dispatches tasks to a Worker running the Workflow, its Activities and Child Workflows. Under each component, four bands show what it contributes to logs, metrics, traces and propagated context, and which APIs are replay-safe in Workflow code.</desc>
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#334155"/>
+    </marker>
+  </defs>
+  <rect width="960" height="580" fill="#ffffff"/>
+  <text x="480" y="34" text-anchor="middle" font-size="20" font-weight="bold" fill="#0f172a">One order, four signals</text>
+
+  <!-- Components -->
+  <rect x="30" y="64" width="180" height="130" rx="10" fill="#eef2ff" stroke="#4f46e5" stroke-width="2"/>
+  <text x="120" y="92" text-anchor="middle" font-size="15" font-weight="bold" fill="#312e81">Client</text>
+  <text x="120" y="114" text-anchor="middle" font-size="13" fill="#1e293b">HTTP handler,</text>
+  <text x="120" y="132" text-anchor="middle" font-size="13" fill="#1e293b">starter, admin tool</text>
+  <text x="120" y="160" text-anchor="middle" font-size="12" fill="#475569">c.ExecuteWorkflow(ctx, …)</text>
+
+  <rect x="290" y="64" width="220" height="130" rx="10" fill="#f1f5f9" stroke="#475569" stroke-width="2"/>
+  <text x="400" y="92" text-anchor="middle" font-size="15" font-weight="bold" fill="#0f172a">Temporal Service</text>
+  <rect x="310" y="106" width="180" height="72" rx="6" fill="#ffffff" stroke="#94a3b8"/>
+  <text x="400" y="128" text-anchor="middle" font-size="13" font-weight="bold" fill="#0f172a">Event History</text>
+  <text x="400" y="147" text-anchor="middle" font-size="12" fill="#334155">every step, input, error,</text>
+  <text x="400" y="164" text-anchor="middle" font-size="12" fill="#334155">and headers. Free.</text>
+
+  <rect x="580" y="64" width="360" height="130" rx="10" fill="#ecfdf5" stroke="#059669" stroke-width="2"/>
+  <text x="760" y="86" text-anchor="middle" font-size="15" font-weight="bold" fill="#064e3b">Worker(s)</text>
+  <rect x="595" y="98" width="160" height="84" rx="6" fill="#ffffff" stroke="#10b981"/>
+  <text x="675" y="124" text-anchor="middle" font-size="13" font-weight="bold" fill="#064e3b">Workflow</text>
+  <text x="675" y="144" text-anchor="middle" font-size="12" fill="#334155">deterministic,</text>
+  <text x="675" y="162" text-anchor="middle" font-size="12" fill="#b45309" font-weight="bold">replayed</text>
+  <rect x="765" y="98" width="160" height="84" rx="6" fill="#ffffff" stroke="#10b981"/>
+  <text x="845" y="124" text-anchor="middle" font-size="13" font-weight="bold" fill="#064e3b">Activities,</text>
+  <text x="845" y="142" text-anchor="middle" font-size="13" font-weight="bold" fill="#064e3b">Child Workflows</text>
+  <text x="845" y="162" text-anchor="middle" font-size="12" fill="#334155">side effects, retries</text>
+
+  <line x1="212" y1="129" x2="286" y2="129" stroke="#334155" stroke-width="2" marker-end="url(#arr)"/>
+  <text x="249" y="120" text-anchor="middle" font-size="12" fill="#334155">start</text>
+  <line x1="512" y1="129" x2="576" y2="129" stroke="#334155" stroke-width="2" marker-end="url(#arr)"/>
+  <text x="544" y="120" text-anchor="middle" font-size="12" fill="#334155">tasks</text>
+
+  <!-- Bands -->
+  <g font-size="12" fill="#1e293b" text-anchor="middle">
+    <!-- Logs -->
+    <rect x="20" y="218" width="920" height="70" rx="8" fill="#fff7ed" stroke="#fdba74"/>
+    <text x="32" y="236" text-anchor="start" font-size="14" font-weight="bold" fill="#9a3412">Logs</text>
+    <text x="120" y="258">client.Options.Logger</text>
+    <text x="120" y="276">(SDK and Worker messages)</text>
+    <text x="400" y="258">the history is the</text>
+    <text x="400" y="276">audit trail of record</text>
+    <text x="675" y="258">workflow.GetLogger</text>
+    <text x="675" y="276">silent during replay</text>
+    <text x="845" y="258">activity.GetLogger</text>
+    <text x="845" y="276">+ ActivityType, Attempt</text>
+
+    <!-- Metrics -->
+    <rect x="20" y="298" width="920" height="70" rx="8" fill="#f0f9ff" stroke="#7dd3fc"/>
+    <text x="32" y="316" text-anchor="start" font-size="14" font-weight="bold" fill="#075985">Metrics</text>
+    <text x="120" y="338">client.Options.MetricsHandler</text>
+    <text x="120" y="356">(request latency, failures)</text>
+    <text x="400" y="338">server metrics</text>
+    <text x="400" y="356">(load, latency, errors)</text>
+    <text x="675" y="338">workflow.GetMetricsHandler</text>
+    <text x="675" y="356">skips replay</text>
+    <text x="845" y="338">SDK task latencies,</text>
+    <text x="845" y="356">poll and slot metrics</text>
+
+    <!-- Traces -->
+    <rect x="20" y="378" width="920" height="70" rx="8" fill="#f5f3ff" stroke="#c4b5fd"/>
+    <text x="32" y="396" text-anchor="start" font-size="14" font-weight="bold" fill="#5b21b6">Traces</text>
+    <text x="120" y="418">root span</text>
+    <text x="120" y="436">"POST /orders"</text>
+    <text x="400" y="418">trace context travels</text>
+    <text x="400" y="436">in a header</text>
+    <text x="675" y="418">temporalotel.Tracer</text>
+    <text x="675" y="436">replay-safe span IDs</text>
+    <text x="845" y="418">otel.Tracer</text>
+    <text x="845" y="436">(ordinary code)</text>
+
+    <!-- Context -->
+    <rect x="20" y="458" width="920" height="70" rx="8" fill="#f0fdf4" stroke="#86efac"/>
+    <text x="32" y="476" text-anchor="start" font-size="14" font-weight="bold" fill="#166534">Propagated context</text>
+    <text x="120" y="498">Inject: ctx → header</text>
+    <text x="120" y="516">(merchant, request ID)</text>
+    <text x="400" y="498">headers stored with</text>
+    <text x="400" y="516">the events, in clear</text>
+    <text x="675" y="498">ExtractToWorkflow,</text>
+    <text x="675" y="516">InjectFromWorkflow</text>
+    <text x="845" y="498">Extract: header → ctx</text>
+    <text x="845" y="516">in every Activity</text>
+  </g>
+
+  <text x="480" y="560" text-anchor="middle" font-size="13" fill="#334155">Event History: one Execution, step by step · Metrics: all Executions at once · Logs and traces: tie them to your code</text>
+</svg>

@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 600" width="960" height="600" role="img" aria-labelledby="title desc" font-family="Inter, Helvetica, Arial, sans-serif">
+  <title id="title">Trace tree of one checkout with AddTemporalSpans</title>
+  <desc id="desc">A waterfall of the 11 spans exported for one checkout with the OpenTelemetry v2 plugin and AddTemporalSpans set to true. The root span POST /orders is created by the API. Its child StartWorkflow is created by the plugin on the API's Client. RunWorkflow and the checkout span run on the Worker. Under checkout, each Activity has a StartActivity span (the Workflow scheduling it) and a RunActivity span (the Activity running). The custom span payment-gateway.charge is a child of RunActivity ChargePayment. The gap between StartActivity and RunActivity is time spent waiting in the Task Queue. Bars are illustrative, not to scale.</desc>
+  <rect width="960" height="600" fill="#ffffff"/>
+
+  <text x="32" y="40" font-size="20" font-weight="700" fill="#1f2937">One checkout, one trace (AddTemporalSpans: true)</text>
+  <text x="32" y="64" font-size="13" fill="#4b5563">11 spans exported by the test in section 7. Bar lengths are illustrative.</text>
+
+  <!-- header row -->
+  <text x="32" y="98" font-size="12" font-weight="700" fill="#6b7280">SPAN</text>
+  <text x="360" y="98" font-size="12" font-weight="700" fill="#6b7280">CREATED BY</text>
+  <text x="500" y="98" font-size="12" font-weight="700" fill="#6b7280">TIME →</text>
+  <line x1="32" y1="106" x2="928" y2="106" stroke="#e5e7eb"/>
+
+  <!-- rows: y step 36, start 130 -->
+  <!-- 1 POST /orders -->
+  <text x="32" y="134" font-size="14" fill="#1f2937" font-weight="600">POST /orders</text>
+  <text x="360" y="134" font-size="12" fill="#4b5563">API (your span)</text>
+  <rect x="500.0" y="120" width="412.8" height="20" rx="4" fill="#bfdbfe" stroke="#2563eb"/>
+
+  <!-- 2 StartWorkflow -->
+  <text x="50" y="170" font-size="14" fill="#1f2937">StartWorkflow:CheckoutWorkflow</text>
+  <text x="360" y="170" font-size="12" fill="#4b5563">API's Client (plugin)</text>
+  <rect x="505.2" y="156" width="34.4" height="20" rx="4" fill="#e9d5ff" stroke="#7c3aed"/>
+
+  <!-- 3 RunWorkflow -->
+  <text x="68" y="206" font-size="14" fill="#1f2937">RunWorkflow:CheckoutWorkflow</text>
+  <text x="360" y="206" font-size="12" fill="#4b5563">Worker (plugin)</text>
+  <rect x="544.7" y="192" width="361.2" height="20" rx="4" fill="#e9d5ff" stroke="#7c3aed"/>
+
+  <!-- 4 checkout -->
+  <text x="86" y="242" font-size="14" fill="#1f2937" font-weight="600">checkout</text>
+  <text x="360" y="242" font-size="12" fill="#4b5563">Workflow (your span)</text>
+  <rect x="549.9" y="228" width="350.9" height="20" rx="4" fill="#bbf7d0" stroke="#16a34a"/>
+
+  <!-- 5 StartActivity Reserve -->
+  <text x="104" y="278" font-size="14" fill="#1f2937">StartActivity:ReserveInventory</text>
+  <text x="360" y="278" font-size="12" fill="#4b5563">Workflow (plugin)</text>
+  <rect x="555.0" y="264" width="8.6" height="20" rx="3" fill="#e9d5ff" stroke="#7c3aed"/>
+  <!-- 6 RunActivity Reserve -->
+  <text x="122" y="314" font-size="14" fill="#1f2937">RunActivity:ReserveInventory</text>
+  <text x="360" y="314" font-size="12" fill="#4b5563">Worker (plugin)</text>
+  <rect x="586.0" y="300" width="60.2" height="20" rx="4" fill="#e9d5ff" stroke="#7c3aed"/>
+  <!-- queue gap annotation -->
+  <line x1="563.6" y1="310" x2="586.0" y2="310" stroke="#dc2626" stroke-dasharray="3 3"/>
+
+  <!-- 7 StartActivity Charge -->
+  <text x="104" y="350" font-size="14" fill="#1f2937">StartActivity:ChargePayment</text>
+  <text x="360" y="350" font-size="12" fill="#4b5563">Workflow (plugin)</text>
+  <rect x="654.8" y="336" width="8.6" height="20" rx="3" fill="#e9d5ff" stroke="#7c3aed"/>
+  <!-- 8 RunActivity Charge -->
+  <text x="122" y="386" font-size="14" fill="#1f2937">RunActivity:ChargePayment</text>
+  <text x="360" y="386" font-size="12" fill="#4b5563">Worker (plugin)</text>
+  <rect x="668.6" y="372" width="129.0" height="20" rx="4" fill="#e9d5ff" stroke="#7c3aed"/>
+  <!-- 9 payment-gateway.charge -->
+  <text x="140" y="422" font-size="14" fill="#1f2937" font-weight="600">payment-gateway.charge</text>
+  <text x="360" y="422" font-size="12" fill="#4b5563">Activity (your span)</text>
+  <rect x="677.2" y="408" width="111.8" height="20" rx="4" fill="#bbf7d0" stroke="#16a34a"/>
+
+  <!-- 10 StartActivity Ship -->
+  <text x="104" y="458" font-size="14" fill="#1f2937">StartActivity:ShipOrder</text>
+  <text x="360" y="458" font-size="12" fill="#4b5563">Workflow (plugin)</text>
+  <rect x="804.4" y="444" width="8.6" height="20" rx="3" fill="#e9d5ff" stroke="#7c3aed"/>
+  <!-- 11 RunActivity Ship -->
+  <text x="122" y="494" font-size="14" fill="#1f2937">RunActivity:ShipOrder</text>
+  <text x="360" y="494" font-size="12" fill="#4b5563">Worker (plugin)</text>
+  <rect x="816.5" y="480" width="77.4" height="20" rx="4" fill="#e9d5ff" stroke="#7c3aed"/>
+
+  <line x1="32" y1="514" x2="928" y2="514" stroke="#e5e7eb"/>
+
+  <!-- legend -->
+  <rect x="32" y="532" width="18" height="14" rx="3" fill="#bfdbfe" stroke="#2563eb"/>
+  <text x="58" y="544" font-size="13" fill="#1f2937">root span, created where the request enters</text>
+  <rect x="360" y="532" width="18" height="14" rx="3" fill="#bbf7d0" stroke="#16a34a"/>
+  <text x="386" y="544" font-size="13" fill="#1f2937">your spans (exist without AddTemporalSpans)</text>
+  <rect x="690" y="532" width="18" height="14" rx="3" fill="#e9d5ff" stroke="#7c3aed"/>
+  <text x="716" y="544" font-size="13" fill="#1f2937">plugin spans (AddTemporalSpans)</text>
+  <line x1="32" y1="570" x2="50" y2="570" stroke="#dc2626" stroke-dasharray="3 3"/>
+  <text x="58" y="574" font-size="13" fill="#1f2937">StartActivity → RunActivity gap: time waiting in the Task Queue (too few or too busy Workers)</text>
+</svg>
