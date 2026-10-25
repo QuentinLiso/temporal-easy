@@ -57,6 +57,8 @@ function guideCard(guide: string) {
 }
 
 export default defineConfig({
+  // GitHub Pages serves the site under /<repo>/. Must match the repository name.
+  base: '/temporal-easy/',
   title: 'Temporal with Go',
   description: 'A progressive roadmap to Temporal Workflows and Activities in Go.',
   cleanUrls: true,

@@ -1,0 +1,44 @@
+name: Deploy site
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: # manual "Run workflow" button
+
+permissions:
+  contents: read
+  pages: write # deploy to Pages
+  id-token: write # OIDC token Pages uses to verify the deploy
+
+concurrency:
+  group: pages
+  cancel-in-progress: false # never cut a deploy in half
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 12.15.0 # same pnpm as local, so the lockfile reads the same
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm # reuse the pnpm store between runs
+      - uses: actions/configure-pages@v5
+      - run: pnpm install --frozen-lockfile # fail if the lockfile is out of date
+      - run: pnpm docs:build
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs/.vitepress/dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

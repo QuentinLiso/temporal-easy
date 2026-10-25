@@ -18,6 +18,8 @@ The guides are plain Markdown. [VitePress](https://vitepress.dev) turns them int
 
 ```
 temporal-easy/
+├── .github/workflows/
+│   └── deploy.yml           # CI/CD: build and deploy to GitHub Pages on every push to main
 ├── package.json             # scripts + vitepress dependency
 ├── .npmrc                   # project registry (public npm, not Artifactory)
 ├── pnpm-workspace.yaml      # pnpm settings (allows esbuild's install script)
@@ -46,18 +48,45 @@ temporal-easy/
         └── img/*.svg
 ```
 
-VitePress builds every `.md` file into a page at the same path, so `docs/workflows/docs/05-timers-selectors-concurrency.md` is served at `/workflows/docs/05-timers-selectors-concurrency`. This `README.md` lives outside `docs/`, so it is not part of the site.
+VitePress builds every `.md` file into a page at the same path, under the `/temporal-easy/` base: `docs/workflows/docs/05-timers-selectors-concurrency.md` is served at `/temporal-easy/workflows/docs/05-timers-selectors-concurrency`. This `README.md` lives outside `docs/`, so it is not part of the site.
 
 ```sh
 pnpm install        # once
-pnpm docs:dev       # live-reload server on http://localhost:5173
+pnpm docs:dev       # live-reload server on http://localhost:5173/temporal-easy/
 pnpm docs:build     # static site in docs/.vitepress/dist/
-pnpm docs:preview   # serve the built site on http://localhost:4173
+pnpm docs:preview   # serve the built site on http://localhost:4173/temporal-easy/
 ```
 
-The project uses pnpm. The local `.npmrc` points it at the public npm registry, which overrides the global Artifactory registry for this folder only.
+The project uses pnpm (CI pins the same version in `.github/workflows/deploy.yml`; update it there when you upgrade pnpm locally). The local `.npmrc` points it at the public npm registry, which overrides the global Artifactory registry for this folder only.
 
-`docs/.vitepress/dist/` is plain HTML, CSS and JS, so you can deploy it to any static host (GitLab Pages, GitHub Pages, S3 or nginx).
+## Deployment
+
+The site is published on GitHub Pages: <https://quentinliso.github.io/temporal-easy/>.
+
+**How it deploys.** Every push to `main` runs `.github/workflows/deploy.yml`:
+
+1. `build` job: installs pnpm and Node 24, runs `pnpm install --frozen-lockfile` and `pnpm docs:build`, and uploads `docs/.vitepress/dist/` as the Pages artifact. A failed build (dead link, Vue syntax error, outdated lockfile) stops here and nothing is deployed.
+2. `deploy` job: publishes the artifact to GitHub Pages. The run page shows the live URL.
+
+To redeploy without a new commit: Actions tab → "Deploy site" → "Run workflow".
+
+**Before pushing:**
+
+1. `pnpm docs:build` must end with "build complete".
+2. `pnpm docs:preview`, then open <http://localhost:4173/temporal-easy/> and check the pages you changed.
+
+**After pushing:**
+
+1. In the Actions tab, both jobs of the "Deploy site" run are green (about a minute).
+2. On the live site, open a guide card, a chapter and a diagram, try the search, and reload a deep link (for example `/temporal-easy/testing/docs/07-replay-testing`) to check it doesn't 404.
+
+**When a run fails:** the site keeps the last good version. Open the failed run's log, fix the problem locally (`pnpm docs:build` reproduces build errors), and push again.
+
+**One-time setup** (in the GitHub UI):
+
+- Settings → Pages → Build and deployment → Source: **GitHub Actions**.
+- `base` in `docs/.vitepress/config.mts` must match the repository name (`/temporal-easy/`). If you fork or rename the repository, change it, or the pages load without styles.
+- GitHub Pages on a private repository needs a paid GitHub plan.
 
 ## Topic files
 
@@ -103,5 +132,5 @@ To document a new feature, copy `topics/.template.md` to `topics/<feature>.md`, 
   - Use fenced blocks with a language (`` ```go ``).
   - Use production-like names such as `ProcessInvoiceWorkflow`, not `YourWorkflow`.
 - **Vue syntax:** VitePress compiles Markdown through Vue. Put `{{ }}` and anything that looks like an HTML tag (`<T>`, `<nil>`) in prose inside backticks.
-- **Before pushing:** run `pnpm docs:build`. It fails on dead internal links. Links to the local Temporal UI (`http://localhost:8233`) are allowed.
+- **Before pushing:** run `pnpm docs:build`. It fails on dead internal links, and so does the deploy pipeline. Links to the local Temporal UI (`http://localhost:8233`) are allowed. See [Deployment](#deployment).
 - **Generating a guide with Claude Code:** write `topics/<feature>.md` from `topics/.template.md`, then run `/temporal-doc topics/<feature>.md`. See [Topic files](#topic-files).
