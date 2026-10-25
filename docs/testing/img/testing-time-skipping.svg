@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 520" width="960" height="520" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">
+  <title>Time skipping in the Go test environment</title>
+  <desc>The test environment's mock clock jumps straight to the next timer when nothing is running. While a real Activity executes, the mock clock follows the wall clock. Delayed callbacks fire at mock times, between timers.</desc>
+  <rect width="960" height="520" fill="#ffffff"/>
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#475569"/>
+    </marker>
+  </defs>
+
+  <text x="480" y="36" text-anchor="middle" font-size="20" font-weight="700" fill="#0f172a">Time skipping: TrialSubscriptionWorkflow in a test</text>
+  <text x="480" y="60" text-anchor="middle" font-size="14" fill="#475569">The mock clock jumps when the Workflow is only waiting. It slows down to real time while an Activity runs.</text>
+
+  <!-- Lane labels -->
+  <text x="40" y="128" font-size="15" font-weight="700" fill="#1d4ed8">Workflow time</text>
+  <text x="40" y="146" font-size="12" fill="#475569">mock clock, env.Now()</text>
+  <text x="40" y="318" font-size="15" font-weight="700" fill="#b45309">Wall clock</text>
+  <text x="40" y="336" font-size="12" fill="#475569">your CI runner</text>
+
+  <!-- Workflow time axis -->
+  <line x1="190" y1="135" x2="920" y2="135" stroke="#1d4ed8" stroke-width="3"/>
+  <!-- ticks -->
+  <g font-size="12" fill="#0f172a" text-anchor="middle">
+    <line x1="200" y1="125" x2="200" y2="145" stroke="#1d4ed8" stroke-width="2"/>
+    <text x="200" y="112">day 0</text>
+    <line x1="610" y1="125" x2="610" y2="145" stroke="#1d4ed8" stroke-width="2"/>
+    <text x="610" y="112">day 27</text>
+    <line x1="700" y1="125" x2="700" y2="145" stroke="#1d4ed8" stroke-width="2"/>
+    <text x="700" y="112">day 28</text>
+    <line x1="900" y1="125" x2="900" y2="145" stroke="#1d4ed8" stroke-width="2"/>
+    <text x="900" y="112">day 30</text>
+  </g>
+
+  <!-- timer jump 1 -->
+  <path d="M205,160 C320,215 500,215 600,160" fill="none" stroke="#1d4ed8" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#arr)"/>
+  <rect x="300" y="198" width="210" height="44" rx="6" fill="#eff6ff" stroke="#93c5fd"/>
+  <text x="405" y="216" text-anchor="middle" font-size="13" fill="#1e3a8a">Timer to the reminder:</text>
+  <text x="405" y="233" text-anchor="middle" font-size="13" fill="#1e3a8a">nothing runs, so the clock jumps</text>
+
+  <!-- activity block on workflow lane -->
+  <rect x="606" y="150" width="14" height="24" fill="#f59e0b" stroke="#b45309"/>
+  <text x="628" y="167" font-size="12" fill="#92400e">SendTrialReminder</text>
+
+  <!-- delayed callback -->
+  <circle cx="700" cy="135" r="9" fill="#16a34a" stroke="#14532d" stroke-width="2"/>
+  <text x="700" y="88" text-anchor="middle" font-size="12" fill="#14532d">RegisterDelayedCallback(…, 28 days)</text>
+  <text x="700" y="73" text-anchor="middle" font-size="12" font-weight="700" fill="#14532d">QueryWorkflow / SignalWorkflow</text>
+
+  <!-- timer jump 2 -->
+  <path d="M710,160 C770,205 840,205 893,160" fill="none" stroke="#1d4ed8" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#arr)"/>
+  <text x="800" y="222" text-anchor="middle" font-size="13" fill="#1e3a8a">jump again to the trial end</text>
+
+  <!-- Wall clock axis -->
+  <line x1="190" y1="325" x2="920" y2="325" stroke="#b45309" stroke-width="3"/>
+  <g font-size="12" fill="#0f172a" text-anchor="middle">
+    <line x1="200" y1="315" x2="200" y2="335" stroke="#b45309" stroke-width="2"/>
+    <text x="200" y="360">0 s</text>
+    <line x1="230" y1="315" x2="230" y2="335" stroke="#b45309" stroke-width="2"/>
+    <line x1="530" y1="315" x2="530" y2="335" stroke="#b45309" stroke-width="2"/>
+    <text x="530" y="360">+ Activity duration</text>
+    <line x1="560" y1="315" x2="560" y2="335" stroke="#b45309" stroke-width="2"/>
+  </g>
+  <rect x="230" y="300" width="300" height="18" fill="#fde68a" stroke="#b45309"/>
+  <text x="380" y="295" text-anchor="middle" font-size="13" fill="#92400e">a real (unmocked) Activity runs in wall time</text>
+
+  <!-- mapping lines -->
+  <line x1="200" y1="145" x2="200" y2="315" stroke="#94a3b8" stroke-dasharray="3 4"/>
+  <line x1="610" y1="175" x2="230" y2="300" stroke="#94a3b8" stroke-dasharray="3 4"/>
+  <line x1="620" y1="175" x2="530" y2="300" stroke="#94a3b8" stroke-dasharray="3 4"/>
+  <line x1="900" y1="145" x2="560" y2="315" stroke="#94a3b8" stroke-dasharray="3 4"/>
+
+  <!-- rules box -->
+  <rect x="40" y="390" width="880" height="110" rx="10" fill="#f8fafc" stroke="#cbd5e1"/>
+  <g font-size="13" fill="#0f172a">
+    <text x="60" y="416"><tspan font-weight="700">Nothing running</tspan> (only waiting): the mock clock jumps to the next Timer or delayed callback.</text>
+    <text x="60" y="440"><tspan font-weight="700">A real Activity running:</tspan> no skipping. 1 h Timer + 2 s Activity: 2.04 s of wall time, 1 h of Workflow time.</text>
+    <text x="60" y="464"><tspan font-weight="700">Mocked Activities</tspan> take no wall time; <tspan font-family="Menlo, monospace" font-size="12">.After(2*time.Hour)</tspan> spends 2 h of mock time.</text>
+    <text x="60" y="488"><tspan font-weight="700">Idle timeout:</tspan> 3 s of wall time without a new event (SetTestTimeout). A 4 s real Activity makes the test panic.</text>
+  </g>
+</svg>

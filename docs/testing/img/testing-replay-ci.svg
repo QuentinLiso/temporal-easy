@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 500" width="960" height="500" role="img" aria-labelledby="title desc">
+  <title id="title">Replay testing in CI</title>
+  <desc id="desc">Workflow Executions that ran with the old code left Event Histories in the Temporal Service. CI gets them two ways: golden histories committed under testdata after being exported with temporal workflow show -o json, and recent histories sampled with ListWorkflow by a replaycheck tool. A WorkflowReplayer registered with the new code re-runs each history. If every replay returns nil the build can deploy; a TMPRL1100 nondeterminism error fails CI, and the fix is workflow.GetVersion.</desc>
+  <defs>
+    <style>
+      .t{font-family:-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;fill:#1f2937}
+      .h{font-size:16px;font-weight:700}
+      .bb{font-size:13px;font-weight:700}
+      .s{font-size:12px;fill:#4b5563}
+      .m{font-family:SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;fill:#111827}
+    </style>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#6b7280"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="960" height="500" rx="14" fill="#ffffff"/>
+  <text class="t h" x="30" y="38">Replay testing: old histories × new code, before deploy</text>
+
+  <!-- Service -->
+  <rect x="30" y="70" width="230" height="270" rx="10" fill="#eff6ff" stroke="#2563eb" stroke-width="1.5"/>
+  <text class="t bb" x="46" y="96">Temporal Service</text>
+  <text class="t s" x="46" y="116">(production or staging)</text>
+  <rect x="46" y="132" width="198" height="56" rx="6" fill="#ffffff" stroke="#93c5fd"/>
+  <text class="m" x="58" y="154">place-order-1001</text>
+  <text class="t s" x="58" y="174">closed · 22 events</text>
+  <rect x="46" y="198" width="198" height="56" rx="6" fill="#ffffff" stroke="#93c5fd"/>
+  <text class="m" x="58" y="220">place-order-1003</text>
+  <text class="t s" x="58" y="240">running · in its Timer</text>
+  <text class="t s" x="46" y="280">Event Histories written</text>
+  <text class="t s" x="46" y="298">by the code that is</text>
+  <text class="t s" x="46" y="316">deployed today</text>
+
+  <!-- Two sources -->
+  <rect x="320" y="70" width="270" height="120" rx="10" fill="#f9fafb" stroke="#9ca3af" stroke-width="1.5"/>
+  <text class="t bb" x="336" y="96">1 · Golden histories (in git)</text>
+  <text class="m" x="336" y="120">temporal workflow show \</text>
+  <text class="m" x="336" y="138">  -w place-order-1001 -o json</text>
+  <text class="m" x="336" y="160">orders/testdata/*.json</text>
+  <text class="t s" x="336" y="180">replayed by go test, every PR</text>
+
+  <rect x="320" y="220" width="270" height="120" rx="10" fill="#f9fafb" stroke="#9ca3af" stroke-width="1.5"/>
+  <text class="t bb" x="336" y="246">2 · Recent sample (live)</text>
+  <text class="m" x="336" y="270">cmd/replaycheck</text>
+  <text class="m" x="336" y="288">ReplayWorkflowExecution</text>
+  <text class="t s" x="336" y="310">ListWorkflow: N recent Executions per Type,</text>
+  <text class="t s" x="336" y="328">before each release</text>
+
+  <line x1="260" y1="150" x2="318" y2="130" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="260" y1="230" x2="318" y2="270" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- Replayer -->
+  <rect x="650" y="120" width="280" height="160" rx="10" fill="#fef3c7" stroke="#d97706" stroke-width="1.5"/>
+  <text class="t bb" x="666" y="146">WorkflowReplayer + NEW code</text>
+  <text class="m" x="666" y="170">r := worker.NewWorkflowReplayer()</text>
+  <text class="m" x="666" y="188">orders.RegisterWorkflows(r)</text>
+  <text class="t s" x="666" y="214">Re-runs the Workflow function and</text>
+  <text class="t s" x="666" y="232">compares each Command it produces</text>
+  <text class="t s" x="666" y="250">with the recorded Events.</text>
+  <text class="t s" x="666" y="268">No Service, no Activities executed.</text>
+
+  <line x1="590" y1="130" x2="648" y2="170" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="590" y1="280" x2="648" y2="240" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- Outcomes -->
+  <rect x="520" y="370" width="200" height="100" rx="10" fill="#d1fae5" stroke="#059669" stroke-width="1.5"/>
+  <text class="t bb" x="536" y="396">All return nil</text>
+  <text class="t s" x="536" y="418">The change is replay-safe:</text>
+  <text class="t s" x="536" y="436">CI passes, deploy the</text>
+  <text class="t s" x="536" y="454">new Workers.</text>
+
+  <rect x="740" y="370" width="190" height="100" rx="10" fill="#fee2e2" stroke="#dc2626" stroke-width="1.5"/>
+  <text class="t bb" x="756" y="396">[TMPRL1100] error</text>
+  <text class="t s" x="756" y="418">Non-deterministic change:</text>
+  <text class="t s" x="756" y="436">CI fails. Wrap the change</text>
+  <text class="m" x="756" y="454">workflow.GetVersion</text>
+
+  <line x1="760" y1="280" x2="640" y2="368" stroke="#059669" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="820" y1="280" x2="835" y2="368" stroke="#dc2626" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <text class="t s" x="30" y="380">Replay checks the Commands' order and</text>
+  <text class="t s" x="30" y="398">type (Activity, Timer, Child…), not your</text>
+  <text class="t s" x="30" y="416">business logic: keep unit tests for that.</text>
+  <text class="t s" x="30" y="446">A history that never reached the changed</text>
+  <text class="t s" x="30" y="464">line (1003, still sleeping) still passes.</text>
+</svg>

@@ -4,7 +4,7 @@
 > Temporal Encyclopedia (the concepts) and the Temporal Go SDK docs (how to do it in Go), read side by side.
 > Every chapter has **compilable Go examples** with production-like names.
 >
-> Companion guide: [Temporal Activities with Go](../../activities/docs/README.md). Workflows orchestrate, Activities do the side effects.
+> Companion guides: [Temporal Activities with Go](../../activities/docs/README.md). Workflows orchestrate, Activities do the side effects. [Temporal Testing with Go](../../testing/docs/README.md) shows how to test both.
 >
 > New to Temporal? Start with [Temporal Architecture with Go](../../architecture/docs/README.md): which part runs where, and why replay works.
 

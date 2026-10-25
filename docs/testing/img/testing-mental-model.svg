@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 600" width="960" height="600" role="img" aria-labelledby="title desc">
+  <title id="title">Testing mental model</title>
+  <desc id="desc">Your Workflow and Activity code sits in the middle, surrounded by the four Go testing tools. The Workflow test environment runs Workflows in the test process with a mock clock and no server; it fakes the Service, time, Activities and Child Workflows, and runs in milliseconds. The Activity test environment calls one Activity directly with a mocked Activity context; it fakes the Worker and the Workflow. The dev server started with testsuite.StartDevServer is a real Temporal Service with real Workers and real time; nothing is faked except external systems, and it takes seconds. The Workflow replayer re-runs your current Workflow code against recorded Event Histories to catch non-deterministic changes before deploying.</desc>
+  <defs>
+    <style>
+      .t{font-family:-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;fill:#1f2937}
+      .h{font-size:17px;font-weight:700}
+      .hh{font-size:15px;font-weight:700}
+      .b{font-size:13px}
+      .s{font-size:12px;fill:#4b5563}
+      .m{font-family:SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;fill:#111827}
+    </style>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#6b7280"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="960" height="600" rx="14" fill="#ffffff"/>
+  <text class="t h" x="30" y="38">Four tools around your code: what each one runs, fakes, and costs</text>
+
+  <!-- Center: your code -->
+  <rect x="365" y="235" width="230" height="130" rx="12" fill="#fef3c7" stroke="#d97706" stroke-width="2"/>
+  <text class="t hh" x="480" y="265" text-anchor="middle">Your code</text>
+  <text class="m" x="480" y="292" text-anchor="middle">PlaceOrderWorkflow</text>
+  <text class="m" x="480" y="312" text-anchor="middle">(*Activities).ChargePayment</text>
+  <text class="t s" x="480" y="338" text-anchor="middle">Workflows, Activities,</text>
+  <text class="t s" x="480" y="354" text-anchor="middle">Child Workflows, Nexus calls</text>
+
+  <!-- Top-left: Workflow test env -->
+  <rect x="20" y="60" width="410" height="160" rx="10" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+  <text class="t hh" x="36" y="86">1. Workflow test environment</text>
+  <text class="m" x="36" y="106">testsuite.TestWorkflowEnvironment</text>
+  <text class="t b" x="36" y="130">Runs: your Workflow, in the test process</text>
+  <text class="t b" x="36" y="150">Fakes: the Service, time (mock clock),</text>
+  <text class="t b" x="36" y="168">Activities and Child Workflows (if mocked)</text>
+  <text class="t b" x="36" y="192">Speed: milliseconds, even for 90-day timers</text>
+  <text class="t s" x="36" y="210">Most of your tests · chapters 02, 03, 05, 06</text>
+
+  <!-- Top-right: Activity test env -->
+  <rect x="530" y="60" width="410" height="160" rx="10" fill="#dcfce7" stroke="#16a34a" stroke-width="1.5"/>
+  <text class="t hh" x="546" y="86">2. Activity test environment</text>
+  <text class="m" x="546" y="106">testsuite.TestActivityEnvironment</text>
+  <text class="t b" x="546" y="130">Runs: one Activity, called directly</text>
+  <text class="t b" x="546" y="150">Fakes: the Activity context, the Worker,</text>
+  <text class="t b" x="546" y="168">the Workflow; captures Heartbeats</text>
+  <text class="t b" x="546" y="192">Speed: as fast as the Activity itself</text>
+  <text class="t s" x="546" y="210">Activity logic, Heartbeats, cancellation · chapter 04</text>
+
+  <!-- Bottom-left: dev server -->
+  <rect x="20" y="380" width="410" height="160" rx="10" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+  <text class="t hh" x="36" y="406">3. Dev server (end-to-end)</text>
+  <text class="m" x="36" y="426">testsuite.StartDevServer</text>
+  <text class="t b" x="36" y="450">Runs: a real Temporal Service, real Workers,</text>
+  <text class="t b" x="36" y="468">a real Client, real time</text>
+  <text class="t b" x="36" y="486">Fakes: only your external systems</text>
+  <text class="t b" x="36" y="510">Speed: seconds (process start, real timers)</text>
+  <text class="t s" x="36" y="528">A few smoke tests · chapter 08</text>
+
+  <!-- Bottom-right: replayer -->
+  <rect x="530" y="380" width="410" height="160" rx="10" fill="#fee2e2" stroke="#dc2626" stroke-width="1.5"/>
+  <text class="t hh" x="546" y="406">4. Workflow replayer</text>
+  <text class="m" x="546" y="426">worker.WorkflowReplayer</text>
+  <text class="t b" x="546" y="450">Runs: today's Workflow code against</text>
+  <text class="t b" x="546" y="468">yesterday's recorded Event Histories</text>
+  <text class="t b" x="546" y="486">Fakes: everything (no Activity runs)</text>
+  <text class="t b" x="546" y="510">Speed: milliseconds per history</text>
+  <text class="t s" x="546" y="528">Catches non-deterministic changes in CI · chapter 07</text>
+
+  <!-- Arrows to center -->
+  <line x1="300" y1="220" x2="395" y2="235" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="660" y1="220" x2="565" y2="235" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="300" y1="380" x2="395" y2="365" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="660" y1="380" x2="565" y2="365" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <text class="t s" x="480" y="566" text-anchor="middle">Top row: fast, in-process, most of your tests. Bottom row: a few end-to-end tests, and replay in CI.</text>
+  <text class="t s" x="480" y="584" text-anchor="middle">The docs recommend mostly integration tests: the Workflow environment with real or mocked Activities.</text>
+</svg>

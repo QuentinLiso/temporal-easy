@@ -391,7 +391,7 @@ func TestRefundRequestWorkflow_ReplaysRecordedHistories(t *testing.T) {
 
 	for _, f := range files {
 		t.Run(filepath.Base(f), func(t *testing.T) {
-			// nil logger = no-op logger
+			// nil = the SDK default logger, not a no-op one (see the Testing guide, chapter 07)
 			if err := replayer.ReplayWorkflowHistoryFromJSONFile(nil, f); err != nil {
 				t.Fatalf("history %s is not compatible with the current code: %v", f, err)
 			}

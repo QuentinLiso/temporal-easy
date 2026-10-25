@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 560" width="960" height="560" role="img" aria-labelledby="title desc">
+  <title id="title">Inside the Workflow test environment</title>
+  <desc id="desc">Everything runs inside one go test process; there is no Temporal Service. The test code calls env.ExecuteWorkflow, which blocks until the Workflow finishes. The test environment runs the Workflow function as a coroutine, keeps a mock clock that jumps to the next timer whenever nothing is running, and dispatches each Activity call either to a mock set with OnActivity or to a real Activity registered with RegisterActivity. Child Workflows go to an OnWorkflow mock or a registered Workflow. A wall-clock idle timeout of 3 seconds, set with SetTestTimeout, guards against a test that hangs. Afterwards the test reads IsWorkflowCompleted, GetWorkflowResult, GetWorkflowError and AssertExpectations.</desc>
+  <defs>
+    <style>
+      .t{font-family:-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;fill:#1f2937}
+      .h{font-size:17px;font-weight:700}
+      .hh{font-size:14px;font-weight:700}
+      .b{font-size:13px}
+      .s{font-size:12px;fill:#4b5563}
+      .m{font-family:SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;fill:#111827}
+    </style>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#2563eb"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="960" height="560" rx="14" fill="#ffffff"/>
+  <text class="t h" x="30" y="38">Inside the Workflow test environment: one process, no server</text>
+
+  <!-- process frame -->
+  <rect x="20" y="56" width="920" height="440" rx="12" fill="#f9fafb" stroke="#9ca3af" stroke-width="1.5" stroke-dasharray="6 4"/>
+  <text class="t s" x="36" y="78">go test process</text>
+
+  <!-- Test code -->
+  <rect x="40" y="96" width="250" height="380" rx="10" fill="#fef3c7" stroke="#d97706" stroke-width="1.5"/>
+  <text class="t hh" x="56" y="122">Your test</text>
+  <text class="m" x="56" y="150">env.OnActivity(...)</text>
+  <text class="m" x="56" y="170">env.OnWorkflow(...)</text>
+  <text class="m" x="56" y="190">env.RegisterActivity(...)</text>
+  <text class="t s" x="56" y="212">1. arrange mocks / real code</text>
+  <text class="m" x="56" y="248">env.ExecuteWorkflow(</text>
+  <text class="m" x="56" y="266">  PlaceOrderWorkflow, in)</text>
+  <text class="t s" x="56" y="288">2. blocks until the Workflow</text>
+  <text class="t s" x="56" y="304">   completes, fails or times out</text>
+  <text class="m" x="56" y="340">env.IsWorkflowCompleted()</text>
+  <text class="m" x="56" y="360">env.GetWorkflowResult(&amp;r)</text>
+  <text class="m" x="56" y="380">env.GetWorkflowError()</text>
+  <text class="m" x="56" y="400">env.AssertExpectations(t)</text>
+  <text class="t s" x="56" y="422">3. assert on the outcome</text>
+  <text class="t s" x="56" y="438">   and on the calls made</text>
+
+  <!-- Env -->
+  <rect x="340" y="96" width="580" height="380" rx="10" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+  <text class="t hh" x="356" y="122">TestWorkflowEnvironment</text>
+
+  <rect x="356" y="136" width="250" height="110" rx="8" fill="#ffffff" stroke="#2563eb" stroke-width="1.2"/>
+  <text class="t hh" x="370" y="160">Workflow coroutine</text>
+  <text class="t b" x="370" y="182">your Workflow function, run</text>
+  <text class="t b" x="370" y="200">deterministically; deadlock</text>
+  <text class="t b" x="370" y="218">detector: 1s without yielding</text>
+  <text class="t s" x="370" y="236">workflowID default-test-workflow-id</text>
+
+  <rect x="650" y="136" width="254" height="110" rx="8" fill="#ffffff" stroke="#2563eb" stroke-width="1.2"/>
+  <text class="t hh" x="664" y="160">Mock clock</text>
+  <text class="t b" x="664" y="182">jumps to the next timer when</text>
+  <text class="t b" x="664" y="200">nothing is running: Sleep(24h),</text>
+  <text class="t b" x="664" y="218">retries and After(d) are instant</text>
+  <text class="m" x="664" y="236">env.Now()</text>
+
+  <rect x="356" y="268" width="250" height="110" rx="8" fill="#ffffff" stroke="#16a34a" stroke-width="1.2"/>
+  <text class="t hh" x="370" y="292">Activity calls</text>
+  <text class="t b" x="370" y="314">→ a mock (OnActivity), or</text>
+  <text class="t b" x="370" y="332">→ the real Activity (Register-</text>
+  <text class="t b" x="370" y="350">Activity), on a goroutine</text>
+  <text class="t s" x="370" y="368">neither: "no activity is registered"</text>
+
+  <rect x="650" y="268" width="254" height="110" rx="8" fill="#ffffff" stroke="#7c3aed" stroke-width="1.2"/>
+  <text class="t hh" x="664" y="292">Child Workflow calls</text>
+  <text class="t b" x="664" y="314">→ a mock (OnWorkflow), or</text>
+  <text class="t b" x="664" y="332">→ the registered Workflow, in</text>
+  <text class="t b" x="664" y="350">its own child environment</text>
+  <text class="t s" x="664" y="368">neither: the test binary panics</text>
+
+  <rect x="356" y="396" width="548" height="64" rx="8" fill="#fee2e2" stroke="#dc2626" stroke-width="1.2"/>
+  <text class="t hh" x="370" y="420">Idle timeout (wall clock): 3s by default</text>
+  <text class="t b" x="370" y="440">A real Activity that runs longer makes the test panic.</text>
+  <text class="t b" x="370" y="456">Mock it, or call env.SetTestTimeout(10 * time.Second).</text>
+
+  <line x1="290" y1="258" x2="352" y2="200" stroke="#2563eb" stroke-width="1.6" marker-end="url(#arr)"/>
+  <line x1="606" y1="190" x2="646" y2="190" stroke="#2563eb" stroke-width="1.6" marker-end="url(#arr)"/>
+  <line x1="480" y1="246" x2="480" y2="264" stroke="#2563eb" stroke-width="1.6" marker-end="url(#arr)"/>
+  <line x1="606" y1="236" x2="660" y2="266" stroke="#2563eb" stroke-width="1.6" marker-end="url(#arr)"/>
+
+  <text class="t s" x="480" y="528" text-anchor="middle">No Temporal Service, no Task Queue polling, no network: the environment plays the Service's role in memory.</text>
+</svg>
