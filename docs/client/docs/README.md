@@ -8,7 +8,8 @@
 > Companion guides: [Temporal Architecture with Go](../../architecture/docs/README.md) (where the
 > Client fits), [Temporal Workflows with Go](../../workflows/docs/README.md) and
 > [Temporal Activities with Go](../../activities/docs/README.md) (what the Client starts),
-> [Temporal Workers with Go](../../workers/docs/README.md) (what picks up the work).
+> [Temporal Workers with Go](../../workers/docs/README.md) (what picks up the work),
+> [Temporal Namespaces with Go](../../namespaces/docs/README.md) (where the Client connects).
 
 ![Temporal Client mental model](../img/client-mental-model.svg)
 

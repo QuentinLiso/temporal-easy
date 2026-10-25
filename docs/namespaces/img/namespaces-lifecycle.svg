@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 470" width="960" height="470" role="img" aria-labelledby="title desc">
+  <title id="title">Namespace lifecycle</title>
+  <desc id="desc">A Namespace is Registered when created. Updating its state to Deprecated, or calling the deprecated DeprecateNamespace RPC, makes the Service refuse new Workflow starts after a short cache delay while running Workflows continue. DeleteNamespace on the OperatorService renames the Namespace to name-deleted-suffix, frees the name at once and removes its Workflows in the background. A Deprecated Namespace can't go back to Registered.</desc>
+  <defs>
+    <style>
+      .t{font-family:-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;fill:#1f2937}
+      .h{font-size:16px;font-weight:700}
+      .b{font-size:13px}
+      .bb{font-size:13px;font-weight:700}
+      .s{font-size:12px;fill:#4b5563}
+      .m{font-family:SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;fill:#111827}
+    </style>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#6b7280"/>
+    </marker>
+    <marker id="arrr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#dc2626"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="960" height="470" rx="14" fill="#ffffff"/>
+  <text class="t h" x="30" y="38">Registered → Deprecated → Deleted, and what each state allows</text>
+
+  <!-- Registered -->
+  <rect x="30" y="80" width="250" height="170" rx="10" fill="#d1fae5" stroke="#059669" stroke-width="1.5"/>
+  <text class="t bb" x="46" y="106">Registered</text>
+  <text class="m" x="46" y="128">nc.Register(…)</text>
+  <text class="m" x="46" y="146">operator namespace create</text>
+  <text class="t s" x="46" y="174">✓ start new Workflows</text>
+  <text class="t s" x="46" y="194">✓ Signal, Query, Update, Workers poll</text>
+  <text class="t s" x="46" y="214">✓ Describe, Update, appears in List</text>
+  <text class="t s" x="46" y="234">default state of every new Namespace</text>
+
+  <!-- Deprecated -->
+  <rect x="355" y="80" width="250" height="170" rx="10" fill="#fef3c7" stroke="#d97706" stroke-width="1.5"/>
+  <text class="t bb" x="371" y="106">Deprecated</text>
+  <text class="t s" x="371" y="128">✗ new starts refused (after ~2s):</text>
+  <text class="m" x="371" y="146">invalid state: Deprecated.</text>
+  <text class="m" x="371" y="162">Must be Registered.</text>
+  <text class="t s" x="371" y="188">✓ running Workflows continue:</text>
+  <text class="t s" x="371" y="206">  Signals, Workers, completion</text>
+  <text class="t s" x="371" y="230">time to drain before deleting</text>
+
+  <!-- Deleted -->
+  <rect x="680" y="80" width="250" height="170" rx="10" fill="#fee2e2" stroke="#dc2626" stroke-width="1.5"/>
+  <text class="t bb" x="696" y="106">Deleted</text>
+  <text class="t s" x="696" y="128">renamed at once to</text>
+  <text class="m" x="696" y="146">promo-2025-deleted-0a6d9</text>
+  <text class="t s" x="696" y="172">✓ the name is free again</text>
+  <text class="t s" x="696" y="192">✗ Describe: NamespaceNotFound</text>
+  <text class="t s" x="696" y="212">Workflows and history removed</text>
+  <text class="t s" x="696" y="230">in the background</text>
+
+  <!-- arrows -->
+  <line x1="280" y1="150" x2="351" y2="150" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="605" y1="150" x2="676" y2="150" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arr)"/>
+  <path d="M 155 250 C 155 345, 805 345, 805 254" fill="none" stroke="#6b7280" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#arr)"/>
+  <path d="M 420 250 C 420 300, 220 300, 220 254" fill="none" stroke="#dc2626" stroke-width="1.5" marker-end="url(#arrr)"/>
+  <text class="t s" x="440" y="282" fill="#dc2626">✗ Deprecated → Registered: "Invalid namespace state update"</text>
+
+  <!-- API labels -->
+  <rect x="30" y="350" width="440" height="96" rx="10" fill="#f3f4f6" stroke="#9ca3af" stroke-width="1.5"/>
+  <text class="t bb" x="46" y="374">Deprecate</text>
+  <text class="m" x="46" y="396">nc.Update(… UpdateInfo{State: NAMESPACE_STATE_DEPRECATED})</text>
+  <text class="m" x="46" y="416">c.WorkflowService().DeprecateNamespace(…)</text>
+  <text class="t s" x="46" y="436">the RPC still works but is marked Deprecated in the API</text>
+
+  <rect x="490" y="350" width="440" height="96" rx="10" fill="#f3f4f6" stroke="#9ca3af" stroke-width="1.5"/>
+  <text class="t bb" x="506" y="374">Delete (from Registered or Deprecated)</text>
+  <text class="m" x="506" y="396">c.OperatorService().DeleteNamespace(…)</text>
+  <text class="m" x="506" y="416">temporal operator namespace delete -n …</text>
+  <text class="t s" x="506" y="436">no guard: a dev server deleted "default" without asking</text>
+</svg>

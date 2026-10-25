@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 520" width="960" height="520" role="img" aria-labelledby="title desc">
+  <title id="title">A Namespace topology for a shop</title>
+  <desc id="desc">One Temporal Service holds shop-prod, billing-prod and shop-staging. Each has its own retention, Search Attributes, access rules and Workers. Inside shop-prod, two teams share the Namespace and prefix Workflow IDs and Task Queues. A Workflow in shop-prod can't start a Child Workflow in billing-prod: the Service rejects it. It reaches billing-prod through an Activity that uses a second Client, or through a Nexus Endpoint.</desc>
+  <defs>
+    <style>
+      .t{font-family:-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;fill:#1f2937}
+      .h{font-size:16px;font-weight:700}
+      .bb{font-size:13px;font-weight:700}
+      .s{font-size:12px;fill:#4b5563}
+      .m{font-family:SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;fill:#111827}
+    </style>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#6b7280"/>
+    </marker>
+    <marker id="arrg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#059669"/>
+    </marker>
+    <marker id="arrr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#dc2626"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="960" height="520" rx="14" fill="#ffffff"/>
+  <text class="t h" x="30" y="38">One Service, one Namespace per environment and team</text>
+
+  <rect x="20" y="58" width="920" height="300" rx="12" fill="#f9fafb" stroke="#9ca3af" stroke-width="1.5" stroke-dasharray="6 4"/>
+  <text class="t bb" x="36" y="80">Temporal Service (self-hosted or Cloud)</text>
+
+  <!-- shop-prod -->
+  <rect x="40" y="96" width="380" height="244" rx="10" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+  <text class="t bb" x="56" y="120">shop-prod</text>
+  <text class="t s" x="150" y="120">retention 30d · team shop · on-call shop</text>
+  <rect x="56" y="134" width="170" height="78" rx="8" fill="#ffffff" stroke="#9ca3af" stroke-width="1.5"/>
+  <text class="t bb" x="68" y="154">checkout team</text>
+  <text class="m" x="68" y="174">shop/order/ord-1042</text>
+  <text class="m" x="68" y="192">TQ shop-checkout</text>
+  <rect x="236" y="134" width="170" height="78" rx="8" fill="#ffffff" stroke="#9ca3af" stroke-width="1.5"/>
+  <text class="t bb" x="248" y="154">shipping team</text>
+  <text class="m" x="248" y="174">ship/label/ord-1042</text>
+  <text class="m" x="248" y="192">TQ ship-labels</text>
+  <text class="t s" x="56" y="234">shared Namespace: prefix IDs and Task Queues</text>
+  <rect x="56" y="248" width="350" height="78" rx="8" fill="#ffffff" stroke="#2563eb" stroke-width="1.5"/>
+  <text class="t bb" x="68" y="268">PlaceOrderWorkflow</text>
+  <text class="t s" x="68" y="288">Activity RequestInvoice uses a second Client</text>
+  <text class="m" x="68" y="308">client.NewClientFromExisting(shopClient, …)</text>
+
+  <!-- billing-prod -->
+  <rect x="540" y="190" width="380" height="150" rx="10" fill="#d1fae5" stroke="#059669" stroke-width="1.5"/>
+  <text class="t bb" x="556" y="214">billing-prod</text>
+  <text class="t s" x="660" y="214">retention 90d · team billing</text>
+  <rect x="556" y="226" width="350" height="56" rx="8" fill="#ffffff" stroke="#059669" stroke-width="1.5"/>
+  <text class="t bb" x="568" y="248">IssueInvoiceWorkflow</text>
+  <text class="m" x="568" y="268">ID invoice-ord-1042 · TQ billing-invoices</text>
+  <text class="t s" x="556" y="306">own Search Attributes, own access rules,</text>
+  <text class="t s" x="556" y="324">own rate limits on Cloud</text>
+
+  <!-- shop-staging -->
+  <rect x="540" y="96" width="380" height="80" rx="10" fill="#fef3c7" stroke="#d97706" stroke-width="1.5"/>
+  <text class="t bb" x="556" y="120">shop-staging</text>
+  <text class="t s" x="660" y="120">retention 3d · same code, other Namespace</text>
+  <text class="m" x="556" y="144">ID shop/order/ord-1042 can exist here too</text>
+  <text class="t s" x="556" y="164">IDs are unique per Namespace only</text>
+
+  <!-- arrows -->
+  <path d="M 406 312 C 480 312, 480 272, 552 272" fill="none" stroke="#059669" stroke-width="2" marker-end="url(#arrg)"/>
+  <text class="t s" x="432" y="334" fill="#059669">✓ Activity</text>
+  <path d="M 406 256 C 470 256, 480 238, 552 238" fill="none" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#arrr)"/>
+  <text class="t s" x="426" y="228" fill="#dc2626">✗ Child Workflow</text>
+
+  <!-- workers -->
+  <rect x="40" y="378" width="380" height="58" rx="10" fill="#ffffff" stroke="#9ca3af" stroke-width="1.5"/>
+  <text class="t bb" x="56" y="400">orders-worker</text>
+  <text class="t s" x="56" y="420">Client Namespace shop-prod (+ billing-prod for the Activity)</text>
+  <line x1="230" y1="378" x2="230" y2="344" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arr)"/>
+  <rect x="540" y="378" width="380" height="58" rx="10" fill="#ffffff" stroke="#9ca3af" stroke-width="1.5"/>
+  <text class="t bb" x="556" y="400">billing-worker</text>
+  <text class="t s" x="556" y="420">Client Namespace billing-prod</text>
+  <line x1="730" y1="378" x2="730" y2="344" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <text class="t s" x="30" y="466">Red dashed: a Child Workflow with Namespace "billing-prod" is rejected ("cross namespace commands are not allowed").</text>
+  <text class="t s" x="30" y="486">The Workflow Task fails and the Workflow stays Running.</text>
+  <text class="t s" x="30" y="506">Green: the supported paths are an Activity with a Client for the other Namespace, or a Nexus Endpoint.</text>
+</svg>
