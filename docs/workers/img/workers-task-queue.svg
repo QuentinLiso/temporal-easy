@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 520" width="960" height="520" role="img" aria-labelledby="title desc">
+  <title id="title">A Task Queue between Clients and Workers</title>
+  <desc id="desc">A Client starts a Workflow on the Task Queue named orders, and a Workflow schedules Activities on the warehouse queue. The orders name holds a Workflow, an Activity and a Nexus Task Queue, each split into four partitions by default. Workflow and Activity Tasks are persisted; Query and Nexus Tasks are only sync matched. Several Worker processes with identical registrations poll the orders queue and share the load. A typo such as order creates a second queue that no Worker polls, so the Workflow waits forever.</desc>
+  <defs>
+    <style>
+      .t{font-family:-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;fill:#1f2937}
+      .h{font-size:16px;font-weight:700}
+      .bb{font-size:13px;font-weight:700}
+      .s{font-size:12px;fill:#4b5563}
+      .m{font-family:SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;fill:#111827;white-space:pre}
+    </style>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#6b7280"/>
+    </marker>
+    <marker id="arrb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#2563eb"/>
+    </marker>
+    <marker id="arrr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#dc2626"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="960" height="520" rx="14" fill="#ffffff"/>
+  <text class="t h" x="30" y="38">Clients and Workers never meet: they share a Task Queue name</text>
+
+  <!-- producers -->
+  <rect x="20" y="76" width="220" height="74" rx="10" fill="#f3f4f6" stroke="#6b7280" stroke-width="1.5"/>
+  <text class="t bb" x="34" y="100">Client (checkout-api)</text>
+  <text class="m" x="34" y="120">TaskQueue: "orders"</text>
+  <text class="t s" x="34" y="138">ExecuteWorkflow</text>
+  <rect x="20" y="168" width="220" height="74" rx="10" fill="#f3f4f6" stroke="#6b7280" stroke-width="1.5"/>
+  <text class="t bb" x="34" y="192">FulfillOrderWorkflow</text>
+  <text class="m" x="34" y="212">ActivityOptions{TaskQueue}</text>
+  <text class="t s" x="34" y="230">default: the Workflow's queue</text>
+
+  <!-- service -->
+  <rect x="290" y="60" width="380" height="300" rx="12" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+  <text class="t bb" x="306" y="84">Temporal Service · Namespace shop-prod</text>
+  <rect x="306" y="98" width="348" height="200" rx="10" fill="#ffffff" stroke="#7c3aed" stroke-width="1.5"/>
+  <text class="t bb" x="320" y="120">Task Queue "orders"</text>
+  <rect x="320" y="132" width="320" height="44" rx="6" fill="#dbeafe" stroke="#2563eb" stroke-width="1"/>
+  <text class="t bb" x="332" y="152">Workflow Tasks</text>
+  <text class="t s" x="332" y="168">persisted · 4 partitions</text>
+  <rect x="320" y="184" width="320" height="44" rx="6" fill="#fef3c7" stroke="#d97706" stroke-width="1"/>
+  <text class="t bb" x="332" y="204">Activity Tasks</text>
+  <text class="t s" x="332" y="220">persisted · can be rate-limited</text>
+  <rect x="320" y="236" width="320" height="48" rx="6" fill="#f3f4f6" stroke="#6b7280" stroke-width="1"/>
+  <text class="t bb" x="332" y="256">Nexus Tasks · Query Tasks</text>
+  <text class="t s" x="332" y="274">not persisted: sync match or fail</text>
+  <rect x="306" y="308" width="348" height="40" rx="8" fill="#ffffff" stroke="#9ca3af" stroke-width="1.5"/>
+  <text class="t bb" x="320" y="333">Task Queue "warehouse"</text>
+  <text class="t s" x="490" y="333">other Workers</text>
+
+  <line x1="240" y1="113" x2="316" y2="150" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="240" y1="205" x2="302" y2="326" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- workers -->
+  <rect x="720" y="76" width="220" height="64" rx="10" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+  <text class="t bb" x="734" y="100">orders-worker #1</text>
+  <text class="t s" x="734" y="120">same registrations</text>
+  <rect x="720" y="156" width="220" height="64" rx="10" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+  <text class="t bb" x="734" y="180">orders-worker #2</text>
+  <text class="t s" x="734" y="200">same registrations</text>
+  <rect x="720" y="236" width="220" height="64" rx="10" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+  <text class="t bb" x="734" y="260">orders-worker #3</text>
+  <text class="t s" x="734" y="280">polls only with a free slot</text>
+  <line x1="716" y1="108" x2="658" y2="150" stroke="#2563eb" stroke-width="2" marker-end="url(#arrb)"/>
+  <line x1="716" y1="188" x2="658" y2="196" stroke="#2563eb" stroke-width="2" marker-end="url(#arrb)"/>
+  <line x1="716" y1="268" x2="658" y2="240" stroke="#2563eb" stroke-width="2" marker-end="url(#arrb)"/>
+  <text class="t s" x="676" y="110">poll</text>
+
+  <!-- typo -->
+  <rect x="20" y="392" width="920" height="110" rx="12" fill="#fee2e2" stroke="#dc2626" stroke-width="1.5"/>
+  <text class="t bb" x="36" y="416">A typo is not an error</text>
+  <rect x="36" y="428" width="200" height="56" rx="8" fill="#ffffff" stroke="#9ca3af" stroke-width="1.5"/>
+  <text class="t bb" x="48" y="450">Client</text>
+  <text class="m" x="48" y="470">TaskQueue: "order"</text>
+  <rect x="300" y="428" width="260" height="56" rx="8" fill="#ffffff" stroke="#dc2626" stroke-width="1.5"/>
+  <text class="t bb" x="312" y="450">Task Queue "order" (new!)</text>
+  <text class="t s" x="312" y="470">backlog: 1 · pollers: none</text>
+  <line x1="236" y1="456" x2="296" y2="456" stroke="#dc2626" stroke-width="1.5" marker-end="url(#arrr)"/>
+  <text class="t s" x="580" y="450">The Workflow is Running but never moves.</text>
+  <text class="t s" x="580" y="470">Fix: one shared constant for Client and Worker;</text>
+  <text class="m" x="580" y="490">temporal task-queue describe</text>
+</svg>

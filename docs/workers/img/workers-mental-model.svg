@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 540" width="960" height="540" role="img" aria-labelledby="title desc">
+  <title id="title">Worker mental model</title>
+  <desc id="desc">On your infrastructure, a Worker Program is deployed as several Worker Processes. Each process holds one or more Worker Entities, and each Worker Entity polls one Task Queue on the Temporal Service. The Service stores Event Histories and puts Tasks on Task Queues. Workers open outbound connections, poll for Tasks, run your Workflow and Activity code, and respond with Commands and results. The Service never runs your code.</desc>
+  <defs>
+    <style>
+      .t{font-family:-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;fill:#1f2937}
+      .h{font-size:16px;font-weight:700}
+      .b{font-size:13px}
+      .bb{font-size:13px;font-weight:700}
+      .s{font-size:12px;fill:#4b5563}
+      .m{font-family:SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;fill:#111827;white-space:pre}
+    </style>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#6b7280"/>
+    </marker>
+    <marker id="arrb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#2563eb"/>
+    </marker>
+    <marker id="arrg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#059669"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="960" height="540" rx="14" fill="#ffffff"/>
+  <text class="t h" x="30" y="38">Workers pull work from the Service and run your code in your processes</text>
+
+  <!-- Your infrastructure -->
+  <rect x="20" y="60" width="450" height="420" rx="12" fill="#f9fafb" stroke="#d1d5db" stroke-width="1.5" stroke-dasharray="6 4"/>
+  <text class="t bb" x="36" y="84">Your infrastructure</text>
+  <text class="t s" x="36" y="102">Worker Program (cmd/worker) deployed as N Worker Processes</text>
+
+  <rect x="36" y="116" width="418" height="160" rx="10" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+  <text class="t bb" x="50" y="140">Worker Process  (pod orders-worker-7f9c)</text>
+  <rect x="50" y="152" width="192" height="110" rx="8" fill="#ffffff" stroke="#9ca3af" stroke-width="1.5"/>
+  <text class="t bb" x="62" y="174">Worker Entity</text>
+  <text class="m" x="62" y="194">worker.New(c, "orders")</text>
+  <text class="t s" x="62" y="214">Workflow Worker</text>
+  <text class="t s" x="62" y="232">Activity Worker</text>
+  <text class="t s" x="62" y="250">+ Workflow cache</text>
+  <rect x="252" y="152" width="190" height="110" rx="8" fill="#ffffff" stroke="#9ca3af" stroke-width="1.5"/>
+  <text class="t bb" x="264" y="174">Worker Entity</text>
+  <text class="m" x="264" y="194">worker.New(c, "billing")</text>
+  <text class="t s" x="264" y="214">one Task Queue each</text>
+  <text class="t s" x="264" y="232">same Client shared</text>
+
+  <rect x="36" y="292" width="418" height="80" rx="10" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+  <text class="t bb" x="50" y="316">Worker Process  (pod orders-worker-2b1d)</text>
+  <text class="t s" x="50" y="338">same program, same registrations: shares the load</text>
+  <text class="t s" x="50" y="356">of the same Task Queues</text>
+
+  <rect x="36" y="386" width="418" height="80" rx="10" fill="#fef3c7" stroke="#d97706" stroke-width="1.5"/>
+  <text class="t bb" x="50" y="410">What Activities need lives here</text>
+  <text class="t s" x="50" y="432">payment gateway, database, IAM roles, GPUs, secrets</text>
+  <text class="t s" x="50" y="450">Data Converter: encrypt payloads before they leave</text>
+
+  <!-- Service -->
+  <rect x="560" y="60" width="380" height="420" rx="12" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+  <text class="t bb" x="576" y="84">Temporal Service (self-hosted or Cloud)</text>
+  <text class="t s" x="576" y="102">stores state, schedules Tasks, never runs your code</text>
+
+  <rect x="580" y="120" width="340" height="56" rx="8" fill="#ffffff" stroke="#9ca3af" stroke-width="1.5"/>
+  <text class="t bb" x="594" y="142">Task Queue "orders"</text>
+  <text class="t s" x="594" y="162">Workflow Tasks · Activity Tasks · Nexus Tasks</text>
+  <rect x="580" y="188" width="340" height="56" rx="8" fill="#ffffff" stroke="#9ca3af" stroke-width="1.5"/>
+  <text class="t bb" x="594" y="210">Task Queue "billing"</text>
+  <text class="t s" x="594" y="230">created on first use, no registration</text>
+  <rect x="580" y="262" width="340" height="96" rx="8" fill="#ffffff" stroke="#9ca3af" stroke-width="1.5"/>
+  <text class="t bb" x="594" y="284">Event Histories</text>
+  <text class="t s" x="594" y="304">order-A-1042: Started, ActivityScheduled, …</text>
+  <text class="t s" x="594" y="322">the source of truth: any Worker can</text>
+  <text class="t s" x="594" y="340">rebuild a Workflow's state from it</text>
+
+  <rect x="580" y="380" width="340" height="80" rx="8" fill="#ffffff" stroke="#9ca3af" stroke-width="1.5"/>
+  <text class="t bb" x="594" y="402">Client (checkout-api)</text>
+  <text class="m" x="594" y="422">c.ExecuteWorkflow(…, TaskQueue: "orders")</text>
+  <text class="t s" x="594" y="442">creates the history and the first Task</text>
+
+  <!-- arrows -->
+  <line x1="456" y1="170" x2="576" y2="140" stroke="#2563eb" stroke-width="2" marker-end="url(#arrb)"/>
+  <text class="t s" x="478" y="140">1. poll</text>
+  <line x1="576" y1="160" x2="456" y2="196" stroke="#6b7280" stroke-width="2" marker-end="url(#arr)"/>
+  <text class="t s" x="490" y="200">2. Task</text>
+  <line x1="456" y1="230" x2="576" y2="280" stroke="#059669" stroke-width="2" marker-end="url(#arrg)"/>
+  <text class="t s" x="472" y="282">4. respond</text>
+  <text class="t s" x="472" y="298">Commands,</text>
+  <text class="t s" x="472" y="314">results</text>
+
+  <text class="t s" x="30" y="508">3. The Worker runs your Go code locally. All connections go from Workers to the Service (outbound gRPC):</text>
+  <text class="t s" x="30" y="526">no open ports, no service discovery. A Worker polls only when it has a free slot.</text>
+</svg>

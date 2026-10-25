@@ -6,6 +6,7 @@ Onboarding guides for Temporal with Go:
 - `docs/workflows/`: Temporal Workflows (13 chapters)
 - `docs/activities/`: Temporal Activities (10 chapters)
 - `docs/client/`: Temporal Client (9 chapters)
+- `docs/workers/`: Temporal Workers (12 chapters)
 
 The guides are plain Markdown. [VitePress](https://vitepress.dev) turns them into a static website with a left sidebar, search and a per-page table of contents.
 
@@ -28,6 +29,7 @@ temporal-easy/
     ├── index.md               # home page: one card per guide, generated
     ├── architecture/          # same layout as workflows/
     ├── client/                # same layout as workflows/
+    ├── workers/               # same layout as workflows/
     ├── workflows/
     │   ├── docs/*.md          # chapters (README.md is the overview)
     │   └── img/*.svg          # diagrams

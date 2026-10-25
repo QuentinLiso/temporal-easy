@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 500" width="960" height="500" role="img" aria-labelledby="title desc">
+  <title id="title">Sticky Execution</title>
+  <desc id="desc">The first Workflow Task of a cart Workflow goes to the normal Task Queue and is picked up by Worker A, which caches the Workflow and polls its own Sticky Queue. Later Workflow Tasks go to that Sticky Queue and carry only new events. If Worker A is gone, the sticky Task times out after StickyScheduleToStartTimeout (5 seconds by default) and is rescheduled on the normal queue, where Worker B picks it up and replays the full Event History.</desc>
+  <defs>
+    <style>
+      .t{font-family:-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;fill:#1f2937}
+      .h{font-size:16px;font-weight:700}
+      .b{font-size:13px}
+      .bb{font-size:13px;font-weight:700}
+      .s{font-size:12px;fill:#4b5563}
+      .m{font-family:SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;fill:#111827;white-space:pre}
+      .n{font-size:12px;font-weight:700;fill:#ffffff}
+    </style>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#6b7280"/>
+    </marker>
+    <marker id="arrb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#2563eb"/>
+    </marker>
+    <marker id="arrp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#7c3aed"/>
+    </marker>
+    <marker id="arrr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#dc2626"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="960" height="500" rx="14" fill="#ffffff"/>
+  <text class="t h" x="30" y="38">Sticky Execution: the next Workflow Task goes to the Worker that has the Workflow cached</text>
+
+  <!-- Service -->
+  <rect x="20" y="66" width="360" height="340" rx="12" fill="#f9fafb" stroke="#9ca3af" stroke-width="1.5"/>
+  <text class="t bb" x="38" y="92">Temporal Service</text>
+  <rect x="40" y="110" width="320" height="72" rx="10" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+  <text class="t bb" x="56" y="134">Normal Task Queue</text>
+  <text class="m" x="56" y="156">carts</text>
+  <text class="t s" x="56" y="173">any Worker on "carts" can poll it</text>
+  <rect x="40" y="226" width="320" height="72" rx="10" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+  <text class="t bb" x="56" y="250">Sticky Queue of Worker A</text>
+  <text class="m" x="56" y="272">host-a:d7175bef-…</text>
+  <text class="t s" x="56" y="289">only Worker A polls it</text>
+  <rect x="40" y="326" width="320" height="62" rx="10" fill="#fee2e2" stroke="#dc2626" stroke-width="1.5"/>
+  <text class="t bb" x="56" y="350">Not picked up within 5s?</text>
+  <text class="t s" x="56" y="370">WorkflowTaskTimedOut (ScheduleToStart)</text>
+  <text class="t s" x="56" y="384">→ rescheduled on the normal queue</text>
+  <line x1="200" y1="298" x2="200" y2="322" stroke="#dc2626" stroke-width="1.5" marker-end="url(#arrr)"/>
+  <path d="M 40 357 C 4 357, 4 146, 36 146" fill="none" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#arrr)"/>
+
+  <!-- Worker A -->
+  <rect x="560" y="76" width="380" height="200" rx="12" fill="#d1fae5" stroke="#059669" stroke-width="1.5"/>
+  <text class="t bb" x="578" y="102">Worker A</text>
+  <text class="t s" x="578" y="121">polls "carts" and its own Sticky Queue</text>
+  <rect x="578" y="136" width="344" height="120" rx="8" fill="#ffffff" stroke="#9ca3af" stroke-width="1.5"/>
+  <text class="t bb" x="594" y="160">Workflow cache (LRU, 10,000 by default)</text>
+  <rect x="594" y="174" width="312" height="30" rx="6" fill="#ecfdf5" stroke="#059669" stroke-width="1"/>
+  <text class="m" x="606" y="194">ShoppingCartWorkflow cart-42</text>
+  <text class="t s" x="594" y="226">goroutines blocked where the code waits;</text>
+  <text class="t s" x="594" y="243">new events are applied, no replay</text>
+
+  <!-- Worker B -->
+  <rect x="560" y="316" width="380" height="90" rx="12" fill="#fef3c7" stroke="#d97706" stroke-width="1.5"/>
+  <text class="t bb" x="578" y="342">Worker B</text>
+  <text class="t s" x="578" y="362">cache miss: receives the full Event History</text>
+  <text class="t s" x="578" y="380">and replays it to rebuild cart-42</text>
+
+  <!-- arrows -->
+  <circle cx="420" cy="118" r="11" fill="#2563eb"/><text class="t n" x="416" y="122">1</text>
+  <line x1="360" y1="136" x2="556" y2="136" stroke="#2563eb" stroke-width="1.5" marker-end="url(#arrb)"/>
+  <text class="t s" x="440" y="124">first Workflow Task</text>
+
+  <circle cx="420" cy="232" r="11" fill="#7c3aed"/><text class="t n" x="416" y="236">2</text>
+  <line x1="360" y1="252" x2="556" y2="210" stroke="#7c3aed" stroke-width="1.5" marker-end="url(#arrp)"/>
+  <text class="t s" x="380" y="290">next Tasks: new events only</text>
+
+  <circle cx="390" cy="326" r="11" fill="#d97706"/><text class="t n" x="386" y="330">3</text>
+  <line x1="360" y1="364" x2="556" y2="364" stroke="#d97706" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text class="t s" x="408" y="330">Worker A gone:</text>
+  <text class="t s" x="408" y="350">back on "carts", any Worker</text>
+
+  <text class="t s" x="30" y="440">Stickiness is also dropped when a Workflow Task fails (the Workflow is evicted) or when the cache evicts it.</text>
+  <text class="t s" x="30" y="460">Only Workflow Tasks are sticky. Activity Tasks always go to the Task Queue you set.</text>
+  <text class="t s" x="30" y="480">Go: StickyScheduleToStartTimeout (worker.Options, default 5s) · worker.SetStickyWorkflowCacheSize(n) (process-wide).</text>
+</svg>

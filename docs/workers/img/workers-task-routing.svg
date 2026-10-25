@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 560" width="960" height="560" role="img" aria-labelledby="title desc">
+  <title id="title">Task Routing for a video-transcoding pipeline</title>
+  <desc id="desc">The TranscodeVideoWorkflow runs on the media Task Queue, polled by CPU Workers. Step 1, FetchSourceVideo, is scheduled on the shared media-gpu queue, polled by every GPU host. It returns the host-specific queue name of the host that ran it, for example media-gpu-host-a. Steps 2 and 3, TranscodeRenditions and UploadRenditions, are scheduled on that host queue, which only the Worker on host A polls. Step 4, PublishCatalogEntry, runs back on the media queue. Each GPU host process runs two Worker Entities: one on the shared queue and one on its own host queue.</desc>
+  <defs>
+    <style>
+      .t{font-family:-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;fill:#1f2937}
+      .h{font-size:16px;font-weight:700}
+      .b{font-size:13px}
+      .bb{font-size:13px;font-weight:700}
+      .s{font-size:12px;fill:#4b5563}
+      .m{font-family:SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;fill:#111827;white-space:pre}
+      .n{font-size:12px;font-weight:700;fill:#ffffff}
+    </style>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#6b7280"/>
+    </marker>
+    <marker id="arrb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#2563eb"/>
+    </marker>
+    <marker id="arrp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#7c3aed"/>
+    </marker>
+    <marker id="arrg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#059669"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="960" height="560" rx="14" fill="#ffffff"/>
+  <text class="t h" x="30" y="38">Task Routing: each step picks a Task Queue, each Worker picks the queues it polls</text>
+
+  <!-- Column headers -->
+  <text class="t bb" x="30" y="74">TranscodeVideoWorkflow</text>
+  <text class="t bb" x="330" y="74">Task Queues (Temporal Service)</text>
+  <text class="t bb" x="660" y="74">Worker processes</text>
+
+  <!-- Steps -->
+  <rect x="20" y="90" width="260" height="56" rx="10" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+  <text class="t bb" x="34" y="113">1 · FetchSourceVideo</text>
+  <text class="m" x="34" y="133">TaskQueue: "media-gpu"</text>
+
+  <rect x="20" y="186" width="260" height="56" rx="10" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+  <text class="t bb" x="34" y="209">2 · TranscodeRenditions</text>
+  <text class="m" x="34" y="229">TaskQueue: src.HostTaskQueue</text>
+
+  <rect x="20" y="256" width="260" height="56" rx="10" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+  <text class="t bb" x="34" y="279">3 · UploadRenditions</text>
+  <text class="m" x="34" y="299">TaskQueue: src.HostTaskQueue</text>
+
+  <rect x="20" y="352" width="260" height="56" rx="10" fill="#d1fae5" stroke="#059669" stroke-width="1.5"/>
+  <text class="t bb" x="34" y="375">4 · PublishCatalogEntry</text>
+  <text class="m" x="34" y="395">TaskQueue: "" (Workflow's)</text>
+
+  <path d="M 150 146 L 150 182" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text class="t s" x="160" y="170">returns "media-gpu-host-a"</text>
+  <path d="M 150 312 L 150 348" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- Queues -->
+  <rect x="330" y="96" width="250" height="44" rx="10" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+  <text class="m" x="346" y="123">media-gpu</text>
+  <text class="t s" x="440" y="123">shared GPU queue</text>
+
+  <rect x="330" y="226" width="250" height="44" rx="10" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+  <text class="m" x="346" y="253">media-gpu-host-a</text>
+  <text class="t s" x="490" y="253">host A only</text>
+
+  <rect x="330" y="290" width="250" height="44" rx="10" fill="#f3f4f6" stroke="#9ca3af" stroke-width="1.5"/>
+  <text class="m" x="346" y="317">media-gpu-host-b</text>
+  <text class="t s" x="490" y="317">host B only</text>
+
+  <rect x="330" y="358" width="250" height="44" rx="10" fill="#d1fae5" stroke="#059669" stroke-width="1.5"/>
+  <text class="m" x="346" y="385">media</text>
+  <text class="t s" x="400" y="385">Workflows + CPU Activities</text>
+
+  <line x1="280" y1="118" x2="326" y2="118" stroke="#2563eb" stroke-width="1.5" marker-end="url(#arrb)"/>
+  <line x1="280" y1="214" x2="326" y2="242" stroke="#7c3aed" stroke-width="1.5" marker-end="url(#arrp)"/>
+  <line x1="280" y1="284" x2="326" y2="254" stroke="#7c3aed" stroke-width="1.5" marker-end="url(#arrp)"/>
+  <line x1="280" y1="380" x2="326" y2="380" stroke="#059669" stroke-width="1.5" marker-end="url(#arrg)"/>
+
+  <!-- Workers -->
+  <rect x="660" y="90" width="280" height="110" rx="12" fill="#f9fafb" stroke="#7c3aed" stroke-width="1.5"/>
+  <text class="t bb" x="676" y="114">GPU host A · cmd/gpu-worker</text>
+  <rect x="676" y="126" width="248" height="28" rx="6" fill="#ffffff" stroke="#2563eb" stroke-width="1.2"/>
+  <text class="t s" x="688" y="145">Worker Entity on media-gpu</text>
+  <rect x="676" y="162" width="248" height="28" rx="6" fill="#ffffff" stroke="#7c3aed" stroke-width="1.2"/>
+  <text class="t s" x="688" y="181">Worker Entity on media-gpu-host-a</text>
+
+  <rect x="660" y="220" width="280" height="110" rx="12" fill="#f9fafb" stroke="#9ca3af" stroke-width="1.5"/>
+  <text class="t bb" x="676" y="244">GPU host B · cmd/gpu-worker</text>
+  <rect x="676" y="256" width="248" height="28" rx="6" fill="#ffffff" stroke="#2563eb" stroke-width="1.2"/>
+  <text class="t s" x="688" y="275">Worker Entity on media-gpu</text>
+  <rect x="676" y="292" width="248" height="28" rx="6" fill="#ffffff" stroke="#9ca3af" stroke-width="1.2"/>
+  <text class="t s" x="688" y="311">Worker Entity on media-gpu-host-b</text>
+
+  <rect x="660" y="352" width="280" height="56" rx="12" fill="#f9fafb" stroke="#059669" stroke-width="1.5"/>
+  <text class="t bb" x="676" y="376">CPU Workers · cmd/media-worker</text>
+  <text class="t s" x="676" y="396">Worker Entity on media (×N replicas)</text>
+
+  <!-- polls (dashed, Worker → queue) -->
+  <path d="M 676 140 C 630 140, 620 118, 584 118" fill="none" stroke="#2563eb" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#arrb)"/>
+  <path d="M 676 270 C 620 270, 620 130, 584 126" fill="none" stroke="#2563eb" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#arrb)"/>
+  <path d="M 676 176 C 630 176, 620 248, 584 248" fill="none" stroke="#7c3aed" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#arrp)"/>
+  <path d="M 676 306 C 640 306, 620 312, 584 312" fill="none" stroke="#9ca3af" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#arr)"/>
+  <line x1="660" y1="380" x2="584" y2="380" stroke="#059669" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#arrg)"/>
+
+  <!-- legend -->
+  <line x1="30" y1="452" x2="70" y2="452" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text class="t s" x="80" y="456">Workflow schedules the step on a queue (ActivityOptions.TaskQueue)</text>
+  <line x1="30" y1="476" x2="70" y2="476" stroke="#6b7280" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#arr)"/>
+  <text class="t s" x="80" y="480">Worker Entity polls the queue (worker.New(c, queue, …))</text>
+  <text class="t s" x="30" y="512">Whichever GPU host wins step 1 returns its own queue name, so steps 2 and 3 can only run where the file is.</text>
+  <text class="t s" x="30" y="532">Host queues need a ScheduleToStartTimeout: if the host is gone, nobody else will ever poll its queue.</text>
+</svg>

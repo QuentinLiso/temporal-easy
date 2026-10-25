@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 560" width="960" height="560" role="img" aria-labelledby="title desc">
+  <title id="title">Tasks between the Service and a Worker</title>
+  <desc id="desc">Events such as Workflow start, Signals, Updates, Activity completions, Timers firing and Child Workflow completions make the Service schedule a Workflow Task. The Worker runs the Workflow code, replaying recorded results and producing Commands such as ScheduleActivityTask or StartTimer. The Service records them in the Event History and schedules Activity Tasks, each one running one Activity attempt. Activity completion creates a new event, which schedules the next Workflow Task. A Workflow Task failure keeps the Workflow open and is retried; a Workflow Execution failure closes it.</desc>
+  <defs>
+    <style>
+      .t{font-family:-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;fill:#1f2937}
+      .h{font-size:16px;font-weight:700}
+      .bb{font-size:13px;font-weight:700}
+      .s{font-size:12px;fill:#4b5563}
+      .m{font-family:SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;fill:#111827;white-space:pre}
+    </style>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#6b7280"/>
+    </marker>
+    <marker id="arrb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#2563eb"/>
+    </marker>
+    <marker id="arrg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#059669"/>
+    </marker>
+    <marker id="arrr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#dc2626"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="960" height="560" rx="14" fill="#ffffff"/>
+  <text class="t h" x="30" y="38">A Workflow advances one Workflow Task at a time</text>
+
+  <!-- columns -->
+  <text class="t bb" x="40" y="76">Temporal Service</text>
+  <text class="t bb" x="620" y="76">Worker (any in the fleet)</text>
+
+  <!-- triggers -->
+  <rect x="30" y="92" width="250" height="132" rx="10" fill="#f3f4f6" stroke="#6b7280" stroke-width="1.5"/>
+  <text class="t bb" x="44" y="114">Something happened</text>
+  <text class="t s" x="44" y="134">• Workflow started</text>
+  <text class="t s" x="44" y="152">• Signal or Update received</text>
+  <text class="t s" x="44" y="170">• Activity / Child Workflow closed</text>
+  <text class="t s" x="44" y="188">• Timer fired</text>
+  <text class="t s" x="44" y="206">• previous Workflow Task failed</text>
+
+  <rect x="320" y="120" width="220" height="70" rx="10" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+  <text class="t bb" x="334" y="146">Workflow Task</text>
+  <text class="t s" x="334" y="166">all new events since the</text>
+  <text class="t s" x="334" y="182">last completed Workflow Task</text>
+  <line x1="280" y1="158" x2="316" y2="155" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <rect x="610" y="100" width="320" height="140" rx="10" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+  <text class="t bb" x="624" y="124">Run the Workflow function</text>
+  <text class="t s" x="624" y="144">recorded calls return from history (replay)</text>
+  <text class="t s" x="624" y="162">until the code needs something new</text>
+  <text class="m" x="624" y="186">→ ScheduleActivityTask</text>
+  <text class="m" x="624" y="204">→ StartTimer</text>
+  <text class="m" x="624" y="222">→ CompleteWorkflowExecution</text>
+  <line x1="540" y1="150" x2="606" y2="150" stroke="#2563eb" stroke-width="2" marker-end="url(#arrb)"/>
+  <text class="t s" x="548" y="140">poll</text>
+
+  <!-- commands back -->
+  <rect x="320" y="262" width="220" height="70" rx="10" fill="#ffffff" stroke="#9ca3af" stroke-width="1.5"/>
+  <text class="t bb" x="334" y="288">Event History</text>
+  <text class="t s" x="334" y="308">ActivityTaskScheduled,</text>
+  <text class="t s" x="334" y="324">TimerStarted, …</text>
+  <path d="M 770 240 C 770 280, 620 296, 544 296" fill="none" stroke="#059669" stroke-width="2" marker-end="url(#arrg)"/>
+  <text class="t s" x="610" y="318">Commands (Workflow Task completed)</text>
+
+  <rect x="320" y="356" width="220" height="70" rx="10" fill="#fef3c7" stroke="#d97706" stroke-width="1.5"/>
+  <text class="t bb" x="334" y="382">Activity Task</text>
+  <text class="t s" x="334" y="402">one attempt; a retry is a</text>
+  <text class="t s" x="334" y="418">new Activity Task</text>
+  <line x1="430" y1="332" x2="430" y2="352" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <rect x="610" y="356" width="320" height="70" rx="10" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+  <text class="t bb" x="624" y="382">Run the Activity function</text>
+  <text class="t s" x="624" y="402">real I/O: payment gateway, database, email</text>
+  <text class="t s" x="624" y="418">result or error goes back to the Service</text>
+  <line x1="540" y1="380" x2="606" y2="380" stroke="#2563eb" stroke-width="2" marker-end="url(#arrb)"/>
+  <text class="t s" x="548" y="370">poll</text>
+  <path d="M 770 426 L 770 456 L 150 456 L 150 228" fill="none" stroke="#059669" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#arrg)"/>
+  <text class="t s" x="300" y="476">ActivityTaskCompleted is a new event → next Workflow Task</text>
+
+  <!-- failures -->
+  <rect x="30" y="494" width="440" height="52" rx="8" fill="#fee2e2" stroke="#dc2626" stroke-width="1.5"/>
+  <text class="t bb" x="44" y="515">Workflow Task failure (panic, non-determinism)</text>
+  <text class="t s" x="44" y="535">Workflow stays Open, the Task is retried until fixed</text>
+  <rect x="490" y="494" width="440" height="52" rx="8" fill="#fee2e2" stroke="#dc2626" stroke-width="1.5"/>
+  <text class="t bb" x="504" y="515">Workflow Execution failure (Workflow returns an error)</text>
+  <text class="t s" x="504" y="535">Workflow closes as Failed; retried only with a Retry Policy</text>
+</svg>

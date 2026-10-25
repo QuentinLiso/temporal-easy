@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 500" width="960" height="500" role="img" aria-labelledby="title desc">
+  <title id="title">Worker shutdown sequence</title>
+  <desc id="desc">A timeline of a Worker shutdown. At SIGTERM, Stop is called: polling stops and the Worker stop channel closes. During the WorkerStopTimeout grace period, in-flight Activities may complete; well-written Activities watch the stop channel, heartbeat a checkpoint and return early. When the grace period ends, remaining Activity contexts are canceled, their attempts fail and the Service retries them on another Worker. In-flight Workflow Tasks are completed, then Stop returns. The platform kill deadline must come after all of this. With the Go default WorkerStopTimeout of 0, the grace period is empty and Activities are canceled immediately.</desc>
+  <defs>
+    <style>
+      .t{font-family:-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;fill:#1f2937}
+      .h{font-size:16px;font-weight:700}
+      .b{font-size:13px}
+      .bb{font-size:13px;font-weight:700}
+      .s{font-size:12px;fill:#4b5563}
+      .m{font-family:SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;fill:#111827;white-space:pre}
+      .n{font-size:12px;font-weight:700;fill:#ffffff}
+    </style>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#6b7280"/>
+    </marker>
+    <marker id="arrr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#dc2626"/>
+    </marker>
+    <marker id="arrg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#059669"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="960" height="500" rx="14" fill="#ffffff"/>
+  <text class="t h" x="30" y="38">What happens between SIGTERM and exit</text>
+
+  <!-- time axis -->
+  <line x1="60" y1="420" x2="920" y2="420" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text class="t s" x="880" y="442">time</text>
+
+  <!-- phase bands -->
+  <rect x="60" y="64" width="160" height="340" fill="#f3f4f6"/>
+  <text class="t bb" x="74" y="86">Running</text>
+  <text class="t s" x="74" y="104">polling, executing</text>
+
+  <rect x="220" y="64" width="420" height="340" fill="#fef3c7"/>
+  <text class="t bb" x="234" y="86">Grace period = WorkerStopTimeout</text>
+  <text class="t s" x="234" y="104">no new Tasks. Running Activities may finish</text>
+
+  <rect x="640" y="64" width="150" height="340" fill="#fee2e2"/>
+  <text class="t bb" x="652" y="86">Timeout hit</text>
+  <text class="t s" x="652" y="104">Activity ctx canceled</text>
+
+  <rect x="790" y="64" width="130" height="340" fill="#d1fae5"/>
+  <text class="t bb" x="802" y="86">Stop() returns</text>
+  <text class="t s" x="802" y="104">process exits</text>
+
+  <!-- markers -->
+  <line x1="220" y1="64" x2="220" y2="420" stroke="#d97706" stroke-width="2"/>
+  <rect x="160" y="428" width="120" height="24" rx="5" fill="#d97706"/>
+  <text class="t n" x="172" y="445">SIGTERM → Stop()</text>
+  <line x1="640" y1="64" x2="640" y2="420" stroke="#dc2626" stroke-width="2"/>
+  <line x1="790" y1="64" x2="790" y2="420" stroke="#059669" stroke-width="2"/>
+
+  <!-- polling row -->
+  <text class="t bb" x="74" y="140">Pollers</text>
+  <rect x="74" y="150" width="146" height="20" rx="4" fill="#2563eb"/>
+  <text class="t n" x="82" y="165">polling Task Queue</text>
+  <text class="t s" x="234" y="165">stopped: other Workers take the new Tasks</text>
+
+  <!-- activity 1: finishes in grace period -->
+  <text class="t bb" x="74" y="205">Activity A (6s)</text>
+  <rect x="120" y="215" width="380" height="20" rx="4" fill="#059669"/>
+  <text class="t n" x="128" y="230">runs and completes during the grace period</text>
+
+  <!-- activity 2: checkpoint and return -->
+  <text class="t bb" x="74" y="270">Activity B</text>
+  <rect x="120" y="280" width="140" height="20" rx="4" fill="#7c3aed"/>
+  <text class="t n" x="128" y="295">sees stop channel</text>
+  <text class="t s" x="268" y="295">heartbeat(checkpoint) + return → retried elsewhere, resumes</text>
+
+  <!-- activity 3: too long -->
+  <text class="t bb" x="74" y="335">Activity C (20s)</text>
+  <rect x="120" y="345" width="520" height="20" rx="4" fill="#d97706"/>
+  <text class="t n" x="128" y="360">still running when the grace period ends</text>
+  <line x1="640" y1="355" x2="700" y2="355" stroke="#dc2626" stroke-width="1.5" marker-end="url(#arrr)"/>
+  <text class="t s" x="652" y="384">ctx canceled →</text>
+  <text class="t s" x="652" y="398">attempt fails, retried</text>
+
+  <text class="t s" x="30" y="476">Go default WorkerStopTimeout = 0: the yellow band is empty, every running Activity is canceled at SIGTERM.</text>
+  <text class="t s" x="30" y="492">The platform's kill deadline (e.g. terminationGracePeriodSeconds) must fall after the green line.</text>
+</svg>

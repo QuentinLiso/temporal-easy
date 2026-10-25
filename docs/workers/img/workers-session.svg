@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 540" width="960" height="540" role="img" aria-labelledby="title desc">
+  <title id="title">Worker Session</title>
+  <desc id="desc">The Workflow calls CreateSession. The SDK schedules an internal session creation Activity on the media-gpu__internal_session_creation queue. GPU Worker A takes it, uses one of its MaxConcurrentSessionExecutionSize slots, and keeps that Activity running and heartbeating for the whole Session. Every Activity scheduled with the session context goes to Worker A's own queue. CompleteSession cancels the creation Activity and frees the slot. If Worker A stops, the Session fails at once; if it crashes, it fails after the Session HeartbeatTimeout. The running Activity returns canceled and later calls return ErrSessionFailed.</desc>
+  <defs>
+    <style>
+      .t{font-family:-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;fill:#1f2937}
+      .h{font-size:16px;font-weight:700}
+      .b{font-size:13px}
+      .bb{font-size:13px;font-weight:700}
+      .s{font-size:12px;fill:#4b5563}
+      .m{font-family:SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;fill:#111827;white-space:pre}
+      .n{font-size:12px;font-weight:700;fill:#ffffff}
+    </style>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#6b7280"/>
+    </marker>
+    <marker id="arrb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#2563eb"/>
+    </marker>
+    <marker id="arrp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#7c3aed"/>
+    </marker>
+    <marker id="arrr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#dc2626"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="960" height="540" rx="14" fill="#ffffff"/>
+  <text class="t h" x="30" y="38">A Session pins a group of Activities to one Worker, with a slot and a heartbeat</text>
+
+  <!-- Workflow -->
+  <rect x="20" y="64" width="270" height="300" rx="12" fill="#f9fafb" stroke="#9ca3af" stroke-width="1.5"/>
+  <text class="t bb" x="36" y="90">TranscodeVideoWorkflow</text>
+  <rect x="36" y="104" width="238" height="40" rx="8" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+  <text class="m" x="48" y="129">CreateSession(ctx, opts)</text>
+  <rect x="36" y="168" width="238" height="30" rx="8" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+  <text class="m" x="48" y="188">FetchSourceVideo</text>
+  <rect x="36" y="206" width="238" height="30" rx="8" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+  <text class="m" x="48" y="226">TranscodeRenditions</text>
+  <rect x="36" y="244" width="238" height="30" rx="8" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+  <text class="m" x="48" y="264">UploadRenditions</text>
+  <text class="t s" x="48" y="160">with sessionCtx:</text>
+  <rect x="36" y="298" width="238" height="40" rx="8" fill="#d1fae5" stroke="#059669" stroke-width="1.5"/>
+  <text class="m" x="48" y="323">CompleteSession(sessionCtx)</text>
+
+  <!-- Queues -->
+  <rect x="340" y="98" width="280" height="52" rx="10" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+  <text class="m" x="354" y="120">media-gpu__internal_session_</text>
+  <text class="m" x="354" y="138">creation</text>
+  <rect x="340" y="194" width="280" height="52" rx="10" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+  <text class="m" x="354" y="216">&lt;uuid&gt;@host-a</text>
+  <text class="t s" x="354" y="236">Worker A's own queue</text>
+
+  <circle cx="306" cy="108" r="11" fill="#2563eb"/><text class="t n" x="302" y="112">1</text>
+  <line x1="274" y1="124" x2="336" y2="124" stroke="#2563eb" stroke-width="1.5" marker-end="url(#arrb)"/>
+  <circle cx="306" cy="158" r="11" fill="#7c3aed"/><text class="t n" x="302" y="162">3</text>
+  <line x1="274" y1="221" x2="336" y2="221" stroke="#7c3aed" stroke-width="1.5" marker-end="url(#arrp)"/>
+  <line x1="274" y1="183" x2="336" y2="212" stroke="#7c3aed" stroke-width="1.5" marker-end="url(#arrp)"/>
+  <line x1="274" y1="259" x2="336" y2="230" stroke="#7c3aed" stroke-width="1.5" marker-end="url(#arrp)"/>
+
+  <!-- Worker A -->
+  <rect x="670" y="64" width="270" height="246" rx="12" fill="#f9fafb" stroke="#7c3aed" stroke-width="1.5"/>
+  <text class="t bb" x="686" y="90">GPU Worker A</text>
+  <text class="m" x="686" y="110">EnableSessionWorker: true</text>
+  <rect x="686" y="122" width="238" height="70" rx="8" fill="#ffffff" stroke="#2563eb" stroke-width="1.2"/>
+  <text class="t bb" x="698" y="144">session creation Activity</text>
+  <text class="t s" x="698" y="163">runs and heartbeats while the</text>
+  <text class="t s" x="698" y="180">Session is open: holds 1 slot</text>
+  <rect x="686" y="204" width="238" height="74" rx="8" fill="#ffffff" stroke="#7c3aed" stroke-width="1.2"/>
+  <text class="t bb" x="698" y="226">session slots</text>
+  <rect x="698" y="238" width="44" height="24" rx="4" fill="#7c3aed"/>
+  <rect x="750" y="238" width="44" height="24" rx="4" fill="#ede9fe" stroke="#7c3aed"/>
+  <rect x="802" y="238" width="44" height="24" rx="4" fill="#ede9fe" stroke="#7c3aed"/>
+  <rect x="854" y="238" width="44" height="24" rx="4" fill="#ede9fe" stroke="#7c3aed"/>
+  <text class="t s" x="698" y="290">MaxConcurrentSessionExecutionSize: 4</text>
+
+  <circle cx="645" cy="108" r="11" fill="#2563eb"/><text class="t n" x="641" y="112">2</text>
+  <path d="M 682 140 C 650 140, 650 124, 624 124" fill="none" stroke="#2563eb" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#arrb)"/>
+  <path d="M 682 230 C 650 230, 650 220, 624 220" fill="none" stroke="#7c3aed" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#arrp)"/>
+  <text class="t s" x="340" y="276">dashed: Worker A polls both queues.</text>
+  <text class="t s" x="340" y="294">The first Worker with a free slot wins (2).</text>
+
+  <!-- Worker B -->
+  <rect x="670" y="322" width="270" height="54" rx="12" fill="#f3f4f6" stroke="#9ca3af" stroke-width="1.5"/>
+  <text class="t bb" x="686" y="346">GPU Worker B</text>
+  <text class="t s" x="686" y="364">polls the creation queue too: next Session</text>
+
+  <!-- failure -->
+  <rect x="20" y="390" width="920" height="96" rx="12" fill="#fee2e2" stroke="#dc2626" stroke-width="1.5"/>
+  <text class="t bb" x="36" y="414">If Worker A goes away, the Session fails</text>
+  <text class="t s" x="36" y="436">Graceful stop: at once (SessionWorkerShutdown). Crash: after SessionOptions.HeartbeatTimeout (default 20s).</text>
+  <text class="t s" x="36" y="456">The Activity running at that moment returns canceled. Activities scheduled afterwards return workflow.ErrSessionFailed.</text>
+  <text class="t s" x="36" y="476">Check GetSessionInfo(sessionCtx).SessionState == SessionStateFailed, then CreateSession again: Worker B takes it.</text>
+
+  <text class="t s" x="30" y="516">CompleteSession (4) cancels the creation Activity and frees the slot. Activities on sessionCtx afterwards go to the normal queue.</text>
+  <circle cx="306" cy="318" r="11" fill="#059669"/><text class="t n" x="302" y="322">4</text>
+</svg>

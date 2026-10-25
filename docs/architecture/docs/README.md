@@ -9,7 +9,8 @@
 > [Temporal Activities with Go](../../activities/docs/README.md). Read this one first to know which
 > part runs where. Read those to write the code.
 > [Temporal Client with Go](../../client/docs/README.md) goes deeper into connecting, starting and
-> managing Workflows from your services.
+> managing Workflows from your services. [Temporal Workers with Go](../../workers/docs/README.md) goes
+> deeper into running, sizing, routing and deploying Workers.
 
 ![Architecture mental model](../img/architecture-mental-model.svg)
 
