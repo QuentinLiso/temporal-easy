@@ -78,8 +78,9 @@ export default defineConfig({
   themeConfig: {
     search: { provider: 'local' },
     outline: [2, 3],
-    // No nav links: the header's right side only shows the light/dark toggle.
+    // No nav links: the header's right side only shows the light/dark toggle and the GitHub link.
     nav: [],
+    socialLinks: [{ icon: 'github', link: 'https://github.com/QuentinLiso/temporal-easy' }],
     sidebar: [{ text: 'Home', link: '/' }, ...guides().map(guideSidebar)],
     // Read by GuideCards.vue on the home page.
     guides: guides().map(guideCard),
