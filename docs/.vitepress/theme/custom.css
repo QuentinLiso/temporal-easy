@@ -9,3 +9,9 @@
     max-width: 960px !important;
   }
 }
+
+/* h2 already draws a top border in the default theme: drop the Markdown `---`
+   that precedes it, otherwise every section shows two separator lines. */
+.vp-doc hr:has(+ h2) {
+  display: none;
+}
