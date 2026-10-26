@@ -1,18 +1,5 @@
 # Temporal Namespaces with Go: a roadmap
 
-> A progressive onboarding guide to **Temporal Namespaces** for Go developers. It is based on the
-> Temporal Encyclopedia's Namespace page (the concept) and the Go SDK's Namespaces page (how to do it
-> in Go), read side by side and checked against the SDK source and a dev server. Every chapter has
-> **compilable Go examples** with production-like names.
->
-> Companion guides: [Temporal Client with Go](../../client/docs/README.md) (connecting to a Namespace),
-> [Temporal Workers with Go](../../workers/docs/README.md) (Workers run inside one Namespace),
-> [Temporal Architecture with Go](../../architecture/docs/README.md) (where Namespaces sit in the Service).
-
-![Namespaces mental model](../img/namespaces-mental-model.svg)
-
----
-
 ## Why this matters, in 30 seconds
 
 Every Workflow, Task Queue and Worker lives in a **Namespace**. It decides which Workflow IDs can clash,
@@ -107,16 +94,6 @@ On Temporal Cloud?                              → Cloud UI or `temporal cloud 
 | Deprecate | `nc.Update(…, UpdateInfo: &namespacepb.UpdateNamespaceInfo{State: enumspb.NAMESPACE_STATE_DEPRECATED})` | 05 |
 | Delete | `c.OperatorService().DeleteNamespace(ctx, &operatorservice.DeleteNamespaceRequest{Namespace: …})` | 05 |
 | Call another Namespace | an Activity holding a Client for that Namespace, or Nexus | 06 |
-
----
-
-## Diagrams
-
-| Diagram | Used in |
-| --- | --- |
-| [Namespaces mental model](../img/namespaces-mental-model.svg) | README, 01 |
-| [Namespace lifecycle](../img/namespaces-lifecycle.svg) | 05 |
-| [Namespace topology](../img/namespaces-topology.svg) | 06 |
 
 ---
 

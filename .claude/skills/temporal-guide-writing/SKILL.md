@@ -43,14 +43,12 @@ docs/<feature>/
 
 ## README.md (the overview)
 - `# Temporal <Feature> with Go: a roadmap`
-- An opening `>` blockquote: what the guide is, and a companion-guide line linking the other guides (`../../<other>/docs/README.md`).
-- The main mental-model diagram.
 - "Why this matters, in 30 seconds".
 - The roadmap: stages (Foundations → daily use → advanced → production), one table per stage: `# | Chapter | You'll be able to…`.
 - Core concepts vs. implementation details table.
 - A "Which … do I need?" decision tree in a `text` block.
 - A Go API cheat sheet table: `I want to… | Go API | Chapter`.
-- A diagrams table, notes about the code samples, "Notes from checking the docs against the SDK", and the sources.
+- Notes about the code samples, "Notes from checking the docs against the SDK", and the sources.
 
 ## Chapters
 - File `NN-short-slug.md`, first line `# NN · Title`. The sidebar label is the text before the first `:`, so keep that part short.

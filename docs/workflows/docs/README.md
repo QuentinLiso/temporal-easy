@@ -1,17 +1,5 @@
 # Temporal Workflows with Go: a roadmap
 
-> A progressive onboarding guide to **Temporal Workflows** for Go developers. It is based on the
-> Temporal Encyclopedia (the concepts) and the Temporal Go SDK docs (how to do it in Go), read side by side.
-> Every chapter has **compilable Go examples** with production-like names.
->
-> Companion guides: [Temporal Activities with Go](../../activities/docs/README.md). Workflows orchestrate, Activities do the side effects. [Temporal Testing with Go](../../testing/docs/README.md) shows how to test both.
->
-> New to Temporal? Start with [Temporal Architecture with Go](../../architecture/docs/README.md): which part runs where, and why replay works.
-
-![Workflows mental model](../img/workflow-mental-model.svg)
-
----
-
 ## Why this matters, in 30 seconds
 
 Real business processes are long and fragile. A signup charges a card, sends emails, waits 14 days
@@ -142,25 +130,6 @@ I need to…
 | Patch running code | `workflow.GetVersion(ctx, "change-id", workflow.DefaultVersion, 1)` | 11 |
 | Catch unknown Workflow Types | `w.RegisterDynamicWorkflow(fn, workflow.DynamicRegisterOptions{})` | 12 |
 | Stream progress | `workflowstreams.NewWorkflowStream`, `Topic(…).Publish`, `NewClient(…).Subscribe` | 13 |
-
----
-
-## Diagrams
-
-| Diagram | Used in |
-| --- | --- |
-| [Workflows mental model](../img/workflow-mental-model.svg) | README, 01 |
-| [Commands, Events and Replay](../img/workflow-replay.svg) | 03 |
-| [Workflow Execution statuses](../img/workflow-execution-status.svg) | 04 |
-| [Workflow ID Reuse & Conflict policies](../img/workflow-id-policies.svg) | 04 |
-| [Timer vs Activity race (soft timeout)](../img/workflow-timer-race.svg) | 05 |
-| [Queries, Signals and Updates](../img/workflow-message-passing.svg) | 06 |
-| [Parent Close Policy](../img/child-workflow-parent-close.svg) | 07 |
-| [Cancel, Terminate, Pause, Reset](../img/workflow-stop-controls.svg) | 08 |
-| [Continue-As-New chain](../img/continue-as-new-chain.svg) | 09 |
-| [Schedule anatomy](../img/schedule-anatomy.svg) | 10 |
-| [GetVersion lifecycle](../img/workflow-versioning-getversion.svg) | 11 |
-| [Workflow Streams](../img/workflow-streams.svg) | 13 |
 
 ---
 

@@ -1,21 +1,5 @@
 # Temporal Workers with Go: a roadmap
 
-> A progressive onboarding guide to **Temporal Workers** for Go developers. It is based on the
-> Temporal Encyclopedia (Workers, Tasks, Task Queues, Task Routing, Sticky Execution, shutdown,
-> Worker Versioning, Serverless Workers) and the Go SDK's Workers pages, read side by side and
-> checked against the SDK source. Every chapter has **compilable Go examples** with production-like
-> names.
->
-> Companion guides: [Temporal Architecture with Go](../../architecture/docs/README.md) (where Workers
-> fit), [Temporal Workflows with Go](../../workflows/docs/README.md) and
-> [Temporal Activities with Go](../../activities/docs/README.md) (the code Workers run),
-> [Temporal Client with Go](../../client/docs/README.md) (how work reaches the Task Queue),
-> [Temporal Error handling with Go](../../error-handling/docs/README.md) (what happens when a Task fails).
-
-![Temporal Workers mental model](../img/workers-mental-model.svg)
-
----
-
 ## Why this matters, in 30 seconds
 
 The Temporal Service never runs your code. **Workers do.** They poll Task Queues, run your
@@ -136,22 +120,6 @@ Don't want to run Worker processes at all? → Serverless Workers (Public Previe
 | Run a versioned Worker | `DeploymentOptions{UseVersioning: true, Version: worker.WorkerDeploymentVersion{…}}`, `RegisterOptions{VersioningBehavior: …}` | 11 |
 | Promote a Version | `temporal worker deployment set-current-version`, `c.WorkerDeploymentClient().GetHandle(…).SetCurrentVersion(…)` | 11 |
 | Run on AWS Lambda | `lambdaworker.RunWorker(version, func(o *lambdaworker.Options) error {…})` | 12 |
-
----
-
-## Diagrams
-
-| Diagram | Used in |
-| --- | --- |
-| [Workers mental model](../img/workers-mental-model.svg) | README, 01 |
-| [From event to Task to Worker](../img/workers-task-flow.svg) | 02 |
-| [Task Queues](../img/workers-task-queue.svg) | 03 |
-| [Sticky Execution](../img/workers-sticky-execution.svg) | 06 |
-| [Task Routing](../img/workers-task-routing.svg) | 07 |
-| [Worker Sessions](../img/workers-session.svg) | 08 |
-| [Graceful shutdown](../img/workers-shutdown.svg) | 10 |
-| [Worker Versioning](../img/workers-versioning.svg) | 11 |
-| [Serverless Workers](../img/workers-serverless.svg) | 12 |
 
 ---
 

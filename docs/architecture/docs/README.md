@@ -1,21 +1,5 @@
 # Temporal Architecture with Go: a roadmap
 
-> A progressive onboarding guide to **how Temporal works under the hood**, for Go developers. It is
-> based on the Temporal Encyclopedia's Architecture pages (the concepts), read side by side with the
-> Go SDK's Client and Worker pages (how it looks in Go). Every chapter has **compilable Go examples**
-> with production-like names.
->
-> Companion guides: [Temporal Workflows with Go](../../workflows/docs/README.md) and
-> [Temporal Activities with Go](../../activities/docs/README.md). Read this one first to know which
-> part runs where. Read those to write the code.
-> [Temporal Client with Go](../../client/docs/README.md) goes deeper into connecting, starting and
-> managing Workflows from your services. [Temporal Workers with Go](../../workers/docs/README.md) goes
-> deeper into running, sizing, routing and deploying Workers.
-
-![Architecture mental model](../img/architecture-mental-model.svg)
-
----
-
 ## Why this matters, in 30 seconds
 
 Temporal promises that your code **survives crashes, retries failures and resumes after days of
@@ -123,21 +107,6 @@ I'm changing Workflow code that already has running executions
 | Send an Activity to another Worker pool | `workflow.ActivityOptions{TaskQueue: "payments", …}` | 05 |
 | Test a Workflow in memory | `testsuite.WorkflowTestSuite`, `env.OnActivity(…)`, `env.ExecuteWorkflow(…)` | 02 |
 | Replay a recorded history | `worker.NewWorkflowReplayer()`, `ReplayWorkflowHistoryFromJSONFile(nil, path)` | 07 |
-
----
-
-## Diagrams
-
-| Diagram | Used in |
-| --- | --- |
-| [Architecture mental model](../img/architecture-mental-model.svg) | README, 01 |
-| [SDK components](../img/architecture-sdk-components.svg) | 02 |
-| [Clients and the Frontend](../img/architecture-clients-frontend.svg) | 03 |
-| [Server internals](../img/architecture-server-internals.svg) | 04 |
-| [Workers poll Task Queues](../img/architecture-worker-polling.svg) | 05 |
-| [Workflow and Activity lifecycle](../img/architecture-lifecycle.svg) | 06 |
-| [Commands, Events and Replay](../img/architecture-replay.svg) | 07 |
-| [Deployment options](../img/architecture-deployment-options.svg) | 08 |
 
 ---
 

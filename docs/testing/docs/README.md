@@ -1,19 +1,5 @@
 # Temporal Testing with Go: a roadmap
 
-> A progressive onboarding guide to **testing and debugging Temporal applications** in Go. It is based on
-> the Go SDK's Testing and Debugging pages (the Temporal Encyclopedia has no page on testing), checked
-> against the SDK source and by running every test. Every chapter has **compilable, passing Go tests**
-> with production-like names.
->
-> Companion guides: [Temporal Workflows with Go](../../workflows/docs/README.md) (what you're testing, and
-> why replay matters), [Temporal Activities with Go](../../activities/docs/README.md) (the side effects you
-> mock), [Temporal Error handling with Go](../../error-handling/docs/README.md) (the failures you assert on),
-> [Temporal Workers with Go](../../workers/docs/README.md) (what the end-to-end tests run).
-
-![Testing mental model](../img/testing-mental-model.svg)
-
----
-
 ## Why this matters, in 30 seconds
 
 A Workflow can sleep for 30 days, retry an Activity for hours, wait for a Signal that comes next week,
@@ -125,17 +111,6 @@ A production Execution failed and I want to step through it? → download its hi
 | Replay a live Execution | `r.ReplayWorkflowExecution(ctx, c.WorkflowService(), logger, ns, workflow.Execution{ID: …})` | 07, 09 |
 | Start a real Service in tests | `srv, err := testsuite.StartDevServer(ctx, testsuite.DevServerOptions{…}); c := srv.Client(); defer srv.Stop()` | 08 |
 | Step through Workflow code | `TEMPORAL_DEBUG=1` in the debugger's environment | 09 |
-
----
-
-## Diagrams
-
-| Diagram | Used in |
-| --- | --- |
-| [Testing mental model](../img/testing-mental-model.svg) | README, 01 |
-| [Inside the Workflow test environment](../img/testing-test-environment.svg) | 02 |
-| [Time skipping](../img/testing-time-skipping.svg) | 05 |
-| [Replay testing in CI](../img/testing-replay-ci.svg) | 07 |
 
 ---
 

@@ -1,19 +1,5 @@
 # Temporal Error handling with Go: a roadmap
 
-> A progressive onboarding guide to **error handling in Temporal** for Go developers. It is based on
-> the Temporal Encyclopedia (failures, Application failures, detecting Activity and Workflow failures,
-> Retry Policies) and the Go SDK's Error handling page, read side by side and checked against the SDK
-> source and a dev server. Every chapter has **compilable Go examples** with production-like names.
->
-> Companion guides: [Temporal Activities with Go](../../activities/docs/README.md) (timeouts,
-> heartbeats, cancellation in depth), [Temporal Workflows with Go](../../workflows/docs/README.md)
-> (determinism and replay), [Temporal Workers with Go](../../workers/docs/README.md) (Tasks and
-> graceful shutdown), [Temporal Client with Go](../../client/docs/README.md) (reading results).
-
-![Error handling mental model](../img/error-handling-mental-model.svg)
-
----
-
 ## Why this matters, in 30 seconds
 
 Temporal recovers from crashes, network failures and outages on its own. It **cannot** decide what
@@ -128,21 +114,6 @@ Workflow "Running" but not progressing?       → Workflow Task failure (panic, 
 | Run compensations after cancel | `workflow.NewDisconnectedContext(ctx)` | 09 |
 | Inspect failing Activities | `c.DescribeWorkflowExecution(ctx, id, "")` → `PendingActivities` | 09 |
 | Encrypt error messages | `temporal.NewDefaultFailureConverter(temporal.DefaultFailureConverterOptions{EncodeCommonAttributes: true, …})` + a codec | 09 |
-
----
-
-## Diagrams
-
-| Diagram | Used in |
-| --- | --- |
-| [Error handling mental model](../img/error-handling-mental-model.svg) | README, 01 |
-| [The error chain a Workflow sees](../img/error-handling-error-chain.svg) | 02 |
-| [Workflow Task vs Workflow Execution failure](../img/error-handling-task-vs-execution.svg) | 03 |
-| [Decisions in the Workflow](../img/error-handling-workflow-decisions.svg) | 05 |
-| [The outermost-error rule](../img/error-handling-outermost-rule.svg) | 06 |
-| [Retry intervals](../img/error-handling-retry-interval.svg) | 07 |
-| [Timeouts as failure detectors](../img/error-handling-timeouts.svg) | 08 |
-| [Checkout Saga](../img/error-handling-saga.svg) | 09 |
 
 ---
 

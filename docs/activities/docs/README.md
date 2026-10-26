@@ -1,19 +1,5 @@
 # Temporal Activities with Go: a roadmap
 
-> A progressive onboarding guide to **Temporal Activities** for Go developers. It is based on the
-> Temporal Encyclopedia (the concepts) and the Temporal Go SDK docs (how to do it in Go), read side by side.
-> Every chapter has **compilable Go examples** with production-like names.
->
-> Companion guide: [Temporal Workflows with Go](../../workflows/docs/README.md). Workflows orchestrate, Activities do the side effects.
->
-> Going further on failures: [Temporal Error handling with Go](../../error-handling/docs/README.md).
->
-> New to Temporal? Start with [Temporal Architecture with Go](../../architecture/docs/README.md): which part runs where, and why replay works.
-
-![Activities mental model](../img/activities-mental-model.svg)
-
----
-
 ## Why this matters, in 30 seconds
 
 Distributed code fails all the time: timeouts, crashed processes, flaky APIs, rate limits, jobs that
@@ -125,23 +111,6 @@ Does an external system or a human produce the final result?
 | Complete it from elsewhere | `return …, activity.ErrResultPending` + `c.CompleteActivity` / `CompleteActivityByID` / `CompleteActivityByActivityID` | 08 |
 | Catch unknown Activity Types | `w.RegisterDynamicActivity(fn, activity.DynamicRegisterOptions{})` | 09 |
 | Pause / reset / extend from ops | `temporal activity pause / unpause / reset / update-options / cancel / terminate / delete` | 10 |
-
----
-
-## Diagrams
-
-| Diagram | Used in |
-| --- | --- |
-| [Activities mental model](../img/activities-mental-model.svg) | README, 01 |
-| [Workflow Activity lifecycle](../img/activity-execution-lifecycle.svg) | 03 |
-| [Activity timeouts](../img/activity-timeouts.svg) | 04 |
-| [Heartbeat checkpointing](../img/activity-heartbeat-checkpoint.svg) | 04 |
-| [Cancellation flow](../img/activity-cancellation-flow.svg) | 05 |
-| [Standalone vs Workflow Activity](../img/standalone-vs-workflow-activity.svg) | 06 |
-| [Standalone ID policies](../img/standalone-id-policies.svg) | 06 |
-| [Regular vs Local Activity](../img/local-activity-flow.svg) | 07 |
-| [Async completion](../img/async-activity-completion.svg) | 08 |
-| [Activity operations state machine](../img/activity-operations-state.svg) | 10 |
 
 ---
 

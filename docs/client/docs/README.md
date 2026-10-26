@@ -1,20 +1,5 @@
 # Temporal Client with Go: a roadmap
 
-> A progressive onboarding guide to the **Temporal Client** for Go developers. It is based on the
-> Temporal Encyclopedia (the concept) and the Go SDK's Temporal Client page (how to do it in Go), read
-> side by side and checked against the SDK source. Every chapter has **compilable Go examples** with
-> production-like names.
->
-> Companion guides: [Temporal Architecture with Go](../../architecture/docs/README.md) (where the
-> Client fits), [Temporal Workflows with Go](../../workflows/docs/README.md) and
-> [Temporal Activities with Go](../../activities/docs/README.md) (what the Client starts),
-> [Temporal Workers with Go](../../workers/docs/README.md) (what picks up the work),
-> [Temporal Namespaces with Go](../../namespaces/docs/README.md) (where the Client connects).
-
-![Temporal Client mental model](../img/client-mental-model.svg)
-
----
-
 ## Why this matters, in 30 seconds
 
 Every Workflow starts with a Client call. So does every Signal from your API, every "where is my
@@ -126,20 +111,6 @@ Must it give up after N days whatever happens?          → WorkflowExecutionTim
 | Run a Standalone Activity | `c.ExecuteActivity(ctx, client.StartActivityOptions{ID, TaskQueue, StartToCloseTimeout}, fn, args...)` | 08 |
 | Second Namespace, same connection | `client.NewClientFromExisting(c, client.Options{Namespace: …})` | 09 |
 | Unit-test code using the Client | `mocks.NewClient(t)`, `mocks.NewWorkflowRun(t)` | 09 |
-
----
-
-## Diagrams
-
-| Diagram | Used in |
-| --- | --- |
-| [Client mental model](../img/client-mental-model.svg) | README, 01 |
-| [Connection options precedence](../img/client-connection-precedence.svg) | 02 |
-| [API key vs mTLS](../img/client-cloud-auth.svg) | 03 |
-| [Starting a Workflow Execution](../img/client-start-workflow.svg) | 04 |
-| [Workflow ID policies](../img/client-id-policies.svg) | 05 |
-| [Workflow timeouts](../img/client-workflow-timeouts.svg) | 06 |
-| [Reading a result](../img/client-get-result.svg) | 07 |
 
 ---
 

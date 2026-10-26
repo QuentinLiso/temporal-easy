@@ -1,20 +1,5 @@
 # Temporal Observability with Go: a roadmap
 
-> A progressive onboarding guide to **observing Temporal applications** in Go: logs, metrics, traces, and
-> the context that ties them together. It is based on the Temporal Encyclopedia's Context Propagation page
-> (the concept), the Go SDK's Context propagation and OpenTelemetry v2 pages (how to do it in Go), and the
-> Go SDK's Observability page that both link to, checked against the SDK source and on a dev server.
-> Every chapter has **compilable Go examples** with production-like names.
->
-> Companion guides: [Temporal Workers with Go](../../workers/docs/README.md) (where interceptors and
-> plugins run), [Temporal Client with Go](../../client/docs/README.md) (where you register them),
-> [Temporal Testing with Go](../../testing/docs/README.md) (debugging a single Execution),
-> [Temporal Error handling with Go](../../error-handling/docs/README.md) (the failures you alert on).
-
-![Observability mental model](../img/observability-mental-model.svg)
-
----
-
 ## Why this matters, in 30 seconds
 
 One checkout in a Temporal application is an HTTP request, a Workflow that lives for days, Activities
@@ -119,17 +104,6 @@ Putting it all together for production?              → one Setup, ordered shut
 | Span in an Activity or Client | `ctx, span := otel.Tracer("shop").Start(ctx, "…")` | 06 |
 | Temporal's own spans | `PluginOptions{TracerOptions: tracing.TracerOptions{AddTemporalSpans: true}}` | 06 |
 | Tune propagation | `PluginOptions.TextMapPropagator`, `TracerOptions.HeaderKey`, `DisableBaggage`, `AllowInvalidParentSpans` | 07 |
-
----
-
-## Diagrams
-
-| Diagram | Used in |
-| --- | --- |
-| [Observability mental model](../img/observability-mental-model.svg) | README, 01 |
-| [Context propagation across Temporal boundaries](../img/observability-context-propagation.svg) | 03 |
-| [Trace tree of one checkout](../img/observability-trace-tree.svg) | 06 |
-| [Observability pipeline in production](../img/observability-production-pipeline.svg) | 08 |
 
 ---
 
